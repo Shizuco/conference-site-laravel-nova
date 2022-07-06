@@ -6,7 +6,7 @@
                     <div class="card-header">{{conference.title}}<br></div>
                     <div class="card-body">{{conference}}</div>
                     <router-link :to="{name: 'ConferenceDetails', params:{id: conference.id}}">Подробнее</router-link>
-                    
+                    <router-link :to="{name: 'EditConference', params:{id: conference.id}}">Изменить</router-link>
                 </div>
             </div>
         </div>

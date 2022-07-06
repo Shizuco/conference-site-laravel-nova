@@ -21,6 +21,7 @@ window.Vue = require('vue').default;
 Vue.component('mainpage', require('./components/MainPage.vue').default);
 Vue.component('details', require('./components/ConferenceDetails.vue').default);
 Vue.component('create', require('./components/CreateConference.vue').default);
+Vue.component('edit', require('./components/EditConference.vue').default);
 
 
 import store from './store'
