@@ -5402,8 +5402,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: {
-    click: function click() {
-      console.log(document.getElementById('po').value);
+    createConference: function createConference() {
+      var href = document.location.origin;
+      var data = {
+        'title': document.getElementById('title').value,
+        'date': document.getElementById('date').value,
+        'time': document.getElementById('time').value,
+        'address_lat': document.getElementById('lat').value,
+        'address_lon': document.getElementById('lon').value,
+        'country': document.getElementById('country').value
+      };
+      console.log(data);
+      this.$store.dispatch('ajaxConferenceCreate', data);
+      this.$store.getters.createConference;
+      document.location.href = href;
     }
   }
 });
@@ -5501,30 +5513,87 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("form", {
-    attrs: {
-      action: "",
-      id: "po"
-    }
+  }, [_c("div", {
+    staticClass: "card-body"
   }, [_c("input", {
+    staticClass: "form-control",
     attrs: {
       type: "text",
-      id: ""
+      name: "title",
+      id: "title",
+      placeholder: "Hазвание"
     }
-  }), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
+    staticStyle: {
+      width: "100%",
+      height: "400px"
+    },
     attrs: {
-      type: "text"
+      id: "map"
     }
-  }), _vm._v(" "), _c("button", {
-    on: {
-      click: function click($event) {
-        return _vm.click();
+  }), _vm._v(" "), _c("router-link", {
+    attrs: {
+      to: {
+        name: "MainPage"
       }
     }
-  })])]);
+  }, [_vm._v("Назад")]), _vm._v(" "), _c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.createConference();
+      }
+    }
+  }, [_vm._v("Сохранить")])], 1)]);
 };
 
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col"
+  }, [_c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "date",
+      id: "date",
+      name: "date",
+      max: "2032-12-31"
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "col"
+  }, [_c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "time",
+      name: "time",
+      id: "time"
+    }
+  })]), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "lat",
+      name: "address_lat"
+    }
+  }), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "lon",
+      name: "address_lon"
+    }
+  }), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "country",
+      name: "country"
+    }
+  })]);
+}];
 render._withStripped = true;
 
 
@@ -5762,6 +5831,30 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
         commit('setConference', response.data);
       })["catch"](function (error) {
         console.log('Error', error);
+      });
+    },
+    ajaxConferenceCreate: function ajaxConferenceCreate(_ref4, data) {
+      var commit = _ref4.commit;
+      axios({
+        method: 'post',
+        url: 'api/conferences',
+        data: {
+          title: data.title,
+          date: data.date,
+          time: data.time,
+          address_lat: data.address_lat,
+          address_lon: data.address_lon,
+          country: data.country
+        },
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
+        commit('setConferences', response.data);
+        console.log('Ответ сервера успешно получен!');
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error);
       });
     }
   },

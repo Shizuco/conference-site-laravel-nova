@@ -38,9 +38,34 @@ export default new Vuex.Store({
             }).catch(error=>{
                 console.log('Error', error)
             })
-        }
-    },
-    mutations:{
+        },
+        ajaxConferenceCreate({commit}, data) {
+            axios({
+                method: 'post',
+                url: 'api/conferences',
+                data: {
+                    title: data.title,
+                    date : data.date,
+                    time : data.time,
+                    address_lat : data.address_lat,
+                    address_lon : data.address_lon,
+                    country : data.country
+                },
+                headers: {
+                  "Content-type": "application/json; charset=UTF-8"
+                }
+              })
+              .then(function(response) {
+                commit('setConferences', response.data)
+                console.log('Ответ сервера успешно получен!');
+                console.log(response.data);
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          },
+        },
+        mutations:{
         setConferences(state, data){
             return state.conferences = data
         },
@@ -48,4 +73,5 @@ export default new Vuex.Store({
             return state.conference = data
         }
     }
-})
+    }
+)
