@@ -17,7 +17,8 @@
             //console.log(data)
             this.$store.dispatch('AUTH', data).then(()=>{
                this.$store.getters.getUser
-               this.$router.replace('/conferences')
+               let href = document.location.origin
+               document.location.href = href
             })
          }
         }

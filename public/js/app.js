@@ -5370,6 +5370,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   methods: {
+    isAuth: function isAuth() {
+      if ("Authorized" in localStorage) {
+        var href = document.location.origin;
+        document.location.href = href;
+        return true;
+      } else return false;
+    },
     logout: function logout() {
       console.log(localStorage.getItem('Authorized'));
       this.$store.dispatch('LOGOUT');
@@ -5402,8 +5409,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.$store.dispatch('AUTH', data).then(function () {
         _this.$store.getters.getUser;
-
-        _this.$router.replace('/conferences');
+        var href = document.location.origin;
+        document.location.href = href;
       });
     }
   }
@@ -5599,23 +5606,23 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("button", [_c("router-link", {
+  return _c("div", [!_vm.isAuth() ? _c("button", [_c("router-link", {
     attrs: {
       to: {
         name: "Registration"
       }
     }
-  }, [_vm._v("Регистарция")])], 1), _vm._v(" "), _c("button", [_c("router-link", {
+  }, [_vm._v("Регистарция")])], 1) : _vm._e(), _vm._v(" "), !_vm.isAuth() ? _c("button", [_c("router-link", {
     attrs: {
       to: {
         name: "Auth"
       }
     }
-  }, [_vm._v("Авторизация")])], 1), _vm._v(" "), _c("button", {
+  }, [_vm._v("Авторизация")])], 1) : _vm._e(), _vm._v(" "), _vm.isAuth() ? _c("button", {
     on: {
       click: _vm.logout
     }
-  }, [_vm._v("Выйти")])]);
+  }, [_vm._v("Выйти")]) : _vm._e()]);
 };
 
 var staticRenderFns = [];
