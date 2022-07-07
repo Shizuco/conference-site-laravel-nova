@@ -115,13 +115,35 @@ export default new Vuex.Store({
                 })
                 .then(function(response) {
                     commit('setUser', response.data)
-                    console.log('Ответ сервера успешно получен!');
-                    console.log(response.data);
+                    localStorage.setItem('user', response.data.token)
+                })
+                .catch(function(error) {
+                    console.log(error);
+            });
+        },
+        AUTH({commit}, data) {
+            axios({
+                method: 'post',
+                url: 'api/login',
+                data:{
+                    password: data.password,
+                    email: data.email
+                },
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then(function(response) {
+                    commit('setUser', response.data)
+                    localStorage.setItem('user', response.data.token)
                 })
                 .catch(function(error) {
                     console.log(response.data);
                     console.log(error);
             });
+        },
+        LOGOUT({commit}) {
+            localStorage.clear()
         },
     },
     mutations:{
