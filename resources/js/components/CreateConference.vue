@@ -1,5 +1,6 @@
 <template>
    <div class="container">
+    <auth></auth>
         <div class="card-body">
             <input type="text" name="title"  id="title" class="form-control" placeholder="Hазвание">
             <div class="form-row">

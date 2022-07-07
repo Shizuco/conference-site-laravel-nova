@@ -5,7 +5,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state:{
         conferences:[],
-        conference:[]
+        conference:[],
+        user:[]
     },
     getters:{
         getConferences(state){
@@ -13,6 +14,9 @@ export default new Vuex.Store({
         },
         getConference(state){
             return state.conference;
+        },
+        getUser(state){
+            return state.user;
         }
     },
     actions:{
@@ -63,8 +67,8 @@ export default new Vuex.Store({
               .catch(function(error) {
                 console.log(error);
               });
-          },
-          ajaxConferenceEdit({commit}, data) {
+        },
+        ajaxConferenceEdit({commit}, data) {
             axios({
                 method: 'put',
                 url: 'api/conferences/' + data.id,
@@ -89,14 +93,46 @@ export default new Vuex.Store({
               .catch(function(error) {
                 console.log(error);
               });
-          },
         },
-        mutations:{
+        REGISTER({commit}, data) {
+            axios({
+                method: 'post',
+                url: 'api/register',
+                data:{
+                    name: data.name,
+                    surname: data.surname,
+                    password: data.password,
+                    password_confirmation: data.password_confirmation,
+                    country: data.country,
+                    birthday: data.birthday,
+                    phone: data.phone,
+                    role: data.role,
+                    email: data.email
+                },
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then(function(response) {
+                    commit('setUser', response.data)
+                    console.log('Ответ сервера успешно получен!');
+                    console.log(response.data);
+                })
+                .catch(function(error) {
+                    console.log(response.data);
+                    console.log(error);
+            });
+        },
+    },
+    mutations:{
         setConferences(state, data){
             return state.conferences = data
         },
         setConference(state, data){
             return state.conference = data
+        },
+        setUser(state, data){
+            return state.user = data
         }
     }
     }

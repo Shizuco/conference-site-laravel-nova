@@ -23,6 +23,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "bootstrap-vue": "^2.22.0",
         "laravel-mix": "^6.0.49",
         "vue-router": "^3.5.4",
         "vuetify": "^2.6.7",

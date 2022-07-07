@@ -22,13 +22,19 @@ Vue.component('mainpage', require('./components/MainPage.vue').default);
 Vue.component('details', require('./components/ConferenceDetails.vue').default);
 Vue.component('create', require('./components/CreateConference.vue').default);
 Vue.component('edit', require('./components/EditConference.vue').default);
-
+Vue.component('auth', require('./components/Auth.vue').default);
+Vue.component('register', require('./components/Auth/Registration.vue').default);
+Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
 
 import store from './store'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 import router from './router/index'
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
+Vue.use(BootstrapVue);
 Vue.use(VueRouter)
 
 const app = new Vue({

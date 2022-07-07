@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <auth></auth>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card" v-for="conference in getConferences" :value="conference.id" :key="conference.id">
@@ -12,6 +13,7 @@
         </div>
         <router-link :to="{name: 'CreateConference'}">Создать</router-link>
     </div>
+    
 </template>
 
 <script>
@@ -26,4 +28,5 @@
             }
         }
     }
+    
 </script>
