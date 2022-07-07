@@ -10,6 +10,7 @@
    export default{
         methods:{
          logout(){
+            console.log(localStorage.getItem('Authorized'))
             this.$store.dispatch('LOGOUT')
          }
         }

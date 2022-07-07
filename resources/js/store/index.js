@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import axios from 'axios';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -115,7 +116,7 @@ export default new Vuex.Store({
                 })
                 .then(function(response) {
                     commit('setUser', response.data)
-                    localStorage.setItem('user', response.data.token)
+                    localStorage.setItem('Authorized', response.data.token)
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -135,7 +136,7 @@ export default new Vuex.Store({
                 })
                 .then(function(response) {
                     commit('setUser', response.data)
-                    localStorage.setItem('user', response.data.token)
+                    localStorage.setItem('Authorized', response.data.token)
                 })
                 .catch(function(error) {
                     console.log(response.data);
@@ -143,6 +144,15 @@ export default new Vuex.Store({
             });
         },
         LOGOUT({commit}) {
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'post',
+                url: 'api/logout',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
             localStorage.clear()
         },
     },

@@ -5371,6 +5371,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   methods: {
     logout: function logout() {
+      console.log(localStorage.getItem('Authorized'));
       this.$store.dispatch('LOGOUT');
     }
   }
@@ -6268,12 +6269,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 
-vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
     conferences: [],
     conference: [],
@@ -6293,7 +6297,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
   actions: {
     ajaxConferences: function ajaxConferences(_ref) {
       var commit = _ref.commit;
-      axios.get("api/conferences").then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/conferences").then(function (response) {
         commit('setConferences', response.data);
       })["catch"](function (error) {
         console.log('Error', error);
@@ -6301,7 +6305,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     ajaxGetConference: function ajaxGetConference(_ref2, id) {
       var commit = _ref2.commit;
-      axios.get("api/conferences/" + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/conferences/" + id).then(function (response) {
         console.log(response.data);
         commit('setConference', response.data);
       })["catch"](function (error) {
@@ -6310,7 +6314,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     ajaxConferenceDelete: function ajaxConferenceDelete(_ref3, id) {
       var commit = _ref3.commit;
-      axios["delete"]("api/conferences/" + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("api/conferences/" + id).then(function (response) {
         console.log(response.data);
         commit('setConference', response.data);
       })["catch"](function (error) {
@@ -6319,7 +6323,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     ajaxConferenceCreate: function ajaxConferenceCreate(_ref4, data) {
       var commit = _ref4.commit;
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'post',
         url: 'api/conferences',
         data: {
@@ -6343,7 +6347,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     ajaxConferenceEdit: function ajaxConferenceEdit(_ref5, data) {
       var commit = _ref5.commit;
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'put',
         url: 'api/conferences/' + data.id,
         data: {
@@ -6368,7 +6372,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     REGISTER: function REGISTER(_ref6, data) {
       var commit = _ref6.commit;
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'post',
         url: 'api/register',
         data: {
@@ -6387,14 +6391,14 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
         }
       }).then(function (response) {
         commit('setUser', response.data);
-        localStorage.setItem('user', response.data.token);
+        localStorage.setItem('Authorized', response.data.token);
       })["catch"](function (error) {
         console.log(error);
       });
     },
     AUTH: function AUTH(_ref7, data) {
       var commit = _ref7.commit;
-      axios({
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'post',
         url: 'api/login',
         data: {
@@ -6406,7 +6410,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
         }
       }).then(function (response) {
         commit('setUser', response.data);
-        localStorage.setItem('user', response.data.token);
+        localStorage.setItem('Authorized', response.data.token);
       })["catch"](function (error) {
         console.log(response.data);
         console.log(error);
@@ -6414,6 +6418,15 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_1_
     },
     LOGOUT: function LOGOUT(_ref8) {
       var commit = _ref8.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'post',
+        url: 'api/logout',
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      });
       localStorage.clear();
     }
   },
