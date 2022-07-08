@@ -39,6 +39,6 @@ export default new VueRouter({
             path:'/login',
             component: Auth,
             name: 'Auth'
-        },
+        }
     ]
 })

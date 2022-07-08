@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::match(['get', 'post'],'/login', [AuthController::class, 'login'])->name('login');
-
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::match(['get', 'post'],'/conferencejoin', [UserController::class, 'conferencejoin']);
-    Route::match(['get', 'post'],'/conferenceOut', [UserController::class, 'conferenceOut']);
+    Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
+    Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);
+    Route::post('/isOnConference/{id}', [UserController::class, 'getConference']);
 });
 
 Route::resource('/conferences', ConferenceController::class)->only([

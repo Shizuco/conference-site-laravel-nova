@@ -54,10 +54,4 @@ class User extends Authenticatable
 		return $this->belongsToMany(Conference::class, 'conference_user');
 	}
 
-    public function getConference($conference_id)
-    {
-        $user =Auth::user();
-        $conf = $user->conferences()->find($conference_id);
-        return (bool) $conf;
-    }
 }

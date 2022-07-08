@@ -5372,14 +5372,16 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     isAuth: function isAuth() {
       if ("Authorized" in localStorage) {
-        var href = document.location.origin;
-        document.location.href = href;
         return true;
-      } else return false;
+      } else {
+        return false;
+      }
     },
     logout: function logout() {
       console.log(localStorage.getItem('Authorized'));
       this.$store.dispatch('LOGOUT');
+      var href = document.location.origin;
+      document.location.href = href;
     }
   }
 });
@@ -5475,10 +5477,29 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var id = this.$route.params.id;
     this.$store.dispatch('ajaxGetConference', id);
+    this.$store.dispatch('isUserOnConference', id);
   },
   computed: {
     getConference: function getConference() {
       return this.$store.getters.getConference;
+    }
+  },
+  methods: {
+    isAuth: function isAuth() {
+      if ("Authorized" in localStorage) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    join: function join() {
+      var conference_id = this.$store.getters.getConference.id;
+      console.log(conference_id);
+      this.$store.dispatch('userConferenceJoin', conference_id);
+    },
+    out: function out() {
+      var conference_id = this.$store.getters.getConference.id;
+      this.$store.dispatch('userConferenceOut', conference_id);
     },
     deleteConference: function deleteConference() {
       var id = this.$route.params.id;
@@ -5486,6 +5507,13 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('ajaxConferenceDelete', id);
       this.$store.getters.deleteConference;
       document.location.href = href;
+    },
+    ajaxUser: function ajaxUser() {
+      var conference_id = this.$store.getters.getConference.id;
+      this.$store.dispatch('userConferenceOut', conference_id);
+    },
+    isOnConference: function isOnConference() {
+      return this.$store.getters.getUser;
     }
   }
 });
@@ -5606,19 +5634,26 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [!_vm.isAuth() ? _c("button", [_c("router-link", {
+  return _c("nav", {
+    staticClass: "navbar sticky-top navbar-light bg-light"
+  }, [!_vm.isAuth() ? _c("button", {
+    staticClass: "navbar-brand"
+  }, [_c("router-link", {
     attrs: {
       to: {
         name: "Registration"
       }
     }
-  }, [_vm._v("Регистарция")])], 1) : _vm._e(), _vm._v(" "), !_vm.isAuth() ? _c("button", [_c("router-link", {
+  }, [_vm._v("Регистарция")])], 1) : _vm._e(), _vm._v(" "), !_vm.isAuth() ? _c("button", {
+    staticClass: "navbar-brand"
+  }, [_c("router-link", {
     attrs: {
       to: {
         name: "Auth"
       }
     }
   }, [_vm._v("Авторизация")])], 1) : _vm._e(), _vm._v(" "), _vm.isAuth() ? _c("button", {
+    staticClass: "navbar-brand",
     on: {
       click: _vm.logout
     }
@@ -5819,7 +5854,25 @@ var render = function render() {
         return _vm.deleteConference();
       }
     }
-  }, [_vm._v("Удалить")])], 1);
+  }, [_vm._v("Удалить")]), _vm._v(" "), _vm.isAuth() && _vm.isOnConference() == null ? _c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.join();
+      }
+    }
+  }, [_vm._v("Присоединиться")]) : _vm._e(), _vm._v(" "), _vm.isAuth() && _vm.isOnConference() != null ? _c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.out();
+      }
+    }
+  }, [_vm._v("Выйти")]) : _vm._e(), _vm._v(" "), _vm.isAuth() ? _c("button", {
+    on: {
+      click: function click($event) {
+        return _vm.isOnConference();
+      }
+    }
+  }, [_vm._v("аулцхал")]) : _vm._e()], 1);
 };
 
 var staticRenderFns = [];
@@ -6065,13 +6118,11 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", {
-    staticClass: "container"
-  }, [_c("auth"), _vm._v(" "), _c("div", {
+  return _c("div", [_c("auth"), _vm._v(" "), _c("div", {
     staticClass: "row justify-content-center"
   }, [_c("div", {
     staticClass: "col-md-8"
-  }, _vm._l(_vm.getConferences, function (conference) {
+  }, [_c("br"), _vm._v(" "), _vm._l(_vm.getConferences, function (conference) {
     return _c("div", {
       key: conference.id,
       staticClass: "card",
@@ -6101,7 +6152,7 @@ var render = function render() {
         }
       }
     }, [_vm._v("Изменить")])], 1);
-  }), 0)]), _vm._v(" "), _c("router-link", {
+  })], 2)]), _vm._v(" "), _c("router-link", {
     attrs: {
       to: {
         name: "CreateConference"
@@ -6435,6 +6486,63 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
         }
       });
       localStorage.clear();
+    },
+    userConferenceJoin: function userConferenceJoin(_ref9, conference_id) {
+      var commit = _ref9.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'post',
+        url: '/api/conferenceJoin/' + conference_id,
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    userConferenceOut: function userConferenceOut(_ref10, conference_id) {
+      var commit = _ref10.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'post',
+        url: '/api/conferenceOut/' + conference_id,
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    ajaxUser: function ajaxUser(_ref11) {
+      var commit = _ref11.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'get',
+        url: 'api/user',
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
+        commit('setUser', response.data);
+      });
+    },
+    isUserOnConference: function isUserOnConference(_ref12, conference_id) {
+      var commit = _ref12.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'post',
+        url: 'api/isOnConference/' + conference_id,
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
+        commit('setUser', response.data);
+        console.log(response.data);
+      });
     }
   },
   mutations: {

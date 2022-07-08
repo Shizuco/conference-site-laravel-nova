@@ -1,8 +1,9 @@
 <template>
-    <div class="container">
+    <div>
         <auth></auth>
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <br>
                 <div class="card" v-for="conference in getConferences" :value="conference.id" :key="conference.id">
                     <div class="card-header">{{conference.title}}<br></div>
                     <div class="card-body">{{conference}}</div>

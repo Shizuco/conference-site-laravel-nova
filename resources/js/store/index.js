@@ -155,6 +155,61 @@ export default new Vuex.Store({
                 })
             localStorage.clear()
         },
+        userConferenceJoin({commit}, conference_id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'post',
+                url: '/api/conferenceJoin/' + conference_id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response=>{
+                console.log(response.data)
+            })
+        },
+        userConferenceOut({commit}, conference_id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'post',
+                url: '/api/conferenceOut/' + conference_id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response=>{
+                console.log(response.data)
+            })
+        },
+        ajaxUser({commit}){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'get',
+                url: 'api/user',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then((response)=>{
+                    commit('setUser', response.data)
+            })
+        },
+        isUserOnConference({commit},conference_id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'post',
+                url: 'api/isOnConference/' + conference_id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then((response)=>{
+                    commit('setUser', response.data)
+                    console.log(response.data)
+            })
+        }
     },
     mutations:{
         setConferences(state, data){
