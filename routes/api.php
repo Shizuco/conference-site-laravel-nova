@@ -16,24 +16,23 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('/conferences',[ConferenceController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::match(['get', 'post'],'/login', [AuthController::class, 'login'])->name('login');
+
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
     Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);
     Route::post('/isOnConference/{id}', [UserController::class, 'getConference']);
+    Route::get('/conferences/{id}',[ConferenceController::class, 'show']);
+    
+    Route::group(['middleware' => ['isAdmin']], function(){
+        Route::delete('/conferences/{id}',[ConferenceController::class, 'destroy']);
+        Route::post('/conferences',[ConferenceController::class, 'store']);
+        Route::put('/conferences/{id}',[ConferenceController::class, 'update']);
+    });
 });
-
-Route::resource('/conferences', ConferenceController::class)->only([
-    'index', 'show', 'store', 'update', 'destroy'
-]);
-/*Route::get('/conferences',[ConferenceController::class, 'index']);
-Route::get('/conferences/{id}',[ConferenceController::class, 'show']);
-Route::delete('/conferences/{id}',[ConferenceController::class, 'destroy']);
-Route::post('/conferences',[ConferenceController::class, 'store']);
-Route::put('/conferences/{id}',[ConferenceController::class, 'update']);*/
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
