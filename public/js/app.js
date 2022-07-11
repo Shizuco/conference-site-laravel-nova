@@ -6363,7 +6363,15 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     ajaxGetConference: function ajaxGetConference(_ref2, id) {
       var commit = _ref2.commit;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get("api/conferences/" + id).then(function (response) {
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'get',
+        url: 'api/conferences/' + id,
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
         console.log(response.data);
         commit('setConference', response.data);
       })["catch"](function (error) {
@@ -6372,7 +6380,15 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     ajaxConferenceDelete: function ajaxConferenceDelete(_ref3, id) {
       var commit = _ref3.commit;
-      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("api/conferences/" + id).then(function (response) {
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'delete',
+        url: 'api/conferences/' + id,
+        headers: {
+          "Authorization": token,
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      }).then(function (response) {
         console.log(response.data);
         commit('setConference', response.data);
       })["catch"](function (error) {
@@ -6381,6 +6397,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     ajaxConferenceCreate: function ajaxConferenceCreate(_ref4, data) {
       var commit = _ref4.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
       axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'post',
         url: 'api/conferences',
@@ -6393,6 +6410,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
           country: data.country
         },
         headers: {
+          "Authorization": token,
           "Content-type": "application/json; charset=UTF-8"
         }
       }).then(function (response) {
@@ -6405,6 +6423,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     ajaxConferenceEdit: function ajaxConferenceEdit(_ref5, data) {
       var commit = _ref5.commit;
+      var token = 'Bearer ' + localStorage.getItem('Authorized');
       axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'put',
         url: 'api/conferences/' + data.id,
@@ -6418,6 +6437,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
           country: data.country
         },
         headers: {
+          "Authorization": token,
           "Content-type": "application/json; charset=UTF-8"
         }
       }).then(function (response) {

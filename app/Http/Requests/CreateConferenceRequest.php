@@ -28,8 +28,8 @@ class CreateConferenceRequest extends FormRequest
             'date' => 'required',
             'time' => 'required',
             'country' => 'required',
-            'address_lat' => 'required',
-            'address_lon' => 'required',
+            'address_lat' => 'required|min:-180|max:180',
+            'address_lon' => 'required|min:-180|max:180',
         ];
     }
 
@@ -42,8 +42,10 @@ class CreateConferenceRequest extends FormRequest
             'date.required' => 'Дата обезательна!',
             'time.required' => 'Время обезательно!',
             'country.required' => 'Страна обезательна!',
-            'address_lat.required' => 'Широта обезательна!',
-            'address_lon.required' => 'Долгота обезательна!',
+            'address_lat.min' => 'Минимальное значение широты -180',
+            'address_lat.max' => 'Максимальное значение широты 180',
+            'address_lon.min' => 'Минимальное значение долготы -180',
+            'address_lon.max' => 'Максимальное значение долготы 180',
         ];
     }
 }

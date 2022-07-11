@@ -29,22 +29,39 @@ export default new Vuex.Store({
             })
         },
         ajaxGetConference({commit}, id){
-            axios.get(`api/conferences/` + id).then(response=>{
-                console.log(response.data)
-                commit('setConference', response.data)
-            }).catch(error=>{
-                console.log('Error', error)
-            })
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'get',
+                url: 'api/conferences/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setConference', response.data)
+                }).catch(error=>{
+                    console.log('Error', error)
+                })
         },
         ajaxConferenceDelete({commit}, id){
-            axios.delete(`api/conferences/` + id).then(response=>{
-                console.log(response.data)
-                commit('setConference', response.data)
-            }).catch(error=>{
-                console.log('Error', error)
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'delete',
+                url: 'api/conferences/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setConference', response.data)
+                }).catch(error=>{
+                    console.log('Error', error)
             })
         },
         ajaxConferenceCreate({commit}, data) {
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
             axios({
                 method: 'post',
                 url: 'api/conferences',
@@ -57,7 +74,8 @@ export default new Vuex.Store({
                     country : data.country
                 },
                 headers: {
-                  "Content-type": "application/json; charset=UTF-8"
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
                 }
               })
               .then(function(response) {
@@ -70,6 +88,7 @@ export default new Vuex.Store({
               });
         },
         ajaxConferenceEdit({commit}, data) {
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
             axios({
                 method: 'put',
                 url: 'api/conferences/' + data.id,
@@ -83,7 +102,8 @@ export default new Vuex.Store({
                     country : data.country
                 },
                 headers: {
-                  "Content-type": "application/json; charset=UTF-8"
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
                 }
               })
               .then(function(response) {

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class UpdateConferenceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,8 +37,8 @@ class UpdateRequest extends FormRequest
     {
         return [
             'title.required' => 'Название обезательно!',
-            'title.min' => 'Название от 2 до 255!',
-            'title.max' => 'Название от 2 до 255!',
+            'title.min' => 'Минимальное длинна названия 2 символа, введите еще!',
+            'title.max' => 'Максимальная длинна названия 255 символа, Вы ввели слишком много!',
             'date.required' => 'Дата обезательна!',
             'time.required' => 'Время обезательно!',
             'country.required' => 'Страна обезательна!',
