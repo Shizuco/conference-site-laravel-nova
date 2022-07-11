@@ -6018,9 +6018,7 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", {
-    staticClass: "container"
-  }, [_c("auth", {
+  return _c("div", [_c("auth", {
     staticStyle: {
       height: "80px"
     }
@@ -6032,9 +6030,9 @@ var render = function render() {
     staticClass: "card"
   }, [_c("div", {
     staticClass: "card-header"
-  }, [_vm._v("Conference Component")]), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.getConference))]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  })])])]), _vm._v(" "), _c("router-link", {
+  }, [_vm._v("Conference Component")]), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.getConference))])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-8"
+  }, [_c("router-link", {
     attrs: {
       to: {
         name: "MainPage"
@@ -6058,7 +6056,7 @@ var render = function render() {
         return _vm.out();
       }
     }
-  }, [_vm._v("Выйти")]) : _vm._e()], 1);
+  }, [_vm._v("Выйти")]) : _vm._e()], 1)]), _vm._v(" "), _c("br")], 1);
 };
 
 var staticRenderFns = [];
@@ -6083,31 +6081,15 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", {
-    staticClass: "container"
-  }, [_c("auth", {
+  return _c("div", [_c("auth", {
     staticStyle: {
       height: "80px"
     }
   }), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [_c("input", {
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      name: "title",
-      id: "title",
-      placeholder: "Hазвание"
-    }
-  }), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
-    staticStyle: {
-      width: "100%",
-      height: "400px"
-    },
-    attrs: {
-      id: "map"
-    }
-  }), _vm._v(" "), _c("router-link", {
+    staticClass: "row justify-content-center"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "col-md-8"
+  }, [_c("router-link", {
     attrs: {
       to: {
         name: "MainPage"
@@ -6119,7 +6101,7 @@ var render = function render() {
         return _vm.createConference();
       }
     }
-  }, [_vm._v("Сохранить")])], 1)], 1);
+  }, [_vm._v("Сохранить")])], 1)])], 1);
 };
 
 var staticRenderFns = [function () {
@@ -6127,6 +6109,16 @@ var staticRenderFns = [function () {
       _c = _vm._self._c;
 
   return _c("div", {
+    staticClass: "col-md-8"
+  }, [_c("input", {
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      name: "title",
+      id: "title",
+      placeholder: "Hазвание"
+    }
+  }), _vm._v(" "), _c("div", {
     staticClass: "form-row"
   }, [_c("div", {
     staticClass: "col"
@@ -6168,6 +6160,14 @@ var staticRenderFns = [function () {
       id: "country",
       name: "country"
     }
+  })]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
+    staticStyle: {
+      width: "100%",
+      height: "400px"
+    },
+    attrs: {
+      id: "map"
+    }
   })]);
 }];
 render._withStripped = true;
@@ -6198,7 +6198,9 @@ var render = function render() {
       height: "80px"
     }
   }), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
+    staticClass: "row justify-content-center"
+  }, [_c("div", {
+    staticClass: "col-md-8"
   }, [_c("input", {
     staticClass: "form-control",
     attrs: {
@@ -6275,7 +6277,9 @@ var render = function render() {
     attrs: {
       id: "map"
     }
-  }), _vm._v(" "), _c("router-link", {
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-8"
+  }, [_c("router-link", {
     attrs: {
       to: {
         name: "MainPage"
@@ -6287,7 +6291,7 @@ var render = function render() {
         return _vm.editConference();
       }
     }
-  }, [_vm._v("Сохранить")])], 1)], 1);
+  }, [_vm._v("Сохранить")])], 1)])], 1);
 };
 
 var staticRenderFns = [];

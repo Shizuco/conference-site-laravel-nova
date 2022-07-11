@@ -1,8 +1,9 @@
 <template>
-   <div class="container">
+   <div>
     <auth style="height: 80px"></auth>
-        <div class="card-body">
-            <input type="text" name="title"  id="title" class="form-control" placeholder="Hазвание">
+     <div class="row justify-content-center">
+            <div class="col-md-8">
+                <input type="text" name="title"  id="title" class="form-control" placeholder="Hазвание">
             <div class="form-row">
                 <div class="col">
                     <input type="date"  id="date" class="form-control" name="date" max="2032-12-31">
@@ -16,8 +17,11 @@
             </div>
             <br>
             <div id="map" style="width:100%;height:400px;"></div>
-            <router-link :to="{name: 'MainPage'}">Назад</router-link>
-            <button @click="createConference()">Сохранить</button>
+            </div>
+            <div class="col-md-8">
+                <router-link :to="{name: 'MainPage'}">Назад</router-link>
+                <button @click="createConference()">Сохранить</button>
+            </div>
         </div>
     </div>
 </template>

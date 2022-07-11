@@ -1,20 +1,21 @@
 <template>
-    <div class="container">
+    <div>
         <auth style="height: 80px"></auth>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Conference Component</div>
                         <p>{{getConference}}</p>
-                    <div class="card-body">
-                    </div>
                 </div>
             </div>
+            <div class="col-md-8">
+                <router-link :to="{name: 'MainPage'}">Назад</router-link>
+                <button v-if="isAdmin()" @click="deleteConference()">Удалить</button>
+                <button v-if="isAuth()&&isOnConference()==null" @click="join()">Присоединиться</button>
+                <button v-if="isAuth()&&isOnConference()!=null" @click="out()">Выйти</button>
+            </div>
         </div>
-        <router-link :to="{name: 'MainPage'}">Назад</router-link>
-        <button v-if="isAdmin()" @click="deleteConference()">Удалить</button>
-        <button v-if="isAuth()&&isOnConference()==null" @click="join()">Присоединиться</button>
-        <button v-if="isAuth()&&isOnConference()!=null" @click="out()">Выйти</button>
+        <br>
     </div>
 </template>
 
