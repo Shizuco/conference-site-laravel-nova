@@ -10,7 +10,7 @@
                     <router-link v-if="isAuth()" :to="{name: 'ConferenceDetails', params:{id: conference.id}}">Подробнее</router-link>
                     <router-link v-else :to="{name: 'Registration'}">Подробнее</router-link>
                     <router-link v-if="isAdmin()" :to="{name: 'EditConference', params:{id: conference.id}}">Изменить</router-link>
-                    <button v-if="isAdmin()" @click="deleteConference()">Удалить</button>
+                    <button v-if="isAdmin()" @click="deleteConference(conference.id)">Удалить</button>
                 </div>
             </div>
         </div>
@@ -47,8 +47,7 @@
                     return false
                 }
             },
-            deleteConference(){
-                let id = this.$route.params.id
+            deleteConference(id){
                 let href = document.location.origin
                 this.$store.dispatch('ajaxConferenceDelete', id)
                 this.$store.getters.deleteConference

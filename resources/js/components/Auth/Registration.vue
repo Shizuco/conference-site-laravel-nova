@@ -1,16 +1,40 @@
 <template>
-   <div>
-      <input type="text" name="name" id="name" placeholder="name" required>
-      <input type="text" name="surname" id="surname" placeholder="surname" required>
-      <input type="email" name="email" id="email" placeholder="email" required>
-      <input type="password" name="password" id="password" placeholder="password" required>
-      <input type="password" name="password_confirmation" id="password_confirmation" placeholder="password_confirmation" required>
-      <input type="role" name="role" id="role" placeholder="role" required>
-      <input type="phone" name="phone" id="phone" placeholder="phone" required>
-      <input type="text" name="birthday" id="birthday" placeholder="birthday" required>
-      <input type="text" name="country" id="country" placeholder="country" required>
-      <button @click="register()">Зарегестрироваться</button>
-   </div>
+   <v-app>
+      <v-main>
+         <v-container class="fill-height" fluid>
+            <v-row align="center" justify="center" dense>
+               <v-col cols="12" sm="8" md="4" lg="8">
+                  <v-card elevation="0">
+                     <v-card-text>
+                        <v-form>
+                           <v-row>
+                              <v-col><v-text-field label="Введите имя" name="name" id="name" prepend-inner-icon="mdi-mail" type="name" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
+                              <v-col><v-text-field label="Введите фамилию" name="surname" id="surname" prepend-inner-icon="mdi-lock" type="text" min="2" max="255" class="rounded-0" outlined required></v-text-field></v-col>
+                           </v-row>
+                           <v-text-field label="Введите адрес электронной почты" name="email" id="email" prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined required></v-text-field>
+                           <v-row>
+                              <v-col><v-text-field label="Введите пароль" name="password" id="password" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col><v-text-field label="Повторите пароль" name="password_confirmation" id="password_confirmation" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
+                           </v-row>
+                           <v-text-field label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                           <v-text-field label="Введите номер телефона" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                           <v-row>
+                              <v-col><v-text-field label="Введите дату рождения" name="birthday" id="birthday" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col><v-text-field label="Введите страну местопнаходжения" name="country" id="country" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                           </v-row>
+                           <v-btn @click="register()" class="rounded-0" color="#000000" x-large block dark>Зарегестрироваться</v-btn>
+                           <v-card-actions class="text--secondary">
+                              <v-spacer></v-spacer>
+                              Есть аккаунта? <router-link :to="{name: 'Auth'}">Авторизация</router-link>
+                           </v-card-actions>
+                        </v-form>
+                     </v-card-text>
+                  </v-card>
+               </v-col>
+            </v-row>
+         </v-container>
+      </v-main>
+   </v-app>
 </template>
 
 <script>
@@ -28,12 +52,17 @@
                   surname: document.getElementById('surname').value, 
                   phone: document.getElementById('phone').value
             }
-            console.log(data)
             if(this.valid())
                this.$store.dispatch('REGISTER', data).then(()=>{
-                  this.$store.getters.getUser
-                  let href = document.location.origin
-                  document.location.href = href
+                  let data ={
+                     email: document.getElementById('email').value, 
+                     password: document.getElementById('password').value, 
+                  }
+                  this.$store.dispatch('AUTH', data).then(()=>{
+                     this.$store.getters.getUser
+                     let href = document.location.origin
+                     document.location.href = href
+                  })
                })
          },
          valid(){

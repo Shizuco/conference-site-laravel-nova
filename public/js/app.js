@@ -5447,11 +5447,17 @@ __webpack_require__.r(__webpack_exports__);
         surname: document.getElementById('surname').value,
         phone: document.getElementById('phone').value
       };
-      console.log(data);
       if (this.valid()) this.$store.dispatch('REGISTER', data).then(function () {
-        _this.$store.getters.getUser;
-        var href = document.location.origin;
-        document.location.href = href;
+        var data = {
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        };
+
+        _this.$store.dispatch('AUTH', data).then(function () {
+          _this.$store.getters.getUser;
+          var href = document.location.origin;
+          document.location.href = href;
+        });
       });
     },
     valid: function valid() {
@@ -5645,8 +5651,7 @@ __webpack_require__.r(__webpack_exports__);
         return false;
       }
     },
-    deleteConference: function deleteConference() {
-      var id = this.$route.params.id;
+    deleteConference: function deleteConference(id) {
       var href = document.location.origin;
       this.$store.dispatch('ajaxConferenceDelete', id);
       this.$store.getters.deleteConference;
@@ -5746,7 +5751,7 @@ var render = function render() {
   }, [_c("v-card-text", [_c("v-form", [_c("v-text-field", {
     staticClass: "rounded-0",
     attrs: {
-      label: "Enter your email",
+      label: "Введите адрес электронной почты",
       name: "email",
       id: "email",
       "prepend-inner-icon": "mdi-mail",
@@ -5757,7 +5762,7 @@ var render = function render() {
   }), _vm._v(" "), _c("v-text-field", {
     staticClass: "rounded-0",
     attrs: {
-      label: "Enter your password",
+      label: "Введите пароль",
       name: "password",
       id: "password",
       "prepend-inner-icon": "mdi-lock",
@@ -5779,7 +5784,7 @@ var render = function render() {
         return _vm.auth();
       }
     }
-  }, [_vm._v("Login")]), _vm._v(" "), _c("v-card-actions", {
+  }, [_vm._v("Войти")]), _vm._v(" "), _c("v-card-actions", {
     staticClass: "text--secondary"
   }, [_c("v-spacer"), _vm._v("\r\n                              Нет аккаунта? "), _c("router-link", {
     attrs: {
@@ -5812,85 +5817,155 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("input", {
+  return _c("v-app", [_c("v-main", [_c("v-container", {
+    staticClass: "fill-height",
     attrs: {
-      type: "text",
+      fluid: ""
+    }
+  }, [_c("v-row", {
+    attrs: {
+      align: "center",
+      justify: "center",
+      dense: ""
+    }
+  }, [_c("v-col", {
+    attrs: {
+      cols: "12",
+      sm: "8",
+      md: "4",
+      lg: "8"
+    }
+  }, [_c("v-card", {
+    attrs: {
+      elevation: "0"
+    }
+  }, [_c("v-card-text", [_c("v-form", [_c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
+    attrs: {
+      label: "Введите имя",
       name: "name",
       id: "name",
-      placeholder: "name",
+      "prepend-inner-icon": "mdi-mail",
+      type: "name",
+      min: "2",
+      max: "255",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "text",
+      label: "Введите фамилию",
       name: "surname",
       id: "surname",
-      placeholder: "surname",
+      "prepend-inner-icon": "mdi-lock",
+      type: "text",
+      min: "2",
+      max: "255",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  })], 1)], 1), _vm._v(" "), _c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "email",
+      label: "Введите адрес электронной почты",
       name: "email",
       id: "email",
-      placeholder: "email",
+      "prepend-inner-icon": "mdi-lock",
+      type: "email",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "password",
+      label: "Введите пароль",
       name: "password",
       id: "password",
-      placeholder: "password",
+      "prepend-inner-icon": "mdi-lock",
+      type: "password",
+      min: "8",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "password",
+      label: "Повторите пароль",
       name: "password_confirmation",
       id: "password_confirmation",
-      placeholder: "password_confirmation",
+      "prepend-inner-icon": "mdi-lock",
+      type: "password",
+      min: "8",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  })], 1)], 1), _vm._v(" "), _c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "role",
+      label: "Введите роль",
       name: "role",
       id: "role",
-      placeholder: "role",
+      "prepend-inner-icon": "mdi-lock",
+      type: "text",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "phone",
+      label: "Введите номер телефона",
       name: "phone",
       id: "phone",
-      placeholder: "phone",
+      "prepend-inner-icon": "mdi-lock",
+      type: "text",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "text",
+      label: "Введите дату рождения",
       name: "birthday",
       id: "birthday",
-      placeholder: "birthday",
+      "prepend-inner-icon": "mdi-lock",
+      type: "text",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("input", {
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "text",
+      label: "Введите страну местопнаходжения",
       name: "country",
       id: "country",
-      placeholder: "country",
+      "prepend-inner-icon": "mdi-lock",
+      type: "text",
+      outlined: "",
       required: ""
     }
-  }), _vm._v(" "), _c("button", {
+  })], 1)], 1), _vm._v(" "), _c("v-btn", {
+    staticClass: "rounded-0",
+    attrs: {
+      color: "#000000",
+      "x-large": "",
+      block: "",
+      dark: ""
+    },
     on: {
       click: function click($event) {
         return _vm.register();
       }
     }
-  }, [_vm._v("Зарегестрироваться")])]);
+  }, [_vm._v("Зарегестрироваться")]), _vm._v(" "), _c("v-card-actions", {
+    staticClass: "text--secondary"
+  }, [_c("v-spacer"), _vm._v("\r\n                              Есть аккаунта? "), _c("router-link", {
+    attrs: {
+      to: {
+        name: "Auth"
+      }
+    }
+  }, [_vm._v("Авторизация")])], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1);
 };
 
 var staticRenderFns = [];
@@ -6281,7 +6356,7 @@ var render = function render() {
     }, [_vm._v("Изменить")]) : _vm._e(), _vm._v(" "), _vm.isAdmin() ? _c("button", {
       on: {
         click: function click($event) {
-          return _vm.deleteConference();
+          return _vm.deleteConference(conference.id);
         }
       }
     }, [_vm._v("Удалить")]) : _vm._e()], 1);
