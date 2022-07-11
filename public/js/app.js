@@ -5678,30 +5678,34 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("nav", {
-    staticClass: "navbar sticky-top navbar-light bg-light"
-  }, [!_vm.isAuth() ? _c("button", {
-    staticClass: "navbar-brand"
-  }, [_c("router-link", {
+  return _c("v-app", [_c("v-app-bar", {
+    attrs: {
+      app: "",
+      flat: "",
+      color: "black"
+    }
+  }, [_c("v-toolbar-title", {
+    staticClass: "text-uppercase grey--text"
+  }, [_c("span", [!_vm.isAuth() ? _c("button", [_c("router-link", {
+    staticClass: "text-h5 white--text",
     attrs: {
       to: {
         name: "Registration"
       }
     }
-  }, [_vm._v("Регистарция")])], 1) : _vm._e(), _vm._v(" "), !_vm.isAuth() ? _c("button", {
-    staticClass: "navbar-brand"
-  }, [_c("router-link", {
+  }, [_vm._v("Регистарция")])], 1) : _vm._e()]), _vm._v(" "), _c("span", [!_vm.isAuth() ? _c("button", [_c("router-link", {
+    staticClass: "text-h5 white--text",
     attrs: {
       to: {
         name: "Auth"
       }
     }
-  }, [_vm._v("Авторизация")])], 1) : _vm._e(), _vm._v(" "), _vm.isAuth() ? _c("button", {
-    staticClass: "navbar-brand",
+  }, [_vm._v("Авторизация")])], 1) : _vm._e()]), _vm._v(" "), _c("span", [_vm.isAuth() ? _c("button", {
+    staticClass: "text-h5 white--text",
     on: {
       click: _vm.logout
     }
-  }, [_vm._v("Выйти")]) : _vm._e()]);
+  }, [_vm._v("Выйти")]) : _vm._e()])])], 1)], 1);
 };
 
 var staticRenderFns = [];
@@ -5726,7 +5730,19 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("v-app", [_c("v-main", [_c("v-container", {
+  return _c("v-app", [_c("v-app-bar", {
+    attrs: {
+      app: "",
+      color: "black"
+    }
+  }, [_c("v-list-item-group", [_c("v-list-item", [_c("router-link", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      to: {
+        name: "MainPage"
+      }
+    }
+  }, [_vm._v("Конференции")])], 1)], 1)], 1), _vm._v(" "), _c("v-main", [_c("v-container", {
     staticClass: "fill-height",
     attrs: {
       fluid: ""
@@ -5786,7 +5802,7 @@ var render = function render() {
     }
   }, [_vm._v("Войти")]), _vm._v(" "), _c("v-card-actions", {
     staticClass: "text--secondary"
-  }, [_c("v-spacer"), _vm._v("\r\n                              Нет аккаунта? "), _c("router-link", {
+  }, [_c("v-spacer"), _vm._v("\r\n                              Нет аккаунта?"), _c("router-link", {
     attrs: {
       to: {
         name: "Registration"
@@ -5817,7 +5833,19 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("v-app", [_c("v-main", [_c("v-container", {
+  return _c("v-app", [_c("v-app-bar", {
+    attrs: {
+      app: "",
+      color: "black"
+    }
+  }, [_c("v-list-item-group", [_c("v-list-item", [_c("router-link", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      to: {
+        name: "MainPage"
+      }
+    }
+  }, [_vm._v("Конференции")])], 1)], 1)], 1), _vm._v(" "), _c("v-main", [_c("v-container", {
     staticClass: "fill-height",
     attrs: {
       fluid: ""
@@ -5992,7 +6020,11 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("auth"), _vm._v(" "), _c("div", {
+  }, [_c("auth", {
+    staticStyle: {
+      height: "80px"
+    }
+  }), _vm._v(" "), _c("div", {
     staticClass: "row justify-content-center"
   }, [_c("div", {
     staticClass: "col-md-8"
@@ -6053,7 +6085,11 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("auth"), _vm._v(" "), _c("div", {
+  }, [_c("auth", {
+    staticStyle: {
+      height: "80px"
+    }
+  }), _vm._v(" "), _c("div", {
     staticClass: "card-body"
   }, [_c("input", {
     staticClass: "form-control",
@@ -6157,7 +6193,11 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("auth"), _vm._v(" "), _c("div", {
+  }, [_c("auth", {
+    staticStyle: {
+      height: "80px"
+    }
+  }), _vm._v(" "), _c("div", {
     staticClass: "card-body"
   }, [_c("input", {
     staticClass: "form-control",
@@ -6314,7 +6354,11 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("auth"), _vm._v(" "), _c("div", {
+  return _c("div", [_c("auth", {
+    staticStyle: {
+      height: "80px"
+    }
+  }), _vm._v(" "), _c("div", {
     staticClass: "row justify-content-center"
   }, [_c("div", {
     staticClass: "col-md-8"

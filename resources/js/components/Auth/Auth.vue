@@ -1,5 +1,12 @@
 <template>
    <v-app>
+      <v-app-bar app color="black">
+        <v-list-item-group>
+            <v-list-item>
+               <router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Конференции</router-link>
+            </v-list-item>
+        </v-list-item-group>
+    </v-app-bar>
       <v-main>
          <v-container class="fill-height" fluid>
             <v-row align="center" justify="center" dense>
@@ -12,7 +19,7 @@
                            <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Войти</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
-                              Нет аккаунта? <router-link :to="{name: 'Registration'}">Регистрация</router-link>
+                              Нет аккаунта?<router-link :to="{name: 'Registration'}">Регистрация</router-link>
                            </v-card-actions>
                         </v-form>
                      </v-card-text>

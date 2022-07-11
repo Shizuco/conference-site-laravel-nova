@@ -1,6 +1,6 @@
 <template>
    <div class="container">
-    <auth></auth>
+    <auth style="height: 80px"></auth>
         <div class="card-body">
             <input type="text" name="title"  id="title" class="form-control" placeholder="Hазвание">
             <div class="form-row">

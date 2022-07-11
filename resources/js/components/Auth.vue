@@ -1,9 +1,13 @@
 <template>
-  <nav class="navbar sticky-top navbar-light bg-light">
-      <button class="navbar-brand" v-if="!isAuth()"><router-link :to="{name: 'Registration'}">Регистарция</router-link></button>
-      <button class="navbar-brand" v-if="!isAuth()"><router-link :to="{name: 'Auth'}">Авторизация</router-link></button>
-      <button class="navbar-brand" v-if="isAuth()" @click="logout">Выйти</button>
-</nav>
+   <v-app>
+      <v-app-bar app flat color="black">
+            <v-toolbar-title class="text-uppercase grey--text">
+               <span><button v-if="!isAuth()"><router-link :to="{name: 'Registration'}" class="text-h5 white--text">Регистарция</router-link></button></span>
+               <span><button v-if="!isAuth()"><router-link :to="{name: 'Auth'}" class="text-h5 white--text">Авторизация</router-link></button></span>
+               <span><button class="text-h5 white--text" v-if="isAuth()" @click="logout">Выйти</button></span>
+            </v-toolbar-title>
+      </v-app-bar>
+   </v-app>
 </template>
 
 <script>

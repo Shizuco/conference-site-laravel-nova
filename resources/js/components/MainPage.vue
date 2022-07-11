@@ -1,6 +1,6 @@
 <template>
     <div>
-        <auth></auth>
+        <auth style="height: 80px"></auth>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <br>
