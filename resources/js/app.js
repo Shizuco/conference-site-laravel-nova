@@ -25,20 +25,23 @@ Vue.component('edit', require('./components/EditConference.vue').default);
 Vue.component('auth', require('./components/Auth.vue').default);
 Vue.component('register', require('./components/Auth/Registration.vue').default);
 Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
+Vue.component('error403', require('./components/Errors/Error403Forbidden.vue').default);
 
 import store from './store'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 import router from './router/index'
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
-Vue.use(BootstrapVue);
+Vue.use(Vuetify)
 Vue.use(VueRouter)
 
 const app = new Vue({
     el: '#app',
     store,
-    router
+    router,
+    vuetify : new Vuetify(),
 });

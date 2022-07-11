@@ -7,7 +7,8 @@ export default new Vuex.Store({
     state:{
         conferences:[],
         conference:[],
-        user:[]
+        user:[],
+        userOnConferenceStatus:[]
     },
     getters:{
         getConferences(state){
@@ -18,6 +19,9 @@ export default new Vuex.Store({
         },
         getUser(state){
             return state.user;
+        },
+        getUserOnConferenceStatus(state){
+            return state.userOnConferenceStatus;
         }
     },
     actions:{
@@ -226,7 +230,7 @@ export default new Vuex.Store({
                   }
                 })
                 .then((response)=>{
-                    commit('setUser', response.data)
+                    commit('setUserOnConferenceStatus', response.data)
                     console.log(response.data)
             })
         }
@@ -240,6 +244,9 @@ export default new Vuex.Store({
         },
         setUser(state, data){
             return state.user = data
+        },
+        setUserOnConferenceStatus(state, data){
+            return state.userOnConferenceStatus = data
         }
     }
     }
