@@ -6018,45 +6018,93 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("auth", {
+  return _c("v-app", [_c("auth", {
     staticStyle: {
       height: "80px"
     }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "row justify-content-center"
-  }, [_c("div", {
-    staticClass: "col-md-8"
-  }, [_c("div", {
-    staticClass: "card"
-  }, [_c("div", {
-    staticClass: "card-header"
-  }, [_vm._v("Conference Component")]), _vm._v(" "), _c("p", [_vm._v(_vm._s(_vm.getConference))])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-8"
+  }), _vm._v(" "), _c("v-main", [_c("v-container", {
+    staticClass: "fill-height",
+    attrs: {
+      fluid: ""
+    }
+  }, [_c("v-row", {
+    attrs: {
+      align: "center",
+      justify: "center",
+      dense: ""
+    }
+  }, [_c("v-col", {
+    attrs: {
+      cols: "12",
+      sm: "8",
+      md: "4",
+      lg: "8"
+    }
+  }, [_c("v-card", {
+    attrs: {
+      elevation: "0"
+    }
+  }, [_c("v-card-text", [_c("v-form", [_c("v-row", [_c("v-col", [_c("v-text", [_c("h1", [_vm._v(_vm._s(_vm.getConference.title))])])], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text", [_c("h3", [_vm._v("Время проведения: " + _vm._s(_vm.getConference.date) + " " + _vm._s(_vm.getConference.time))])])], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("div", {
+    staticStyle: {
+      width: "100%",
+      height: "400px"
+    },
+    attrs: {
+      id: "map"
+    }
+  })])], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-btn", {
+    attrs: {
+      "x-large": "",
+      block: "",
+      red: "",
+      color: "#000000"
+    }
   }, [_c("router-link", {
+    staticClass: "text-h5 white--text",
     attrs: {
       to: {
         name: "MainPage"
       }
     }
-  }, [_vm._v("Назад")]), _vm._v(" "), _vm.isAdmin() ? _c("button", {
+  }, [_vm._v("Назад")])], 1)], 1), _vm._v(" "), _c("v-col", [_vm.isAdmin() ? _c("v-btn", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      "x-large": "",
+      block: "",
+      red: ""
+    },
     on: {
       click: function click($event) {
         return _vm.deleteConference();
       }
     }
-  }, [_vm._v("Удалить")]) : _vm._e(), _vm._v(" "), _vm.isAuth() && _vm.isOnConference() == null ? _c("button", {
+  }, [_vm._v("Удалить")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() == null ? _c("v-btn", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      "x-large": "",
+      block: "",
+      green: "",
+      color: "#000000"
+    },
     on: {
       click: function click($event) {
         return _vm.join();
       }
     }
-  }, [_vm._v("Присоединиться")]) : _vm._e(), _vm._v(" "), _vm.isAuth() && _vm.isOnConference() != null ? _c("button", {
+  }, [_vm._v("Присоединиться")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() != null ? _c("v-btn", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      "x-large": "",
+      block: "",
+      yellow: "",
+      color: "#000000"
+    },
     on: {
       click: function click($event) {
         return _vm.out();
       }
     }
-  }, [_vm._v("Выйти")]) : _vm._e()], 1)]), _vm._v(" "), _c("br")], 1);
+  }, [_vm._v("Выйти")]) : _vm._e()], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1);
 };
 
 var staticRenderFns = [];
@@ -6197,50 +6245,89 @@ var render = function render() {
     staticStyle: {
       height: "80px"
     }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "row justify-content-center"
-  }, [_c("div", {
-    staticClass: "col-md-8"
-  }, [_c("input", {
-    staticClass: "form-control",
+  }), _vm._v(" "), _c("v-main", [_c("v-container", {
+    staticClass: "fill-height",
     attrs: {
-      type: "text",
+      fluid: ""
+    }
+  }, [_c("v-row", {
+    attrs: {
+      align: "center",
+      justify: "center",
+      dense: ""
+    }
+  }, [_c("v-col", {
+    attrs: {
+      cols: "12",
+      sm: "8",
+      md: "4",
+      lg: "8"
+    }
+  }, [_c("v-card", {
+    attrs: {
+      elevation: "0"
+    }
+  }, [_c("v-card-text", [_c("v-form", [_c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
+    attrs: {
       name: "title",
       id: "title",
-      placeholder: "Hазвание"
-    },
-    domProps: {
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      min: "2",
+      max: "255",
+      outlined: "",
+      required: "",
       value: _vm.getConference.title
     }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "form-row"
-  }, [_c("div", {
-    staticClass: "col"
-  }, [_c("input", {
-    staticClass: "form-control",
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "date",
-      id: "date",
       name: "date",
-      max: "2032-12-31"
-    },
-    domProps: {
+      id: "date",
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      outlined: "",
+      required: "",
       value: _vm.getConference.date
     }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "col"
-  }, [_c("input", {
-    staticClass: "form-control",
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "time",
       name: "time",
-      id: "time"
-    },
-    domProps: {
+      id: "time",
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      min: "2",
+      max: "255",
+      outlined: "",
+      required: "",
       value: _vm.getConference.time
+    }
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
+    attrs: {
+      name: "country",
+      id: "country",
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      outlined: "",
+      required: "",
+      value: _vm.getConference.country
+    }
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("div", {
+    staticStyle: {
+      width: "100%",
+      height: "400px"
+    },
+    attrs: {
+      id: "map"
     }
   })]), _vm._v(" "), _c("input", {
     staticClass: "form-control",
+    staticStyle: {
+      display: "none"
+    },
     attrs: {
       type: "text",
       id: "lat",
@@ -6251,6 +6338,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("input", {
     staticClass: "form-control",
+    staticStyle: {
+      display: "none"
+    },
     attrs: {
       type: "text",
       id: "lon",
@@ -6259,39 +6349,32 @@ var render = function render() {
     domProps: {
       value: _vm.getConference.address_lon
     }
-  }), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
+  })], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-btn", {
     attrs: {
-      type: "text",
-      id: "country",
-      name: "country"
-    },
-    domProps: {
-      value: _vm.getConference.country
+      "x-large": "",
+      block: "",
+      red: "",
+      color: "#000000"
     }
-  })]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
-    staticStyle: {
-      width: "100%",
-      height: "400px"
-    },
-    attrs: {
-      id: "map"
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-8"
   }, [_c("router-link", {
+    staticClass: "text-h5 white--text",
     attrs: {
       to: {
         name: "MainPage"
       }
     }
-  }, [_vm._v("Назад")]), _vm._v(" "), _c("button", {
+  }, [_vm._v("Назад")])], 1)], 1), _vm._v(" "), _c("v-col", [_c("v-btn", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      "x-large": "",
+      block: ""
+    },
     on: {
       click: function click($event) {
         return _vm.editConference();
       }
     }
-  }, [_vm._v("Сохранить")])], 1)])], 1);
+  }, [_vm._v("Сохранить")])], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1);
 };
 
 var staticRenderFns = [];

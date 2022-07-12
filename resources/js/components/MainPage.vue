@@ -15,6 +15,8 @@
             </div>
         </div>
         <router-link v-if="isAdmin()" :to="{name: 'CreateConference'}">Создать</router-link>
+
+        
     </div>
     
 </template>
