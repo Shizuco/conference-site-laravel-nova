@@ -6129,86 +6129,83 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("auth", {
+  return _c("div", {
+    staticClass: "container"
+  }, [_c("auth", {
     staticStyle: {
       height: "80px"
     }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "row justify-content-center"
-  }, [_vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "col-md-8"
-  }, [_c("router-link", {
+  }), _vm._v(" "), _c("v-main", [_c("v-container", {
+    staticClass: "fill-height",
     attrs: {
-      to: {
-        name: "MainPage"
-      }
+      fluid: ""
     }
-  }, [_vm._v("Назад")]), _vm._v(" "), _c("button", {
-    on: {
-      click: function click($event) {
-        return _vm.createConference();
-      }
-    }
-  }, [_vm._v("Сохранить")])], 1)])], 1);
-};
-
-var staticRenderFns = [function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("div", {
-    staticClass: "col-md-8"
-  }, [_c("input", {
-    staticClass: "form-control",
+  }, [_c("v-row", {
     attrs: {
-      type: "text",
+      align: "center",
+      justify: "center",
+      dense: ""
+    }
+  }, [_c("v-col", {
+    attrs: {
+      cols: "12",
+      sm: "8",
+      md: "4",
+      lg: "8"
+    }
+  }, [_c("v-card", {
+    attrs: {
+      elevation: "0"
+    }
+  }, [_c("v-card-text", [_c("v-form", [_c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
+    attrs: {
+      label: "Введите название",
       name: "title",
       id: "title",
-      placeholder: "Hазвание"
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      min: "2",
+      max: "255",
+      outlined: "",
+      required: ""
     }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "form-row"
-  }, [_c("div", {
-    staticClass: "col"
-  }, [_c("input", {
-    staticClass: "form-control",
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "date",
-      id: "date",
+      label: "Введите дату проведения",
       name: "date",
-      max: "2032-12-31"
+      id: "date",
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      outlined: "",
+      required: ""
     }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "col"
-  }, [_c("input", {
-    staticClass: "form-control",
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "time",
+      label: "Введите время проведения",
       name: "time",
-      id: "time"
-    }
-  })]), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
-    attrs: {
+      id: "time",
+      "prepend-inner-icon": "mdi-mail",
       type: "text",
-      id: "lat",
-      name: "address_lat"
+      min: "2",
+      max: "255",
+      outlined: "",
+      required: ""
     }
-  }), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+    staticClass: "rounded-0",
     attrs: {
-      type: "text",
-      id: "lon",
-      name: "address_lon"
-    }
-  }), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
+      label: "Введите страну",
+      name: "country",
       id: "country",
-      name: "country"
+      "prepend-inner-icon": "mdi-mail",
+      type: "text",
+      outlined: "",
+      required: ""
     }
-  })]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("div", {
     staticStyle: {
       width: "100%",
       height: "400px"
@@ -6216,8 +6213,55 @@ var staticRenderFns = [function () {
     attrs: {
       id: "map"
     }
-  })]);
-}];
+  })]), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    staticStyle: {
+      display: "none"
+    },
+    attrs: {
+      type: "text",
+      id: "lat",
+      name: "address_lat"
+    }
+  }), _vm._v(" "), _c("input", {
+    staticClass: "form-control",
+    staticStyle: {
+      display: "none"
+    },
+    attrs: {
+      type: "text",
+      id: "lon",
+      name: "address_lon"
+    }
+  })], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-btn", {
+    attrs: {
+      "x-large": "",
+      block: "",
+      red: "",
+      color: "#000000"
+    }
+  }, [_c("router-link", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      to: {
+        name: "MainPage"
+      }
+    }
+  }, [_vm._v("Назад")])], 1)], 1), _vm._v(" "), _c("v-col", [_c("v-btn", {
+    staticClass: "text-h5 white--text",
+    attrs: {
+      "x-large": "",
+      block: ""
+    },
+    on: {
+      click: function click($event) {
+        return _vm.editConference();
+      }
+    }
+  }, [_vm._v("Сохранить")])], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1);
+};
+
+var staticRenderFns = [];
 render._withStripped = true;
 
 
@@ -6456,11 +6500,12 @@ var render = function render() {
       attrs: {
         value: conference.id
       }
-    }, [_c("div", {
-      staticClass: "card-header"
-    }, [_vm._v(_vm._s(conference.title)), _c("br")]), _vm._v(" "), _c("div", {
-      staticClass: "card-body"
-    }, [_vm._v(_vm._s(conference))]), _vm._v(" "), _vm.isAuth() ? _c("router-link", {
+    }, [_c("v-card", [_c("v-card-title", [_vm._v(_vm._s(conference.title))]), _vm._v(" "), _c("v-card-text", [_c("v-row", [_c("v-col", [_vm._v("Время проведения: " + _vm._s(conference.date) + "  " + _vm._s(conference.time))])], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-btn", {
+      attrs: {
+        "x-big": "",
+        block: ""
+      }
+    }, [_vm.isAuth() ? _c("router-link", {
       attrs: {
         to: {
           name: "ConferenceDetails",
@@ -6475,7 +6520,7 @@ var render = function render() {
           name: "Registration"
         }
       }
-    }, [_vm._v("Подробнее")]), _vm._v(" "), _vm.isAdmin() ? _c("router-link", {
+    }, [_vm._v("Подробнее")])], 1)], 1), _vm._v(" "), _vm.isAdmin() ? _c("v-col", [_c("router-link", {
       attrs: {
         to: {
           name: "EditConference",
@@ -6484,20 +6529,30 @@ var render = function render() {
           }
         }
       }
-    }, [_vm._v("Изменить")]) : _vm._e(), _vm._v(" "), _vm.isAdmin() ? _c("button", {
+    }, [_c("v-btn", {
+      attrs: {
+        "x-big": "",
+        block: ""
+      }
+    }, [_vm._v("Изменить")])], 1)], 1) : _vm._e(), _vm._v(" "), _vm.isAdmin() ? _c("v-col", [_c("v-btn", {
+      attrs: {
+        "x-big": "",
+        block: ""
+      }
+    }, [_c("button", {
       on: {
         click: function click($event) {
           return _vm.deleteConference(conference.id);
         }
       }
-    }, [_vm._v("Удалить")]) : _vm._e()], 1);
-  })], 2)]), _vm._v(" "), _vm.isAdmin() ? _c("router-link", {
+    }, [_vm._v("УДАЛИТЬ")])])], 1) : _vm._e()], 1)], 1)], 1)], 1);
+  }), _vm._v(" "), _c("br")], 2), _vm._v(" "), _vm.isAdmin() ? _c("router-link", {
     attrs: {
       to: {
         name: "CreateConference"
       }
     }
-  }, [_vm._v("Создать")]) : _vm._e()], 1);
+  }, [_vm._v("Создать")]) : _vm._e()], 1)], 1);
 };
 
 var staticRenderFns = [];

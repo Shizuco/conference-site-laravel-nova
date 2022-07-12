@@ -1,28 +1,39 @@
 <template>
-   <div>
-    <auth style="height: 80px"></auth>
-     <div class="row justify-content-center">
-            <div class="col-md-8">
-                <input type="text" name="title"  id="title" class="form-control" placeholder="Hазвание">
-            <div class="form-row">
-                <div class="col">
-                    <input type="date"  id="date" class="form-control" name="date" max="2032-12-31">
-                </div>
-                <div class="col">
-                    <input type="time" name="time" id="time" class="form-control">
-                </div>
-                <input type="text" id="lat" name="address_lat" class="form-control">
-                <input type="text" id="lon" name="address_lon" class="form-control">
-                <input type="text" id="country" name="country" class="form-control">
-            </div>
-            <br>
-            <div id="map" style="width:100%;height:400px;"></div>
-            </div>
-            <div class="col-md-8">
-                <router-link :to="{name: 'MainPage'}">Назад</router-link>
-                <button @click="createConference()">Сохранить</button>
-            </div>
-        </div>
+   <div class="container">
+        <auth style="height: 80px"></auth>
+        <v-main>
+            <v-container class="fill-height" fluid>
+                <v-row align="center" justify="center" dense>
+                <v-col cols="12" sm="8" md="4" lg="8">
+                    <v-card elevation="0">
+                        <v-card-text>
+                            <v-form>
+                                <v-row>
+                                    <v-col><v-text-field label="Введите название" name="title" id="title" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><v-text-field label="Введите дату проведения" name="date" id="date" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                                    <v-col><v-text-field label="Введите время проведения" name="time" id="time" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><v-text-field label="Введите страну" name="country" id="country" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col><div id="map" style="width:100%;height:400px;"></div></v-col>
+                                    <input type="text" id="lat" name="address_lat" class="form-control" style="display:none;">
+                                    <input type="text" id="lon" name="address_lon" class="form-control" style="display:none;">
+                                </v-row>
+                                <v-row>
+                                    <v-col><v-btn x-large block red color="#000000"><router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Назад</router-link></v-btn></v-col>
+                                    <v-col><v-btn x-large block class="text-h5 white--text" @click="editConference()">Сохранить</v-btn></v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+                </v-row>
+            </v-container>
+        </v-main>
     </div>
 </template>
 

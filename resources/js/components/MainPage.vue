@@ -5,18 +5,25 @@
             <div class="col-md-8">
                 <br>
                 <div class="card" v-for="conference in getConferences" :value="conference.id" :key="conference.id">
-                    <div class="card-header">{{conference.title}}<br></div>
-                    <div class="card-body">{{conference}}</div>
-                    <router-link v-if="isAuth()" :to="{name: 'ConferenceDetails', params:{id: conference.id}}">Подробнее</router-link>
-                    <router-link v-else :to="{name: 'Registration'}">Подробнее</router-link>
-                    <router-link v-if="isAdmin()" :to="{name: 'EditConference', params:{id: conference.id}}">Изменить</router-link>
-                    <button v-if="isAdmin()" @click="deleteConference(conference.id)">Удалить</button>
+                    <v-card>
+                        <v-card-title>{{conference.title}}</v-card-title>
+                        <v-card-text>
+                            <v-row>
+                                <v-col>Время проведения: {{conference.date}}  {{conference.time}}</v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col ><v-btn x-big block><router-link v-if="isAuth()" :to="{name: 'ConferenceDetails', params:{id: conference.id}}">Подробнее</router-link>
+                                <router-link v-else :to="{name: 'Registration'}">Подробнее</router-link></v-btn></v-col>
+                                <v-col v-if="isAdmin()"><router-link :to="{name: 'EditConference', params:{id: conference.id}}"><v-btn x-big block>Изменить</v-btn></router-link></v-col>
+                                <v-col v-if="isAdmin()"><v-btn x-big block><button @click="deleteConference(conference.id)">УДАЛИТЬ</button></v-btn></v-col>         
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
                 </div>
+                <br>
             </div>
+            <router-link v-if="isAdmin()" :to="{name: 'CreateConference'}">Создать</router-link>
         </div>
-        <router-link v-if="isAdmin()" :to="{name: 'CreateConference'}">Создать</router-link>
-
-        
     </div>
     
 </template>
