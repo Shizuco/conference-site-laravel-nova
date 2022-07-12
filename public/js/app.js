@@ -5431,6 +5431,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! process */ "./node_modules/process/browser.js");
+/* harmony import */ var process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(process__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5465,7 +5468,15 @@ __webpack_require__.r(__webpack_exports__);
         value: '10',
         countryName: 'Китай'
       }],
-      selectedCountry: null
+      role: [{
+        value: 'listener',
+        roleName: 'Слушатель'
+      }, {
+        value: 'announcer',
+        roleName: 'Диктор'
+      }],
+      selectedCountry: null,
+      selectedRole: null
     };
   },
   methods: {
@@ -6037,16 +6048,24 @@ var render = function render() {
       outlined: "",
       required: ""
     }
-  })], 1)], 1), _vm._v(" "), _c("v-text-field", {
+  })], 1)], 1), _vm._v(" "), _c("v-select", {
     staticClass: "rounded-0",
     attrs: {
       label: "Введите роль",
       name: "role",
       id: "role",
       "prepend-inner-icon": "mdi-lock",
-      type: "text",
       outlined: "",
-      required: ""
+      required: "",
+      items: _vm.role,
+      "item-text": "roleName"
+    },
+    model: {
+      value: _vm.selectedRole,
+      callback: function callback($$v) {
+        _vm.selectedRole = $$v;
+      },
+      expression: "selectedRole"
     }
   }), _vm._v(" "), _c("v-text-field", {
     staticClass: "rounded-0",

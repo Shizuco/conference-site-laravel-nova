@@ -23,7 +23,9 @@
                               <v-col><v-text-field label="Введите пароль" name="password" id="password" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
                               <v-col><v-text-field label="Повторите пароль" name="password_confirmation" id="password_confirmation" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
                            </v-row>
-                           <v-text-field label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                           <v-select label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
+                                 :items="role" item-text="roleName" v-model="selectedRole">
+                           </v-select>
                            <v-text-field label="Введите номер телефона" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
                            <v-row>
                               <v-col><v-text-field label="Введите дату рождения" name="birthday" id="birthday" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
@@ -49,6 +51,8 @@
 </template>
 
 <script>
+import { listenerCount } from 'process'
+
     export default{
       data: () => ({
          items: [
@@ -63,7 +67,12 @@
             {value: '9', countryName: 'Канада'},
             {value: '10', countryName: 'Китай'},
          ],
-         selectedCountry: null
+         role: [
+            {value: 'listener', roleName: 'Слушатель'},
+            {value: 'announcer', roleName: 'Диктор'}
+         ],
+         selectedCountry: null,
+         selectedRole: null
       }),
         methods:{
          register(){
