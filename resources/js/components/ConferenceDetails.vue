@@ -19,9 +19,9 @@
                                 </v-row>
                                 <v-row>
                                     <v-col><v-btn x-large block red color="#000000"><router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Назад</router-link></v-btn></v-col>
-                                    <v-col><v-btn v-if="isAdmin()" @click="deleteConference()" x-large block red class="text-h5 white--text">Удалить</v-btn></v-col>
-                                    <v-col><v-btn v-if="isAuth()&&isOnConference()==null" @click="join()" x-large block green color="#000000" class="text-h5 white--text">Присоединиться</v-btn></v-col>
-                                    <v-col><v-btn v-if="isAuth()&&isOnConference()!=null" @click="out()" x-large block yellow color="#000000" class="text-h5 white--text">Выйти</v-btn></v-col>
+                                    <v-col><v-btn v-if="isAdmin()" @click="deleteConference()" x-large block red color="#000000" class="text-h5 white--text">Удалить</v-btn></v-col>
+                                    <v-col><v-btn v-if="isAuth()&&isOnConference()==null&&!isAdmin()" @click="join()" x-large block green color="#000000" class="text-h5 white--text">Присоединиться</v-btn></v-col>
+                                    <v-col><v-btn v-if="isAuth()&&isOnConference()!=null&&!isAdmin()" @click="out()" x-large block yellow color="#000000" class="text-h5 white--text">Выйти</v-btn></v-col>
                                 </v-row>
                             </v-form>
                         </v-card-text>
@@ -56,7 +56,7 @@
                 }
             },
             isAdmin(){
-                if(this.$store.getters.getUser.role == "Admin"){
+                if(this.$store.getters.getUser.role == "admin"){
                     return true
                 }
                 else{

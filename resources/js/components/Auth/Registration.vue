@@ -27,7 +27,11 @@
                            <v-text-field label="Введите номер телефона" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
                            <v-row>
                               <v-col><v-text-field label="Введите дату рождения" name="birthday" id="birthday" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
-                              <v-col><v-text-field label="Введите страну местопнаходжения" name="country" id="country" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col>
+                                 <v-select label="Введите страну" name="country" id="country" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
+                                 :items="items" item-text="countryName" v-model="selectedCountry">
+                                 </v-select>
+                              </v-col>
                            </v-row>
                            <v-btn @click="register()" class="rounded-0" color="#000000" x-large block dark>Зарегестрироваться</v-btn>
                            <v-card-actions class="text--secondary">
@@ -46,6 +50,21 @@
 
 <script>
     export default{
+      data: () => ({
+         items: [
+            {value: '1', countryName: 'Япония'},
+            {value: '2', countryName: 'США'},
+            {value: '3', countryName: 'Украина'},
+            {value: '4', countryName: 'Россия'},
+            {value: '5', countryName: 'Беларусь'},
+            {value: '6', countryName: 'Польша'},
+            {value: '7', countryName: 'Чехия'},
+            {value: '8', countryName: 'Черногорие'},
+            {value: '9', countryName: 'Канада'},
+            {value: '10', countryName: 'Китай'},
+         ],
+         selectedCountry: null
+      }),
         methods:{
          register(){
             let data = {
@@ -53,7 +72,7 @@
                   email: document.getElementById('email').value, 
                   password: document.getElementById('password').value, 
                   password_confirmation: document.getElementById('password_confirmation').value, 
-                  country: document.getElementById('country').value, 
+                  country: this.selectedCountry, 
                   birthday: document.getElementById('birthday').value, 
                   role: document.getElementById('role').value, 
                   surname: document.getElementById('surname').value, 

@@ -16,7 +16,11 @@
                                     <v-col><v-text-field name="time" id="time" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" min="2" max="255" outlined required :value=getConference.time></v-text-field></v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col><v-text-field name="country" id="country" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined required :value=getConference.country></v-text-field></v-col>
+                                    <v-col>
+                                        <v-select label="Введите страну" name="country" id="country" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
+                                            :items="items" item-text="countryName" v-model="selectedCountry">
+                                        </v-select>
+                                    </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col><div id="map" style="width:100%;height:400px;"></div></v-col>
@@ -40,16 +44,32 @@
 <script>
 
     export default {
-        mounted() {
+        mounted(){
             let id = this.$route.params.id
             this.$store.dispatch('ajaxGetConference', id)
+            this.selectedCountry = this.$store.getters.getConference.country
+            console.log(this.$store.getters.getConference.country)
         },
+        data: () => ({
+            items: [
+                {value: '1', countryName: 'Япония'},
+                {value: '2', countryName: 'США'},
+                {value: '3', countryName: 'Украина'},
+                {value: '4', countryName: 'Россия'},
+                {value: '5', countryName: 'Беларусь'},
+                {value: '6', countryName: 'Польша'},
+                {value: '7', countryName: 'Чехия'},
+                {value: '8', countryName: 'Черногорие'},
+                {value: '9', countryName: 'Канада'},
+                {value: '10', countryName: 'Китай'},
+            ],
+            selectedCountry: null
+        }),
         computed: {
             getConference(){
                 return this.$store.getters.getConference
             },
             editConference(){
-                let href = document.location.origin
                 let data = {
                     'id': this.$route.params.id,
                     'title' : document.getElementById('title').value,
@@ -57,12 +77,12 @@
                     'time' : document.getElementById('time').value,
                     'address_lat' : document.getElementById('lat').value,
                     'address_lon' : document.getElementById('lon').value,
-                    'country' : document.getElementById('country').value
+                    'country' : this.selectedCountry
                 }
                 console.log(data)
                 this.$store.dispatch('ajaxConferenceEdit', data)
                 this.$store.getters.createConference
-                document.location.href = href
+                location.reload();
             }
         }
     }

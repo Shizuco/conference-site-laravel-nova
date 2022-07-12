@@ -5432,6 +5432,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      items: [{
+        value: '1',
+        countryName: 'Япония'
+      }, {
+        value: '2',
+        countryName: 'США'
+      }, {
+        value: '3',
+        countryName: 'Украина'
+      }, {
+        value: '4',
+        countryName: 'Россия'
+      }, {
+        value: '5',
+        countryName: 'Беларусь'
+      }, {
+        value: '6',
+        countryName: 'Польша'
+      }, {
+        value: '7',
+        countryName: 'Чехия'
+      }, {
+        value: '8',
+        countryName: 'Черногорие'
+      }, {
+        value: '9',
+        countryName: 'Канада'
+      }, {
+        value: '10',
+        countryName: 'Китай'
+      }],
+      selectedCountry: null
+    };
+  },
   methods: {
     register: function register() {
       var _this = this;
@@ -5441,7 +5477,7 @@ __webpack_require__.r(__webpack_exports__);
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
         password_confirmation: document.getElementById('password_confirmation').value,
-        country: document.getElementById('country').value,
+        country: this.selectedCountry,
         birthday: document.getElementById('birthday').value,
         role: document.getElementById('role').value,
         surname: document.getElementById('surname').value,
@@ -5500,7 +5536,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     isAdmin: function isAdmin() {
-      if (this.$store.getters.getUser.role == "Admin") {
+      if (this.$store.getters.getUser.role == "admin") {
         return true;
       } else {
         return false;
@@ -5543,6 +5579,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      items: [{
+        value: '1',
+        countryName: 'Япония'
+      }, {
+        value: '2',
+        countryName: 'США'
+      }, {
+        value: '3',
+        countryName: 'Украина'
+      }, {
+        value: '4',
+        countryName: 'Россия'
+      }, {
+        value: '5',
+        countryName: 'Беларусь'
+      }, {
+        value: '6',
+        countryName: 'Польша'
+      }, {
+        value: '7',
+        countryName: 'Чехия'
+      }, {
+        value: '8',
+        countryName: 'Черногорие'
+      }, {
+        value: '9',
+        countryName: 'Канада'
+      }, {
+        value: '10',
+        countryName: 'Китай'
+      }],
+      selectedCountry: null
+    };
+  },
   computed: {
     createConference: function createConference() {
       var href = document.location.origin;
@@ -5579,13 +5651,50 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var id = this.$route.params.id;
     this.$store.dispatch('ajaxGetConference', id);
+    this.selectedCountry = this.$store.getters.getConference.country;
+    console.log(this.$store.getters.getConference.country);
+  },
+  data: function data() {
+    return {
+      items: [{
+        value: '1',
+        countryName: 'Япония'
+      }, {
+        value: '2',
+        countryName: 'США'
+      }, {
+        value: '3',
+        countryName: 'Украина'
+      }, {
+        value: '4',
+        countryName: 'Россия'
+      }, {
+        value: '5',
+        countryName: 'Беларусь'
+      }, {
+        value: '6',
+        countryName: 'Польша'
+      }, {
+        value: '7',
+        countryName: 'Чехия'
+      }, {
+        value: '8',
+        countryName: 'Черногорие'
+      }, {
+        value: '9',
+        countryName: 'Канада'
+      }, {
+        value: '10',
+        countryName: 'Китай'
+      }],
+      selectedCountry: null
+    };
   },
   computed: {
     getConference: function getConference() {
       return this.$store.getters.getConference;
     },
     editConference: function editConference() {
-      var href = document.location.origin;
       var data = {
         'id': this.$route.params.id,
         'title': document.getElementById('title').value,
@@ -5593,12 +5702,12 @@ __webpack_require__.r(__webpack_exports__);
         'time': document.getElementById('time').value,
         'address_lat': document.getElementById('lat').value,
         'address_lon': document.getElementById('lon').value,
-        'country': document.getElementById('country').value
+        'country': this.selectedCountry
       };
       console.log(data);
       this.$store.dispatch('ajaxConferenceEdit', data);
       this.$store.getters.createConference;
-      document.location.href = href;
+      location.reload();
     }
   }
 });
@@ -5961,16 +6070,24 @@ var render = function render() {
       outlined: "",
       required: ""
     }
-  })], 1), _vm._v(" "), _c("v-col", [_c("v-text-field", {
+  })], 1), _vm._v(" "), _c("v-col", [_c("v-select", {
     staticClass: "rounded-0",
     attrs: {
-      label: "Введите страну местопнаходжения",
+      label: "Введите страну",
       name: "country",
       id: "country",
       "prepend-inner-icon": "mdi-lock",
-      type: "text",
       outlined: "",
-      required: ""
+      required: "",
+      items: _vm.items,
+      "item-text": "countryName"
+    },
+    model: {
+      value: _vm.selectedCountry,
+      callback: function callback($$v) {
+        _vm.selectedCountry = $$v;
+      },
+      expression: "selectedCountry"
     }
   })], 1)], 1), _vm._v(" "), _c("v-btn", {
     staticClass: "rounded-0",
@@ -6071,14 +6188,15 @@ var render = function render() {
     attrs: {
       "x-large": "",
       block: "",
-      red: ""
+      red: "",
+      color: "#000000"
     },
     on: {
       click: function click($event) {
         return _vm.deleteConference();
       }
     }
-  }, [_vm._v("Удалить")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() == null ? _c("v-btn", {
+  }, [_vm._v("Удалить")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() == null && !_vm.isAdmin() ? _c("v-btn", {
     staticClass: "text-h5 white--text",
     attrs: {
       "x-large": "",
@@ -6091,7 +6209,7 @@ var render = function render() {
         return _vm.join();
       }
     }
-  }, [_vm._v("Присоединиться")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() != null ? _c("v-btn", {
+  }, [_vm._v("Присоединиться")]) : _vm._e()], 1), _vm._v(" "), _c("v-col", [_vm.isAuth() && _vm.isOnConference() != null && !_vm.isAdmin() ? _c("v-btn", {
     staticClass: "text-h5 white--text",
     attrs: {
       "x-large": "",
@@ -6163,7 +6281,6 @@ var render = function render() {
       label: "Введите название",
       name: "title",
       id: "title",
-      "prepend-inner-icon": "mdi-mail",
       type: "text",
       min: "2",
       max: "255",
@@ -6176,7 +6293,6 @@ var render = function render() {
       label: "Введите дату проведения",
       name: "date",
       id: "date",
-      "prepend-inner-icon": "mdi-mail",
       type: "text",
       outlined: "",
       required: ""
@@ -6187,23 +6303,30 @@ var render = function render() {
       label: "Введите время проведения",
       name: "time",
       id: "time",
-      "prepend-inner-icon": "mdi-mail",
       type: "text",
       min: "2",
       max: "255",
       outlined: "",
       required: ""
     }
-  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-select", {
     staticClass: "rounded-0",
     attrs: {
       label: "Введите страну",
       name: "country",
       id: "country",
-      "prepend-inner-icon": "mdi-mail",
-      type: "text",
+      "prepend-inner-icon": "mdi-lock",
       outlined: "",
-      required: ""
+      required: "",
+      items: _vm.items,
+      "item-text": "countryName"
+    },
+    model: {
+      value: _vm.selectedCountry,
+      callback: function callback($$v) {
+        _vm.selectedCountry = $$v;
+      },
+      expression: "selectedCountry"
     }
   })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("div", {
     staticStyle: {
@@ -6348,16 +6471,24 @@ var render = function render() {
       required: "",
       value: _vm.getConference.time
     }
-  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-text-field", {
+  })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("v-select", {
     staticClass: "rounded-0",
     attrs: {
+      label: "Введите страну",
       name: "country",
       id: "country",
-      "prepend-inner-icon": "mdi-mail",
-      type: "text",
+      "prepend-inner-icon": "mdi-lock",
       outlined: "",
       required: "",
-      value: _vm.getConference.country
+      items: _vm.items,
+      "item-text": "countryName"
+    },
+    model: {
+      value: _vm.selectedCountry,
+      callback: function callback($$v) {
+        _vm.selectedCountry = $$v;
+      },
+      expression: "selectedCountry"
     }
   })], 1)], 1), _vm._v(" "), _c("v-row", [_c("v-col", [_c("div", {
     staticStyle: {
