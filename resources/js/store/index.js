@@ -234,6 +234,7 @@ export default new Vuex.Store({
                     console.log(response.data)
             })
         }
+
     },
     mutations:{
         setConferences(state, data){

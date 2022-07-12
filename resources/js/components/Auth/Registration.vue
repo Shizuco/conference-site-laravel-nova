@@ -26,15 +26,23 @@
                            <v-select label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
                                  :items="role" item-text="roleName" v-model="selectedRole">
                            </v-select>
-                           <v-text-field label="Введите номер телефона" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                           <v-text-field label="Введите номер телефона" v-model="form.telephone" v-mask="'+38(###)-##-###-##'" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
                            <v-row>
-                              <v-col><v-text-field label="Введите дату рождения" name="birthday" id="birthday" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col><v-text-field type="date" id="date" class="rounded-0"  outlined required></v-text-field></v-col>
                               <v-col>
-                                 <v-select label="Введите страну" name="country" id="country" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
-                                 :items="items" item-text="countryName" v-model="selectedCountry">
-                                 </v-select>
+                                 <select name="country" id="country" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
+                                            <option value="1">Япония</option>
+                                            <option value="2">Россия</option>
+                                            <option value="3">Украина</option>
+                                            <option value="4">Беларусь</option>
+                                            <option value="5">Китай</option>
+                                            <option value="6">Сша</option>
+                                            <option value="7">Франция</option>
+                                            <option value="8">Англия</option>
+                                 </select>
                               </v-col>
                            </v-row>
+                           <br>
                            <v-btn @click="register()" class="rounded-0" color="#000000" x-large block dark>Зарегестрироваться</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
@@ -51,27 +59,15 @@
 </template>
 
 <script>
-import { listenerCount } from 'process'
-
     export default{
       data: () => ({
-         items: [
-            {value: '1', countryName: 'Япония'},
-            {value: '2', countryName: 'США'},
-            {value: '3', countryName: 'Украина'},
-            {value: '4', countryName: 'Россия'},
-            {value: '5', countryName: 'Беларусь'},
-            {value: '6', countryName: 'Польша'},
-            {value: '7', countryName: 'Чехия'},
-            {value: '8', countryName: 'Черногорие'},
-            {value: '9', countryName: 'Канада'},
-            {value: '10', countryName: 'Китай'},
-         ],
          role: [
             {value: 'listener', roleName: 'Слушатель'},
             {value: 'announcer', roleName: 'Диктор'}
          ],
-         selectedCountry: null,
+         form: {
+            telephone: ''
+         },
          selectedRole: null
       }),
         methods:{
@@ -81,9 +77,9 @@ import { listenerCount } from 'process'
                   email: document.getElementById('email').value, 
                   password: document.getElementById('password').value, 
                   password_confirmation: document.getElementById('password_confirmation').value, 
-                  country: this.selectedCountry, 
-                  birthday: document.getElementById('birthday').value, 
-                  role: document.getElementById('role').value, 
+                  country: document.getElementById('country').value, 
+                  birthday: document.getElementById('date').value, 
+                  role: this.selectedRole, 
                   surname: document.getElementById('surname').value, 
                   phone: document.getElementById('phone').value
             }

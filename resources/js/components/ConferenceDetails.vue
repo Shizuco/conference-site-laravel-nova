@@ -4,7 +4,7 @@
         <v-main>
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center" dense>
-                <v-col cols="12" sm="8" md="4" lg="8">
+                <v-col cols="12" sm="8" md="4" lg="10">
                     <v-card elevation="0">
                         <v-card-text>
                             <v-form>
@@ -22,6 +22,24 @@
                                     <v-col><v-btn v-if="isAdmin()" @click="deleteConference()" x-large block red color="#000000" class="text-h5 white--text">Удалить</v-btn></v-col>
                                     <v-col><v-btn v-if="isAuth()&&isOnConference()==null&&!isAdmin()" @click="join()" x-large block green color="#000000" class="text-h5 white--text">Присоединиться</v-btn></v-col>
                                     <v-col><v-btn v-if="isAuth()&&isOnConference()!=null&&!isAdmin()" @click="out()" x-large block yellow color="#000000" class="text-h5 white--text">Выйти</v-btn></v-col>
+                                    <v-col><v-btn v-if="!isAdmin()" x-large block red color="#000000"><ShareNetwork
+                                            network="facebook"
+                                            :url=url()
+                                            title="Say hi to Vue!"
+                                            hashtags="vuejs"
+                                        >
+                                            Facebook
+                                        </ShareNetwork></v-btn>
+                                    </v-col>
+                                    <v-col><v-btn v-if="!isAdmin()" x-large block red color="#000000"><ShareNetwork
+                                            network="twitter"
+                                            :url=url()
+                                            title="Say hi to Vue"
+                                            hashtags="vuejs"
+                                        >
+                                            Twitter
+                                        </ShareNetwork></v-btn>
+                                    </v-col>
                                 </v-row>
                             </v-form>
                         </v-card-text>
@@ -82,6 +100,9 @@
             },
             isOnConference(){
                 return this.$store.getters.getUserOnConferenceStatus
+            },
+            url(){
+                return document.location.origin
             }
         }
     }

@@ -12,14 +12,21 @@
                                     <v-col><v-text-field label="Введите название" name="title" id="title" type="text" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col><v-text-field label="Введите дату проведения" name="date" id="date" type="text" class="rounded-0" outlined required></v-text-field></v-col>
-                                    <v-col><v-text-field label="Введите время проведения" name="time" id="time" type="text" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
+                                    <v-col><v-text-field type="date" id="date" class="rounded-0"  outlined required></v-text-field></v-col>
+                                    <v-col><v-text-field type="time" id="time" class="rounded-0"  outlined required></v-text-field></v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-select label="Введите страну" name="country" id="country" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
-                                        :items="items" item-text="countryName" v-model="selectedCountry">
-                                        </v-select>
+                                        <select name="country" id="country" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
+                                            <option value="1">Япония</option>
+                                            <option value="2">Россия</option>
+                                            <option value="3">Украина</option>
+                                            <option value="4">Беларусь</option>
+                                            <option value="5">Китай</option>
+                                            <option value="6">Сша</option>
+                                            <option value="7">Франция</option>
+                                            <option value="8">Англия</option>
+                                        </select>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -44,21 +51,6 @@
 <script>
 
     export default {
-        data: () => ({
-         items: [
-            {value: '1', countryName: 'Япония'},
-            {value: '2', countryName: 'США'},
-            {value: '3', countryName: 'Украина'},
-            {value: '4', countryName: 'Россия'},
-            {value: '5', countryName: 'Беларусь'},
-            {value: '6', countryName: 'Польша'},
-            {value: '7', countryName: 'Чехия'},
-            {value: '8', countryName: 'Черногорие'},
-            {value: '9', countryName: 'Канада'},
-            {value: '10', countryName: 'Китай'},
-         ],
-         selectedCountry: null
-      }),
         computed: {
             createConference(){
                 let href = document.location.origin

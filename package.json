@@ -25,6 +25,7 @@
     "dependencies": {
         "bootstrap-vue": "^2.22.0",
         "laravel-mix": "^6.0.49",
+        "v-mask": "^2.3.0",
         "vue-router": "^3.5.4",
         "vuetify": "^2.6.7",
         "vuex": "^3.6.2"

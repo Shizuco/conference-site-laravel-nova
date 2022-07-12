@@ -27,6 +27,7 @@ Vue.component('register', require('./components/Auth/Registration.vue').default)
 Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
 Vue.component('error403', require('./components/Errors/Error403Forbidden.vue').default);
 
+import VueMask from 'v-mask'
 import store from './store'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
@@ -35,9 +36,12 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import VueSocialSharing from 'vue-social-sharing'
 
+Vue.use(VueSocialSharing)
 Vue.use(Vuetify)
 Vue.use(VueRouter)
+Vue.use(VueMask)
 
 const app = new Vue({
     el: '#app',
