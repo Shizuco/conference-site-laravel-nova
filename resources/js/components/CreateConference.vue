@@ -45,7 +45,27 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col><div id="map" style="width:100%;height:400px;"></div></v-col>
+                                    <v-col>
+                                        <gmap-map
+                                                :zoom="15"
+                                                :center="{
+                                                lat: 0,
+                                                lng: 0
+                                                }"
+                                                mapTypeId='roadmap'
+                                                style="width:100%;height:500px"
+                                                id="map"
+                                                @click="change"
+                                            >
+                                            <gmap-marker
+                                                :position="{
+                                                    lat: Number(formData.address_lat),
+                                                    lng: Number(formData.address_lon)
+                                                }"
+                                                :draggable="true"
+                                            ></gmap-marker>
+                                            </gmap-map>
+                                    </v-col>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
                                         <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat">
                                         <span>{{ errors[0] }}</span>
@@ -77,8 +97,8 @@
                 title: '',
                 date: '',
                 time: '',
-                address_lat:'',
-                address_lon: ''
+                address_lat:'0',
+                address_lon: '0'
             }
         }),
         computed: {
@@ -95,6 +115,26 @@
                 this.$store.dispatch('ajaxConferenceCreate', data)
                 this.$store.getters.createConference
                 document.location.href = href
+            }
+        },
+        methods:{
+            change(e){
+                if(this.$store.getters.getConference == undefined){
+                    let data = {
+                        'address_lat' : 10,
+                        'address_lon' : 10,
+                    }
+                    this.$store.dispatch('changePoint', data)
+                }
+                else{
+                    let data = {
+                    'address_lat' : e.latLng.lat(),
+                    'address_lon' : e.latLng.lng(),
+                    }
+                    this.$store.dispatch('changePoint', data)
+                    this.formData.address_lat = e.latLng.lat()
+                    this.formData.address_lon = e.latLng.lng()
+                }
             }
         }
     }

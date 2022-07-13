@@ -16,7 +16,7 @@
                                 </v-row>
                                 <v-row>
                                         <gmap-map
-                                        :zoom="10"
+                                        :zoom="15"
                                         :center="{
                                         lat: Number(getConference.address_lat),
                                         lng: Number(getConference.address_lon)
@@ -25,11 +25,15 @@
                                         style="width:100%;height:500px"
                                         id="map"
                                         >
+                                        <gmap-marker
+                                            :position="{
+                                                lat: Number(getConference.address_lat),
+                                                lng: Number(getConference.address_lon)
+                                            }"
+                                            ></gmap-marker>
                                         </gmap-map>
                                 </v-row>
                                 <br>
-                                <input type="number" id="lat" name="address_lat" class="form-control" :value = getConference.address_lat style="display: none">
-                                <input type="number" id="lon" name="address_lon" class="form-control" :value = getConference.address_lon style="display: none">
                                 <v-row>
                                     <v-col><v-btn x-large block red color="#000000"><router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Назад</router-link></v-btn></v-col>
                                     <v-col><v-btn v-if="isAdmin()" @click="deleteConference()" x-large block red color="#000000" class="text-h5 white--text">Удалить</v-btn></v-col>

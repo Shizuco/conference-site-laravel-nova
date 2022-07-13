@@ -233,12 +233,18 @@ export default new Vuex.Store({
                     commit('setUserOnConferenceStatus', response.data)
                     console.log(response.data)
             })
+        },
+        changePoint({commit}, data){
+            commit('setConferencePoint', data)
         }
-
     },
     mutations:{
         setConferences(state, data){
             return state.conferences = data
+        },
+        setConferencePoint(state, data){
+            state.conference.address_lat = data.address_lat
+            state.conference.address_lon = data.address_lon
         },
         setConference(state, data){
             return state.conference = data
