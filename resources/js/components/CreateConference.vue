@@ -9,11 +9,26 @@
                         <v-card-text>
                             <v-form>
                                 <v-row>
-                                    <v-col><v-text-field label="Введите название" name="title" id="title" type="text" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
+                                    <v-col>
+                                        <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }" name="title">
+                                            <v-text-field label="Введите название" name="title" id="title" type="text" class="rounded-0" min="2" max="255" outlined required v-model="formData.title"></v-text-field>
+                                            <span>{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col><v-text-field type="date" id="date" class="rounded-0"  outlined required></v-text-field></v-col>
-                                    <v-col><v-text-field type="time" id="time" class="rounded-0"  outlined required></v-text-field></v-col>
+                                    <v-col>
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="date">
+                                            <v-text-field type="date" id="date" class="rounded-0"  outlined required name="date" v-model="formData.date"></v-text-field>
+                                            <span>{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </v-col>
+                                    <v-col>
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="time">
+                                            <v-text-field type="time" id="time" class="rounded-0"  outlined required name="time" v-model="formData.time"></v-text-field>
+                                            <span>{{ errors[0] }}</span>
+                                        </ValidationProvider>
+                                    </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
@@ -31,12 +46,18 @@
                                 </v-row>
                                 <v-row>
                                     <v-col><div id="map" style="width:100%;height:400px;"></div></v-col>
-                                    <input type="text" id="lat" name="address_lat" class="form-control" style="display:none;">
-                                    <input type="text" id="lon" name="address_lon" class="form-control" style="display:none;">
+                                    <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
+                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat">
+                                        <span>{{ errors[0] }}</span>
+                                    </ValidationProvider>
+                                    <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
+                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon">
+                                        <span>{{ errors[0] }}</span>
+                                    </ValidationProvider>
                                 </v-row>
                                 <v-row>
                                     <v-col><v-btn x-large block red color="#000000"><router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Назад</router-link></v-btn></v-col>
-                                    <v-col><v-btn x-large block class="text-h5 white--text" @click="editConference()">Сохранить</v-btn></v-col>
+                                    <v-col><v-btn x-large block class="text-h5 white--text" @click="createConference()">Сохранить</v-btn></v-col>
                                 </v-row>
                             </v-form>
                         </v-card-text>
@@ -51,6 +72,15 @@
 <script>
 
     export default {
+        data: ()=>({
+            formData:{
+                title: '',
+                date: '',
+                time: '',
+                address_lat:'',
+                address_lon: ''
+            }
+        }),
         computed: {
             createConference(){
                 let href = document.location.origin
@@ -62,7 +92,6 @@
                     'address_lon' : document.getElementById('lon').value,
                     'country' : document.getElementById('country').value
                 }
-                console.log(data)
                 this.$store.dispatch('ajaxConferenceCreate', data)
                 this.$store.getters.createConference
                 document.location.href = href
@@ -70,3 +99,9 @@
         }
     }
 </script>
+
+<style>
+span{
+    color: red;
+}
+</style>

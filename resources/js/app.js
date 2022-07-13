@@ -16,8 +16,6 @@ window.Vue = require('vue').default;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('mainpage', require('./components/MainPage.vue').default);
 Vue.component('details', require('./components/ConferenceDetails.vue').default);
 Vue.component('create', require('./components/CreateConference.vue').default);
@@ -26,6 +24,8 @@ Vue.component('auth', require('./components/Auth.vue').default);
 Vue.component('register', require('./components/Auth/Registration.vue').default);
 Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
 Vue.component('error403', require('./components/Errors/Error403Forbidden.vue').default);
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 
 import VueMask from 'v-mask'
 import store from './store'
@@ -37,6 +37,8 @@ import 'vuetify/dist/vuetify.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import VueSocialSharing from 'vue-social-sharing'
+import { ValidationProvider} from 'vee-validate/dist/vee-validate.full.esm'
+import {ValidationObserver} from 'vee-validate'
 
 Vue.use(VueSocialSharing)
 Vue.use(Vuetify)
@@ -47,5 +49,5 @@ const app = new Vue({
     el: '#app',
     store,
     router,
-    vuetify : new Vuetify(),
+    vuetify : new Vuetify()
 });
