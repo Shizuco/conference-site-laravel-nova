@@ -39,15 +39,25 @@ import 'bootstrap/dist/css/bootstrap.css';
 import VueSocialSharing from 'vue-social-sharing'
 import { ValidationProvider} from 'vee-validate/dist/vee-validate.full.esm'
 import {ValidationObserver} from 'vee-validate'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueGeolocation from 'vue-browser-geolocation'
 
 Vue.use(VueSocialSharing)
 Vue.use(Vuetify)
 Vue.use(VueRouter)
 Vue.use(VueMask)
-
+Vue.use(VueGeolocation)
+Vue.use(VueGoogleMaps, {    
+    load: {    
+      key: 'AIzaSyAWYpOvTuAYKad3lZf-c_RIvRz9wcEA1Ws',
+      libraries: 'places'
+    }, 
+    installComponents: true
+  })
 const app = new Vue({
     el: '#app',
     store,
     router,
-    vuetify : new Vuetify()
+    vuetify : new Vuetify(),
+    VueGoogleMaps
 });

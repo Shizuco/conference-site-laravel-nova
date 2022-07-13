@@ -68,7 +68,6 @@
 </template>
 
 <script>
-
     export default {
         mounted(){
             let id = this.$route.params.id

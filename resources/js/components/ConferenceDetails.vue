@@ -15,8 +15,21 @@
                                     <v-col><v-text><h3>Время проведения: {{getConference.date}} {{getConference.time}}</h3></v-text></v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col><div id="map" style="width:100%;height:400px;"></div></v-col>
+                                        <gmap-map
+                                        :zoom="10"
+                                        :center="{
+                                        lat: Number(getConference.address_lat),
+                                        lng: Number(getConference.address_lon)
+                                        }"
+                                        mapTypeId='roadmap'
+                                        style="width:100%;height:500px"
+                                        id="map"
+                                        >
+                                        </gmap-map>
                                 </v-row>
+                                <br>
+                                <input type="number" id="lat" name="address_lat" class="form-control" :value = getConference.address_lat style="display: none">
+                                <input type="number" id="lon" name="address_lon" class="form-control" :value = getConference.address_lon style="display: none">
                                 <v-row>
                                     <v-col><v-btn x-large block red color="#000000"><router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Назад</router-link></v-btn></v-col>
                                     <v-col><v-btn v-if="isAdmin()" @click="deleteConference()" x-large block red color="#000000" class="text-h5 white--text">Удалить</v-btn></v-col>
@@ -50,19 +63,20 @@
         </v-main>
     </v-app>
 </template>
-
-<script>
+<script>   
+import { gmapApi } from 'vue2-google-maps';
     export default {
         mounted() {
             let id = this.$route.params.id
             this.$store.dispatch('ajaxGetConference', id)
             this.$store.dispatch('isUserOnConference', id)
-            this.$store.dispatch('ajaxUser')
+            this.$store.dispatch('ajaxUser')  
+            google: gmapApi
         },
         computed: {
             getConference(){
                 return this.$store.getters.getConference
-            } 
+            }, 
         },
         methods:{
             isAuth(){
@@ -103,7 +117,7 @@
             },
             url(){
                 return document.location.origin
-            }
-        }
+            },
+        },
     }
 </script>
