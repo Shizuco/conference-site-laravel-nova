@@ -15,20 +15,54 @@
                      <v-card-text>
                         <v-form>
                            <v-row>
-                              <v-col><v-text-field label="Введите имя" name="name" id="name" prepend-inner-icon="mdi-mail" type="name" class="rounded-0" min="2" max="255" outlined required></v-text-field></v-col>
-                              <v-col><v-text-field label="Введите фамилию" name="surname" id="surname" prepend-inner-icon="mdi-lock" type="text" min="2" max="255" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col>
+                                 <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }" name="name">
+                                    <v-text-field label="Введите имя" name="name" id="name" prepend-inner-icon="mdi-mail" type="name" class="rounded-0" outlined required v-model="formData.name"></v-text-field>
+                                    <span>{{ errors[0] }}</span>
+                                 </ValidationProvider>
+                              </v-col>
+                              <v-col>
+                                 <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }" name="surname">
+                                    <v-text-field label="Введите фамилию" name="surname" id="surname" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required  v-model="formData.surname"></v-text-field>
+                                    <span>{{ errors[0] }}</span>
+                                 </ValidationProvider>
+                                 </v-col>
                            </v-row>
-                           <v-text-field label="Введите адрес электронной почты" name="email" id="email" prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined required></v-text-field>
+                           <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
+                              <v-text-field label="Введите адрес электронной почты" name="email" id="email" prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined required v-model="formData.email"></v-text-field>
+                              <span>{{ errors[0] }}</span>
+                           </ValidationProvider>
                            <v-row>
-                              <v-col><v-text-field label="Введите пароль" name="password" id="password" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
-                              <v-col><v-text-field label="Повторите пароль" name="password_confirmation" id="password_confirmation" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field></v-col>
+                              <v-col>
+                                 <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
+                                    <v-text-field label="Введите пароль" name="password" id="password" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required v-model="formData.password"></v-text-field>
+                                    <span>{{ errors[0] }}</span>
+                                 </ValidationProvider>
+                              </v-col>
+                              <v-col>
+                                 <ValidationProvider rules="required|confirmed:password" v-slot="{ errors }" name="password_confirmation">
+                                    <v-text-field label="Повторите пароль" name="password_confirmation" id="password_confirmation" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required v-model="formData.password_confirmation"></v-text-field>
+                                    <span>{{ errors[0] }}</span>
+                                 </ValidationProvider>
+                              </v-col>
                            </v-row>
-                           <v-select label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
-                                 :items="role" item-text="roleName" v-model="selectedRole">
-                           </v-select>
-                           <v-text-field label="Введите номер телефона" v-model="form.telephone" v-mask="'+38(###)-##-###-##'" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                           <ValidationProvider rules="required" v-slot="{ errors }" name="role">
+                              <v-select label="Введите роль" name="role" id="role" prepend-inner-icon="mdi-lock" class="rounded-0" outlined required
+                                    :items="role" item-text="roleName" v-model="selectedRole">
+                              </v-select>
+                              <span>{{ errors[0] }}</span>
+                           </ValidationProvider>
+                           <ValidationProvider rules="required" v-slot="{ errors }" name="phone">
+                              <v-text-field label="Введите номер телефона" v-model="form.telephone" v-mask="'+38(###)-##-###-##'" name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required></v-text-field>
+                              <span>{{ errors[0] }}</span>
+                           </ValidationProvider>
                            <v-row>
-                              <v-col><v-text-field type="date" id="date" class="rounded-0"  outlined required></v-text-field></v-col>
+                              <v-col>
+                                 <ValidationProvider rules="required" v-slot="{ errors }" name="date">
+                                    <v-text-field type="date" id="date" class="rounded-0"  outlined required v-model="formData.date" name="date"></v-text-field>
+                                    <span>{{ errors[0] }}</span>
+                                 </ValidationProvider>
+                              </v-col>
                               <v-col>
                                  <select name="country" id="country" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
                                             <option value="1">Япония</option>
@@ -67,6 +101,14 @@
          ],
          form: {
             telephone: ''
+         },
+         formData:{
+            name: '',
+            surname: '',
+            email: '',
+            password:'',
+            password_confirmation: '',
+            date: ''
          },
          selectedRole: null
       }),
