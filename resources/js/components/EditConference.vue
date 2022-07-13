@@ -31,11 +31,11 @@
                                         </v-col>
                                     </v-row>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="getConference.address_lat">
+                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="getConference.address_lat" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="getConference.address_lon">
+                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="getConference.address_lon" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <v-row>

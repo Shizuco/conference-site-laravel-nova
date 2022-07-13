@@ -67,11 +67,11 @@
                                             </gmap-map>
                                     </v-col>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat">
+                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon">
+                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                 </v-row>

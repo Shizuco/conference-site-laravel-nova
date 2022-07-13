@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'listener',
             'phone' => '380987656428',
             'birthday' => '2002-09-05',
-            'country' => 'Japan'
+            'country' => 'Япония'
         ]);
 
         \App\Models\Conference::factory(10)->create([
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'time' => '14:00:00.000',
             'address_lat' => '35.6895000',
             'address_lon' => '139.6917100',
-            'country' => 'Japan'
+            'country' => 'Япония'
         ]);
 
         Admin::factory()->create([
