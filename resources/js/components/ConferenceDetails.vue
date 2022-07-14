@@ -102,19 +102,18 @@ import { gmapApi } from 'vue2-google-maps';
             join(){
                 let conference_id = this.$store.getters.getConference.id
                 this.$store.dispatch('userConferenceJoin',conference_id)
-                location.reload();
+                this.$router.go()
             },
             out(){
                 let conference_id = this.$store.getters.getConference.id
                 this.$store.dispatch('userConferenceOut',conference_id)
-                location.reload();
+                this.$router.go()
             },
             deleteConference(){
                 let id = this.$route.params.id
                 let href = document.location.origin
                 this.$store.dispatch('ajaxConferenceDelete', id)
-                this.$store.getters.deleteConference
-                document.location.href = href
+                this.$router.replace('/conferences')
             },
             isOnConference(){
                 return this.$store.getters.getUserOnConferenceStatus

@@ -25,8 +25,7 @@
          logout(){
             console.log(localStorage.getItem('Authorized'))
             this.$store.dispatch('LOGOUT')
-            let href = document.location.origin
-            document.location.href = href
+            this.$router.go()
          },
          isAdmin(){
                 if(this.$store.getters.getUser.role == "admin"){

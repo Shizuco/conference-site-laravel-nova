@@ -113,8 +113,7 @@ import { gmapApi } from 'vue2-google-maps';
                     'country' : document.getElementById('country').value
                     }
                 this.$store.dispatch('ajaxConferenceEdit', data)
-                this.$store.getters.createConference
-                document.location.href = href 
+                this.$router.replace('/conferences') 
             }
         },
         methods:{

@@ -103,7 +103,6 @@
         }),
         computed: {
             createConference(){
-                let href = document.location.origin
                 let data = {
                     'title' : document.getElementById('title').value,
                     'date' : document.getElementById('date').value,
@@ -114,7 +113,7 @@
                 }
                 this.$store.dispatch('ajaxConferenceCreate', data)
                 this.$store.getters.createConference
-                document.location.href = href
+                this.$router.replace('/conferences')
             }
         },
         methods:{

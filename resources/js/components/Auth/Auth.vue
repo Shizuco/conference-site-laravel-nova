@@ -39,13 +39,11 @@
                email: document.getElementById('email').value, 
                password: document.getElementById('password').value,
             }
-            //console.log(data)
             this.$store.dispatch('AUTH', data).then(()=>{
                this.$store.getters.getUser
-               let href = document.location.origin
-               document.location.href = href
+               this.$router.go()
             })
-         }
+         },
         }
     }
 </script>

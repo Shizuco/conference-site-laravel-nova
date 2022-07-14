@@ -133,8 +133,7 @@
                   }
                   this.$store.dispatch('AUTH', data).then(()=>{
                      this.$store.getters.getUser
-                     let href = document.location.origin
-                     document.location.href = href
+                     this.$router.go({name: 'MainPage'})
                   })
                })
          },

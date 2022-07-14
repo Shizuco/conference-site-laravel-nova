@@ -56,10 +56,9 @@
                 }
             },
             deleteConference(id){
-                let href = document.location.origin
                 this.$store.dispatch('ajaxConferenceDelete', id)
                 this.$store.getters.deleteConference
-                document.location.href = href
+                this.$router.go()
             },
         }
     }

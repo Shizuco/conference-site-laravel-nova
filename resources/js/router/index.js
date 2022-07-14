@@ -8,6 +8,15 @@ import Registration from '../components/Auth/Registration.vue'
 import Auth from '../components/Auth/Auth.vue'
 import Error403Forbidden from '../components/Errors/Error403Forbidden.vue'
 
+function isAuth(){
+    if("Authorized" in localStorage){
+        return true
+    }
+    else{
+        return false
+    }
+}
+
 export default new VueRouter({
     routes:[
         {
@@ -33,13 +42,29 @@ export default new VueRouter({
         },
         {
             path:'/register',
+            beforeEnter(to, from, next){
+                if(isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
             component: Registration,
             name: 'Registration'
         },
         {
             path:'/login',
             component: Auth,
-            name: 'Auth'
+            name: 'Auth',
+            beforeEnter(to, from, next){
+                if(isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
         },
         {
             path:'/403',
