@@ -5,6 +5,7 @@
                <span><button v-if="!isAuth()"><router-link :to="{name: 'Registration'}" class="text-h5 white--text">Регистарция</router-link></button></span>
                <span><button v-if="!isAuth()"><router-link :to="{name: 'Auth'}" class="text-h5 white--text">Авторизация</router-link></button></span>
                <span><button class="text-h5 white--text" v-if="isAuth()" @click="logout">Выйти</button></span>
+               <span><button><router-link class="text-h5 white--text" v-if="isAdmin()" :to="{name: 'CreateConference'}">Создать</router-link></button></span>
             </v-toolbar-title>
       </v-app-bar>
    </v-app>
@@ -26,7 +27,15 @@
             this.$store.dispatch('LOGOUT')
             let href = document.location.origin
             document.location.href = href
-         }
+         },
+         isAdmin(){
+                if(this.$store.getters.getUser.role == "admin"){
+                    return true
+                }
+                else{
+                    return false
+                }
+         },
       }
     }
 </script>
