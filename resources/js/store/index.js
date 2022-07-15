@@ -149,12 +149,12 @@ export default new Vuex.Store({
                 })
         },
         AUTH({commit}, data) {
-            axios({
+            return axios({
                 method: 'post',
                 url: 'api/login',
                 data:{
-                    password: data.password,
-                    email: data.email
+                    email: data.email,
+                    password: data.password      
                 },
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
@@ -163,11 +163,7 @@ export default new Vuex.Store({
                 .then(function(response) {
                     commit('setUser', response.data)
                     localStorage.setItem('Authorized', response.data.token)
-                })
-                .catch(function(error) {
-                    console.log(response.data);
-                    console.log(error);
-            });
+                });
         },
         LOGOUT({commit}) {
             let token = 'Bearer '+ localStorage.getItem('Authorized')

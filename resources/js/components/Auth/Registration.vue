@@ -148,11 +148,11 @@ export default {
          }
          this.$store.dispatch('REGISTER', data).then(() => {
             let data = {
-               email: document.getElementById('email').value,
-               password: document.getElementById('password').value,
+               email: this.formData.email,
+               password: this.formData.password,
             }
             this.$store.dispatch('AUTH', data).then(() => {
-               this.$router.go({ name: 'MainPage' })
+               this.$router.go()
             })
          }).catch(error => {
             this.$refs.provider.applyResult({
