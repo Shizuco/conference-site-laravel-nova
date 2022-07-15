@@ -23,7 +23,6 @@ Vue.component('edit', require('./components/EditConference.vue').default);
 Vue.component('auth', require('./components/Auth.vue').default);
 Vue.component('register', require('./components/Auth/Registration.vue').default);
 Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
-Vue.component('error403', require('./components/Errors/Error403Forbidden.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 

@@ -39,7 +39,7 @@ export default new Vuex.Store({
         },
         ajaxGetConference({commit}, id){
             let token = 'Bearer '+ localStorage.getItem('Authorized')
-            axios({
+            return axios({
                 method: 'get',
                 url: 'api/conferences/' + id,
                 headers: {

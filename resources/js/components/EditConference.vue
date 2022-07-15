@@ -19,30 +19,30 @@
                                     <v-row>
                                         <v-col>
                                             <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                                <v-text-field type="date" id="date" class="rounded-0" outlined required v-model="getConference.date" name="date"></v-text-field>
+                                                <v-text-field type="date" id="date" class="rounded-0" outlined required v-model="formData.date" name="date"></v-text-field>
                                                 <span>{{ errors[0] }}</span>
                                             </ValidationProvider>
                                         </v-col>
                                         <v-col>
                                             <ValidationProvider rules="required" v-slot="{ errors }" name="time">
-                                                <v-text-field type="time" id="time" class="rounded-0"  outlined required v-model="getConference.time" name="time"></v-text-field>
+                                                <v-text-field type="time" id="time" class="rounded-0"  outlined required v-model="formData.time" name="time"></v-text-field>
                                                 <span>{{ errors[0] }}</span>
                                             </ValidationProvider>
                                         </v-col>
                                     </v-row>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="getConference.address_lat" style="display:none">
+                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="getConference.address_lon" style="display:none">
+                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon" style="display:none">
                                         <span>{{ errors[0] }}</span>
                                     </ValidationProvider>
                                     <v-row>
                                         <v-col>
                                             <ValidationProvider rules="required" v-slot="{ errors }" name="country">
                                             <span>{{ errors[0] }}</span>
-                                            <v-select name="country" id="country" class="rounded-0"  outlined required v-model="getConference.country" :items="countries" :item-value="getConference.country">
+                                            <v-select name="country" id="country" class="rounded-0"  outlined required v-model="formData.country" :items="countries">
                                             </v-select>
                                         </ValidationProvider>
                                         </v-col>
@@ -100,9 +100,16 @@ import { gmapApi } from 'vue2-google-maps';
         }),
         mounted(){
             let id = this.$route.params.id
-            this.$store.dispatch('ajaxGetConference', id)
-            this.formData.title = this.getConference.title
-            google: gmapApi
+            this.$store.dispatch('ajaxGetConference', id).then(()=>{
+                this.formData.title = this.getConference.title
+                this.formData.date = this.getConference.date
+                this.formData.time = this.getConference.time
+                this.formData.address_lat = this.getConference.address_lat
+                this.formData.address_lon = this.getConference.address_lon
+                this.formData.country = this.getConference.country
+                //console.log(response)
+            })
+            
         },
         computed: {
             getConference(){
@@ -112,11 +119,11 @@ import { gmapApi } from 'vue2-google-maps';
                 let data = {
                     'id': this.$route.params.id,
                     'title' : this.formData.title,
-                    'date' : document.getElementById('date').value,
-                    'time' : document.getElementById('time').value,
-                    'address_lat' : document.getElementById('lat').value,
-                    'address_lon' : document.getElementById('lon').value,
-                    'country' : 'Украина'
+                    'date' : this.formData.date,
+                    'time' : this.formData.time,
+                    'address_lat' : this.formData.address_lat,
+                    'address_lon' : this.formData.address_lon,
+                    'country' : this.formData.country
                     }
                 this.$store.dispatch('ajaxConferenceEdit', data)
                 this.$router.replace('/conferences') 

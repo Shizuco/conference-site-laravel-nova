@@ -6,7 +6,6 @@ import CreateConference from '../components/CreateConference.vue'
 import EditConference from '../components/EditConference.vue'
 import Registration from '../components/Auth/Registration.vue'
 import Auth from '../components/Auth/Auth.vue'
-import Error403Forbidden from '../components/Errors/Error403Forbidden.vue'
 
 function isAuth(){
     if("Authorized" in localStorage){
@@ -27,16 +26,40 @@ export default new VueRouter({
         },
         {
             path:'/conferences/:id',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
             component: ConferenceDetails,
             name: 'ConferenceDetails'
         },
         {
             path:'/conferences',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
             component: CreateConference,
             name: 'CreateConference'
         },
         {
             path:'/conferences/:id',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
             component: EditConference,
             name: 'EditConference'
         },
@@ -65,11 +88,6 @@ export default new VueRouter({
                     next()
                 }
             },
-        },
-        {
-            path:'/403',
-            component: Error403Forbidden,
-            name: 'Error403'
         }
     ]
 })
