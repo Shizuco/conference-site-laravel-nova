@@ -14,12 +14,19 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
-                           <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-mail"
-                              type="email" class="rounded-0" outlined required>
-                           </v-text-field>
-                           <v-text-field label="Password" name="password" id="password" prepend-inner-icon="mdi-lock"
-                              type="password" min="8" class="rounded-0" outlined required>
-                           </v-text-field>
+                           <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }" name="email">
+                              <span>{{ errors[0] }}</span>
+                              <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-mail"
+                                 type="email" class="rounded-0" outlined required v-model="formData.email">
+                              </v-text-field>
+                           </ValidationProvider>
+                           <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
+                              <span>{{ errors[0] }}</span>
+                              <v-text-field label="Password" name="password" id="password" prepend-inner-icon="mdi-lock"
+                                 type="password" min="8" class="rounded-0" outlined required
+                                 v-model="formData.password">
+                              </v-text-field>
+                           </ValidationProvider>
                            <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Log in</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
@@ -37,11 +44,17 @@
 
 <script>
 export default {
+   data: () => ({
+      formData: {
+         email: '',
+         password: ''
+      }
+   }),
    methods: {
       auth() {
          let data = {
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
+            email: this.formData.email,
+            password: this.formData.password,
          }
          this.$store.dispatch('AUTH', data).then(() => {
             this.$router.go()
