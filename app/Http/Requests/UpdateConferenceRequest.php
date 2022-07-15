@@ -44,8 +44,8 @@ class UpdateConferenceRequest extends FormRequest
             'country.required' => 'Страна обезательна!',
             'address_lat.required' => 'Широта обезательна!',
             'address_lon.required' => 'Долгота обезательна!',
-            'address_lat.min' => 'Минимальное значение широты -180',
-            'address_lat.max' => 'Максимальное значение широты 180',
+            'address_lat.min' => 'Минимальное значение широты -90',
+            'address_lat.max' => 'Максимальное значение широты 90',
             'address_lon.min' => 'Минимальное значение долготы -180',
             'address_lon.max' => 'Максимальное значение долготы 180',
         ];

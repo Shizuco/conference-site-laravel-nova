@@ -12,7 +12,7 @@ use Auth;
 class UserController extends Controller
 {
     
-    public function conferencejoin(int $conferenceId)
+    public function conferenceJoin(int $conferenceId)
     {
         Auth::user()->conferences()->attach($conferenceId);
     }
