@@ -1,12 +1,12 @@
 <template>
    <v-app>
       <v-app-bar app color="black">
-        <v-list-item-group>
+         <v-list-item-group>
             <v-list-item>
-               <router-link :to="{name: 'MainPage'}" class="text-h5 white--text">Конференции</router-link>
+               <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Conferences</router-link>
             </v-list-item>
-        </v-list-item-group>
-    </v-app-bar>
+         </v-list-item-group>
+      </v-app-bar>
       <v-main>
          <v-container class="fill-height" fluid>
             <v-row align="center" justify="center" dense>
@@ -14,12 +14,16 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
-                           <v-text-field label="Введите адрес электронной почты" name="email" id="email" prepend-inner-icon="mdi-mail" type="email" class="rounded-0" outlined required></v-text-field>
-                           <v-text-field label="Введите пароль" name="password" id="password" prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0" outlined required></v-text-field>
-                           <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Войти</v-btn>
+                           <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-mail"
+                              type="email" class="rounded-0" outlined required>
+                           </v-text-field>
+                           <v-text-field label="Password" name="password" id="password" prepend-inner-icon="mdi-lock"
+                              type="password" min="8" class="rounded-0" outlined required>
+                           </v-text-field>
+                           <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Log in</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
-                              Нет аккаунта?<router-link :to="{name: 'Registration'}">Регистрация</router-link>
+                              No account?<router-link :to="{ name: 'Registration' }">Registration</router-link>
                            </v-card-actions>
                         </v-form>
                      </v-card-text>
@@ -32,18 +36,17 @@
 </template>
 
 <script>
-    export default{
-        methods:{
-         auth(){
-            let data = {
-               email: document.getElementById('email').value, 
-               password: document.getElementById('password').value,
-            }
-            this.$store.dispatch('AUTH', data).then(()=>{
-               this.$store.getters.getUser
-               this.$router.go()
-            })
-         },
-        }
-    }
+export default {
+   methods: {
+      auth() {
+         let data = {
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+         }
+         this.$store.dispatch('AUTH', data).then(() => {
+            this.$router.go()
+         })
+      },
+   }
+}
 </script>

@@ -1,66 +1,74 @@
 <template>
-    <div>
+    <v-app>
         <auth style="height: 80px"></auth>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <br>
-                <div class="card" v-for="conference in getConferences" :value="conference.id" :key="conference.id">
-                    <v-card>
-                        <v-card-title>{{conference.title}}</v-card-title>
-                        <v-card-text>
-                            <v-row>
-                                <v-col>Время проведения: {{conference.date}}  {{conference.time}}</v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col ><v-btn x-big block><router-link v-if="isAuth()" :to="{name: 'ConferenceDetails', params:{id: conference.id}}">Подробнее</router-link>
-                                <router-link v-else :to="{name: 'Registration'}">Подробнее</router-link></v-btn></v-col>
-                                <v-col v-if="isAdmin()"><router-link :to="{name: 'EditConference', params:{id: conference.id}}"><v-btn x-big block>Изменить</v-btn></router-link></v-col>
-                                <v-col v-if="isAdmin()"><v-btn x-big block><button @click="deleteConference(conference.id)">УДАЛИТЬ</button></v-btn></v-col>         
-                            </v-row>
-                        </v-card-text>
-                    </v-card>
-                </div>
+                <v-card v-for="conference in getConferences" :value="conference.id" :key="conference.id" elevation="3">
+                    <v-card-title>{{ conference.title }}</v-card-title>
+                    <v-card-text>
+                        Appointed time: {{ conference.date }} {{ conference.time }}
+                        <br>
+                        <span>
+                            <v-btn x-big depressed color="success">
+                                <router-link class="white--text" style="text-decoration: none; color: inherit;"
+                                    v-if="isAuth()" :to="{ name: 'ConferenceDetails', params: { id: conference.id } }">More
+                                </router-link>
+                                <router-link class="white--text" style="text-decoration: none; color: inherit;" v-else
+                                    :to="{ name: 'Registration' }">More</router-link>
+                            </v-btn>
+                        </span>
+                        <span>
+                            <v-btn v-if="isAdmin()" depressed color="warning" big
+                                :to="{ name: 'EditConference', params: { id: conference.id } }">Edit</v-btn>
+                        </span>
+                        <span>
+                            <v-btn v-if="isAdmin()" x-big depressed color="error"
+                                @click="deleteConference(conference.id)">Delete</v-btn>
+                        </span>
+                    </v-card-text>
+                </v-card>
                 <br>
             </div>
         </div>
-    </div>
-    
+    </v-app>
+
 </template>
 
 <script>
-    export default {
-        mounted() {
-            this.$store.dispatch('ajaxConferences')
-            this.$store.dispatch('ajaxUser')
-        },
-        computed: {
-            getConferences(){
-                return this.$store.getters.getConferences
+export default {
+    mounted() {
+        this.$store.dispatch('ajaxConferences')
+        this.$store.dispatch('ajaxUser')
+    },
+    computed: {
+        getConferences() {
+            return this.$store.getters.getConferences
+        }
+    },
+    methods: {
+        isAuth() {
+            if ("Authorized" in localStorage) {
+                return true
+            }
+            else {
+                return false
             }
         },
-        methods:{
-            isAuth(){
-                if("Authorized" in localStorage){
-                    return true
-                }
-                else{
-                    return false
-                }
-            },
-            isAdmin(){
-                if(this.$store.getters.getUser.role == "admin"){
-                    return true
-                }
-                else{
-                    return false
-                }
-            },
-            deleteConference(id){
-                this.$store.dispatch('ajaxConferenceDelete', id)
-                this.$store.getters.deleteConference
-                this.$router.go()
-            },
-        }
+        isAdmin() {
+            if (this.$store.getters.getUser.role == "admin") {
+                return true
+            }
+            else {
+                return false
+            }
+        },
+        deleteConference(id) {
+            this.$store.dispatch('ajaxConferenceDelete', id)
+            this.$store.getters.deleteConference
+            this.$router.go()
+        },
     }
-    
+}
+
 </script>
