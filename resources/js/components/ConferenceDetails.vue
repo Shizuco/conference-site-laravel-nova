@@ -15,6 +15,9 @@
                                     <v-col><v-text><h3>Время проведения: {{getConference.date}} {{getConference.time}}</h3></v-text></v-col>
                                 </v-row>
                                 <v-row>
+                                    <v-col><v-text><h3>Страна: {{getConference.country}}</h3></v-text></v-col>
+                                </v-row>
+                                <v-row>
                                         <gmap-map
                                         :zoom="15"
                                         :center="{

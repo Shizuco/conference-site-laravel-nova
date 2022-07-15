@@ -11,7 +11,7 @@
                                     <v-row>
                                         <v-col>
                                             <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }" name="title">
-                                                <v-text-field name="title" id="title" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined required v-model="getConference.title"></v-text-field>
+                                                <v-text-field name="title" id="title" prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined required v-model="formData.title"></v-text-field>
                                                 <span>{{ errors[0] }}</span>
                                             </ValidationProvider>
                                         </v-col>
@@ -19,7 +19,7 @@
                                     <v-row>
                                         <v-col>
                                             <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                                <v-text-field type="date" id="date" class="rounded-0"  outlined required v-model="getConference.date" name="date"></v-text-field>
+                                                <v-text-field type="date" id="date" class="rounded-0" outlined required v-model="getConference.date" name="date"></v-text-field>
                                                 <span>{{ errors[0] }}</span>
                                             </ValidationProvider>
                                         </v-col>
@@ -40,16 +40,11 @@
                                     </ValidationProvider>
                                     <v-row>
                                         <v-col>
-                                            <select name="country" id="country" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
-                                                <option value="1">Япония</option>
-                                                <option value="2">Россия</option>
-                                                <option value="3">Украина</option>
-                                                <option value="4">Беларусь</option>
-                                                <option value="5">Китай</option>
-                                                <option value="6">Сша</option>
-                                                <option value="7">Франция</option>
-                                                <option value="8">Англия</option>
-                                            </select>
+                                            <ValidationProvider rules="required" v-slot="{ errors }" name="country">
+                                            <span>{{ errors[0] }}</span>
+                                            <v-select name="country" id="country" class="rounded-0"  outlined required v-model="getConference.country" :items="countries" :item-value="getConference.country">
+                                            </v-select>
+                                        </ValidationProvider>
                                         </v-col>
                                     </v-row>
                                     <v-row>
@@ -92,9 +87,21 @@
 <script>
 import { gmapApi } from 'vue2-google-maps';
     export default {
+        data:()=>({
+            countries:['Япония', 'Россия', 'Украина', 'Беларусь', 'Канада', 'Франция', 'Англия', 'США', 'Китай', 'Корея'],
+            formData:{
+                title: '',
+                date: '',
+                time: '',
+                address_lat:'0',
+                address_lon: '0',
+                country: ''
+            },
+        }),
         mounted(){
             let id = this.$route.params.id
             this.$store.dispatch('ajaxGetConference', id)
+            this.formData.title = this.getConference.title
             google: gmapApi
         },
         computed: {
@@ -102,19 +109,18 @@ import { gmapApi } from 'vue2-google-maps';
                 return this.$store.getters.getConference
             },
             editConference(){
-                let href = document.location.origin
                 let data = {
                     'id': this.$route.params.id,
-                    'title' : document.getElementById('title').value,
+                    'title' : this.formData.title,
                     'date' : document.getElementById('date').value,
                     'time' : document.getElementById('time').value,
                     'address_lat' : document.getElementById('lat').value,
                     'address_lon' : document.getElementById('lon').value,
-                    'country' : document.getElementById('country').value
+                    'country' : 'Украина'
                     }
                 this.$store.dispatch('ajaxConferenceEdit', data)
                 this.$router.replace('/conferences') 
-            }
+            },
         },
         methods:{
             change(e){

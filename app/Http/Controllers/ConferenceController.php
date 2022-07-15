@@ -29,7 +29,7 @@ class ConferenceController extends Controller
         Conference::create($request->validated());
     }
 
-    public function update(int $id, UpdateConferenceRequest $request)
+    public function update(UpdateConferenceRequest $request, int $id)
     {   
         Conference::whereId($id)->update($request->validated());
     }

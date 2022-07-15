@@ -42,8 +42,8 @@ class CreateConferenceRequest extends FormRequest
             'date.required' => 'Дата обезательна!',
             'time.required' => 'Время обезательно!',
             'country.required' => 'Страна обезательна!',
-            'address_lat.min' => 'Минимальное значение широты -180',
-            'address_lat.max' => 'Максимальное значение широты 180',
+            'address_lat.min' => 'Минимальное значение широты -90',
+            'address_lat.max' => 'Максимальное значение широты 90',
             'address_lon.min' => 'Минимальное значение долготы -180',
             'address_lon.max' => 'Максимальное значение долготы 180',
         ];

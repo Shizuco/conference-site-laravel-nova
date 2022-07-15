@@ -11,37 +11,32 @@
                                 <v-row>
                                     <v-col>
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }" name="title">
-                                            <v-text-field label="Введите название" name="title" id="title" type="text" class="rounded-0" min="2" max="255" outlined required v-model="formData.title"></v-text-field>
                                             <span>{{ errors[0] }}</span>
+                                            <v-text-field label="Введите название" name="title" id="title" type="text" class="rounded-0" min="2" max="255" outlined required v-model="formData.title"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                            <v-text-field type="date" id="date" class="rounded-0"  outlined required name="date" v-model="formData.date"></v-text-field>
                                             <span>{{ errors[0] }}</span>
+                                            <v-text-field type="date" id="date" class="rounded-0"  outlined required name="date" v-model="formData.date"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="time">
-                                            <v-text-field type="time" id="time" class="rounded-0"  outlined required name="time" v-model="formData.time"></v-text-field>
                                             <span>{{ errors[0] }}</span>
+                                            <v-text-field type="time" id="time" class="rounded-0"  outlined required name="time" v-model="formData.time"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <select name="country" id="country" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" required>
-                                            <option value="1">Япония</option>
-                                            <option value="2">Россия</option>
-                                            <option value="3">Украина</option>
-                                            <option value="4">Беларусь</option>
-                                            <option value="5">Китай</option>
-                                            <option value="6">Сша</option>
-                                            <option value="7">Франция</option>
-                                            <option value="8">Англия</option>
-                                        </select>
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="country">
+                                            <span>{{ errors[0] }}</span>
+                                            <v-select name="country" id="country" class="rounded-0"  outlined required v-model="formData.country" :items="countries">
+                                            </v-select>
+                                        </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -66,13 +61,13 @@
                                             ></gmap-marker>
                                             </gmap-map>
                                     </v-col>
-                                    <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat" style="display:none">
+                                    <ValidationProvider rules="required|min:-90|max:90" v-slot="{ errors }">
                                         <span>{{ errors[0] }}</span>
+                                        <input type="number" id="lat" name="address_lat" class="form-control" v-model="formData.address_lat" style="display:none">
                                     </ValidationProvider>
                                     <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon" style="display:none">
                                         <span>{{ errors[0] }}</span>
+                                        <input type="number" id="lon" name="address_lon" class="form-control" v-model="formData.address_lon" style="display:none">
                                     </ValidationProvider>
                                 </v-row>
                                 <v-row>
@@ -98,21 +93,22 @@
                 date: '',
                 time: '',
                 address_lat:'0',
-                address_lon: '0'
-            }
+                address_lon: '0',
+                country: ''
+            },
+            countries:['Япония', 'Россия', 'Украина', 'Беларусь', 'Канада', 'Франция', 'Англия', 'США', 'Китай', 'Корея']
         }),
         computed: {
             createConference(){
                 let data = {
-                    'title' : document.getElementById('title').value,
-                    'date' : document.getElementById('date').value,
-                    'time' : document.getElementById('time').value,
-                    'address_lat' : document.getElementById('lat').value,
-                    'address_lon' : document.getElementById('lon').value,
-                    'country' : document.getElementById('country').value
+                    'title' : this.formData.title,
+                    'date' : this.formData.date,
+                    'time' : this.formData.time,
+                    'address_lat' : this.formData.address_lat,
+                    'address_lon' : this.formData.address_lon,
+                    'country' : this.formData.country
                 }
                 this.$store.dispatch('ajaxConferenceCreate', data)
-                this.$store.getters.createConference
                 this.$router.replace('/conferences')
             }
         },

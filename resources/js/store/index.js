@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
+import { message } from 'laravel-mix/src/Log';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -8,7 +9,8 @@ export default new Vuex.Store({
         conferences:[],
         conference:[],
         user:[],
-        userOnConferenceStatus:[]
+        userOnConferenceStatus:[],
+        errors: []
     },
     getters:{
         getConferences(state){
@@ -22,6 +24,9 @@ export default new Vuex.Store({
         },
         getUserOnConferenceStatus(state){
             return state.userOnConferenceStatus;
+        },
+        getErrors(state){
+            return state.errors;
         }
     },
     actions:{
@@ -85,10 +90,10 @@ export default new Vuex.Store({
               .then(function(response) {
                 commit('setConferences', response.data)
                 console.log('Ответ сервера успешно получен!');
-                console.log(response.data);
+                console.log(response.data)
               })
               .catch(function(error) {
-                console.log(error);
+                console.log(error.response.data.errors);
               });
         },
         ajaxConferenceEdit({commit}, data) {
@@ -120,7 +125,7 @@ export default new Vuex.Store({
               });
         },
         REGISTER({commit}, data) {
-            axios({
+            return axios({
                 method: 'post',
                 url: 'api/register',
                 data:{
@@ -142,9 +147,6 @@ export default new Vuex.Store({
                     commit('setUser', response.data)
                     localStorage.setItem('Authorized', response.data.token)
                 })
-                .catch(function(error) {
-                    console.log(error);
-            });
         },
         AUTH({commit}, data) {
             axios({
@@ -254,6 +256,9 @@ export default new Vuex.Store({
         },
         setUserOnConferenceStatus(state, data){
             return state.userOnConferenceStatus = data
+        },
+        setErrors(state, data){
+            return state.errors = data
         }
     }
     }
