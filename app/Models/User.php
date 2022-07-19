@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Auth;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Models\Comment;
 
 class User extends Authenticatable
 {
@@ -59,4 +60,7 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'conference_user_reports');
     }
 
+    public function comments(){
+        return $this->belongsToMany(Comment::class, 'comment');
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Conference;
 use App\Models\User;
+use App\Models\Comment;
 
 class Report extends Model
 {
@@ -30,6 +31,11 @@ class Report extends Model
     public function users()
 	{
 		return $this->belongsToOne(User::class);
+	}
+
+    public function comments()
+	{
+		return $this->belongsToMany(Comment::class);
 	}
 
     public function reports(){
