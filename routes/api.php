@@ -23,13 +23,14 @@ Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name(
 Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
 Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
 
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
     Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);
     Route::post('/isOnConference/{id}', [UserController::class, 'getConference']);
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
-    
+    Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
 
     Route::group(['middleware' => ['isAdmin']], function () {
         Route::delete('/conferences/{id}', [ConferenceController::class, 'destroy']);

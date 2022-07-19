@@ -9,9 +9,12 @@ use App\Models\User;
 
 class Report extends Model
 {
+    public $table = "conferece_user_reports";
     use HasFactory;
 
     protected $fillable = [
+        'conference_id',
+        'user_id',
         'thema',
         'start_time',
         'end_time',
@@ -21,11 +24,15 @@ class Report extends Model
 
     public function conferences()
 	{
-		return $this->hasOne(Conference::class);
+		return $this->belongsToOne(Conference::class);
 	}
 
     public function users()
 	{
-		return $this->hasOne(User::class);
+		return $this->belongsToOne(User::class);
 	}
+
+    public function reports(){
+        return $this->hasMany(Report::class);
+    }
 }

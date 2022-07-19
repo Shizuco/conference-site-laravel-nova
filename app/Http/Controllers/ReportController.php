@@ -26,9 +26,12 @@ class ReportController extends Controller
         return response()->json(Report::All()->where('conference_id', $conference_id)->where('id',$report_id));
     }
 
-    public function store(CreateReportRequest $request)
+    public function store(int $id, CreateReportRequest $request)
     {
-        Conference::create($request->validated());
+        $data = $request->validated();
+        $data['conference_id'] = $id;
+        $data['user_id'] = Auth::user()->id;
+        Report::create($data);
     }
 
     public function update(CreateReportRequest $request, int $id)
