@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
     Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
     Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
+    Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
 
     Route::group(['middleware' => ['isAdmin']], function () {
         Route::delete('/conferences/{id}', [ConferenceController::class, 'destroy']);

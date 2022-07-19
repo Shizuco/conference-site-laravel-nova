@@ -21,9 +21,9 @@ class ReportController extends Controller
         return response()->json(Report::All()->where('conference_id', $id));
     }
     
-    public function show(int $report_id, int $conference_id)
+    public function show(int $conference_id, int $report_id)
     {
-        return response()->json(Report::All()->where('conference_id', $conference_id)->where('id',$report_id));
+        return response()->json(Report::All()->where('conference_id', $conference_id)->where('id', $report_id));
     }
 
     public function store(int $id, CreateReportRequest $request)
@@ -34,9 +34,12 @@ class ReportController extends Controller
         Report::create($data);
     }
 
-    public function update(CreateReportRequest $request, int $id)
+    public function update(CreateReportRequest $request, int $conference_id, int $report_id)
     {   
-        Conference::whereId($id)->update($request->validated());
+        $data = $request->validated();
+        $data['conference_id'] = $conference_id;
+        $data['user_id'] = Auth::user()->id;
+        Report::whereId($report_id)->update($data);
     }
 
     public function destroy(int $id)
