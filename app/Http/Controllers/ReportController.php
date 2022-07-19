@@ -41,6 +41,6 @@ class ReportController extends Controller
 
     public function destroy(int $id)
     {
-        Conference::findOrFail($id)->delete();
+        Report::findOrFail($id)->delete();
     }
 }
