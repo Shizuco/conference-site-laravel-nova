@@ -28,4 +28,8 @@ class Conference extends Model
 	{
 		return $this->hasMany(Conference::class);
 	}
+
+    public function reports(){
+        return $this->belongsToMany(Report::class, 'reports');
+    }
 }

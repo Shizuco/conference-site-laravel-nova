@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Auth;
 use App\Models\Conference;
+use App\Models\Report;
 
 class User extends Authenticatable
 {
@@ -53,5 +54,9 @@ class User extends Authenticatable
 	{
 		return $this->belongsToMany(Conference::class, 'conference_user');
 	}
+
+    public function reports(){
+        return $this->belongsToMany(Report::class, 'reports');
+    }
 
 }
