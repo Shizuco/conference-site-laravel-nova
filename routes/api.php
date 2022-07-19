@@ -28,15 +28,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);
     Route::post('/isOnConference/{id}', [UserController::class, 'getConference']);
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
-
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
-    Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
-    Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
-    Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
-
     Route::get('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'index']);
     Route::post('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'store']);
+
+    Route::group(['middleware' => ['isRigthAnnouncer']], function () {
+        Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
+        Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
+        Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
+    });
+
     Route::put('/conferences/{conference_id}/report/{report_id}/comment/{id}', [CommentController::class, 'update']);
 
     Route::group(['middleware' => ['isAdmin']], function () {
