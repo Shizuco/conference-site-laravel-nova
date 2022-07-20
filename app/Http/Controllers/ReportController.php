@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReportRequest;
 use App\Models\Report;
 use App\Models\User;
-use Auth;
+use Auth, DateTime;
 
 class ReportController extends Controller
 {
@@ -21,9 +21,16 @@ class ReportController extends Controller
         return response()->json(Report::All()->where('conference_id', $conference_id)->where('id', $report_id));
     }
 
+    public function IsInRange(DateTime $dateToCheck, DateTime $startDate, DateTime $endDate)
+    {
+        return dateToCheck >= startDate && dateToCheck < endDate;
+    }
+
     public function store(CreateReportRequest $request, int $id)
     {
         $data = $request->validated();
+        $reports = Report::All()->where('conference_id', $id);
+        return $reports;
         $data['conference_id'] = $id;
         $data['user_id'] = Auth::user()->id;
         Report::create($data);

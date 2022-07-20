@@ -19,7 +19,8 @@ return new class extends Migration
             $table->integer('report_id');
             $table->integer('conference_id');
             $table->text('comment');
-            $table->timestamps();
+            $table->datetime('created_at');
+            $table->datetime('updated_at');
         });
     }
 
