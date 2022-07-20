@@ -7,7 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReportRequest;
 use App\Models\Report;
 use App\Models\User;
-use Auth, DateTime;
+use Auth;
+use DateTime;
 
 class ReportController extends Controller
 {
@@ -26,40 +27,36 @@ class ReportController extends Controller
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-   public function isDateAvailable(CreateReportRequest $request, int $id){
+    public function isDateAvailable(CreateReportRequest $request, int $id)
+    {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
         $startTime = new Datetime($request->start_time);
         $endTime = new Datetime($request->end_time);
-        for($a = 0; $a < count($reports); $a++){
+        for ($a = 0; $a < count($reports); $a++) {
             $startTimeExist = new Datetime($reports[$a]->start_time);
             $endTimeExist = new Datetime($reports[$a]->end_time);
-            if($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true){
+            if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
             }
-            if($this->isInRange($endTime, $startTimeExist, $endTimeExist) === true){
+            if ($this->isInRange($endTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
             }
         }
-        if($isDateOk === 0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return ($isDateOk === 0) ? true : false;
     }
 
     public function store(CreateReportRequest $request, int $id)
     {
         $data = $request->validated();
-        if($this->isDateAvailable($request, $id) === true){
+        if ($this->isDateAvailable($request, $id) === true) {
             $data['conference_id'] = $id;
             $data['user_id'] = Auth::user()->id;
-            Report::create($data);  
+            Report::create($data);
         }
-        
+
     }
 
     public function update(CreateReportRequest $request, int $conference_id, int $report_id)

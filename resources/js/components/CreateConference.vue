@@ -6,6 +6,7 @@
                 <v-card elevation="10">
                     <v-card-text>
                         <v-form>
+                            <ValidationObserver tag="form" @submit.prevent="createConference">
                             <v-row>
                                 <v-col>
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
@@ -37,7 +38,7 @@
                                 <v-col>
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="country">
                                         <span>{{ errors[0] }}</span>
-                                        <v-select label="Country" name="country" id="country" class="rounded-0" outlined
+                                        <v-select name="country" id="country" class="rounded-0" outlined
                                             required v-model="formData.country" :items="countries">
                                         </v-select>
                                     </ValidationProvider>
@@ -56,16 +57,6 @@
                                         }" :draggable="true"></gmap-marker>
                                     </gmap-map>
                                 </v-col>
-                                <ValidationProvider rules="required|min:-90|max:90" v-slot="{ errors }">
-                                    <span>{{ errors[0] }}</span>
-                                    <input type="number" id="lat" name="address_lat" class="form-control"
-                                        v-model="formData.address_lat" style="display:none">
-                                </ValidationProvider>
-                                <ValidationProvider rules="required|min:-180|max:180" v-slot="{ errors }">
-                                    <span>{{ errors[0] }}</span>
-                                    <input type="number" id="lon" name="address_lon" class="form-control"
-                                        v-model="formData.address_lon" style="display:none">
-                                </ValidationProvider>
                             </v-row>
                             <v-row>
                                 <v-col>
@@ -73,10 +64,11 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn x-big block color="success" class="white--text" @click="createConference()">
-                                        Save</v-btn>
+                                    <v-btn type="submit"  class="white--text" color="success" x-big block >
+                                 Save</v-btn>
                                 </v-col>
                             </v-row>
+                            </ValidationObserver>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -95,7 +87,7 @@ export default {
             time: '',
             address_lat: '0',
             address_lon: '0',
-            country: ''
+            country: 'Japan'
         },
         countries: ['Japan', 'Russia', 'Ukraine', 'Belarus', 'Canada', 'France', 'England', 'USA', 'China', 'Korea']
     }),

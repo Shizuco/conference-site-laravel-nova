@@ -128,7 +128,7 @@ export default {
          password: '',
          password_confirmation: '',
          date: '',
-         country: '',
+         country: 'Japan',
          phone: '',
       },
       selectedRole: null,
@@ -146,12 +146,12 @@ export default {
             surname: this.formData.surname,
             phone: this.form.telephone
          }
-         this.$store.dispatch('REGISTER', data).then(() => {
+         this.$store.dispatch('register', data).then(() => {
             let data = {
                email: this.formData.email,
                password: this.formData.password,
             }
-            this.$store.dispatch('AUTH', data).then(() => {
+            this.$store.dispatch('auth', data).then(() => {
                this.$router.go()
             })
          }).catch(error => {

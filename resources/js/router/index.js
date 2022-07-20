@@ -6,14 +6,11 @@ import CreateConference from '../components/CreateConference.vue'
 import EditConference from '../components/EditConference.vue'
 import Registration from '../components/Auth/Registration.vue'
 import Auth from '../components/Auth/Auth.vue'
+import List from '../components/Report/List.vue'
+import Details from '../components/Report/Details.vue'
 
 function isAuth(){
-    if("Authorized" in localStorage){
-        return true
-    }
-    else{
-        return false
-    }
+   return ("Authorized" in localStorage) ? true : false
 }
 
 export default new VueRouter({
@@ -88,6 +85,32 @@ export default new VueRouter({
                     next()
                 }
             },
+        },
+        {
+            path:'/conferences/:id/reports',
+            component: List,
+            name: 'List',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
+        },
+        {
+            path:'/conferences/:id/reports/:rep_id',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
+            component: Details,
+            name: 'Details',
         }
     ]
 })

@@ -34,25 +34,15 @@
 export default {
    methods: {
       isAuth() {
-         if ("Authorized" in localStorage) {
-            return true
-         }
-         else {
-            return false
-         }
+         return ("Authorized" in localStorage) ? true : false
       },
       logout() {
          console.log(localStorage.getItem('Authorized'))
-         this.$store.dispatch('LOGOUT')
+         this.$store.dispatch('logout')
          this.$router.go()
       },
       isAdmin() {
-         if (this.$store.getters.getUser.role == "admin") {
-            return true
-         }
-         else {
-            return false
-         }
+         return (this.$store.getters.getUser.role == "admin")? true : false
       },
    }
 }
