@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportRequest;
+use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Models\User;
 use Auth;
@@ -27,15 +28,15 @@ class ReportController extends Controller
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    public function isDateAvailable(CreateReportRequest $request, int $id)
+    public function isDateAvailable($start_time, $end_time, int $id)
     {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
-        $startTime = new Datetime($request->start_time);
-        $endTime = new Datetime($request->end_time);
-        for ($a = 0; $a < count($reports); $a++) {
-            $startTimeExist = new Datetime($reports[$a]->start_time);
-            $endTimeExist = new Datetime($reports[$a]->end_time);
+        $startTime = new Datetime($start_time);
+        $endTime = new Datetime($end_time);
+        foreach($reports as $report){
+            $startTimeExist = new Datetime($report->start_time);
+            $endTimeExist = new Datetime($report->end_time);
             if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
@@ -48,15 +49,21 @@ class ReportController extends Controller
         return ($isDateOk === 0) ? true : false;
     }
 
-    public function store(CreateReportRequest $request, int $id)
-    {
-        $data = $request->validated();
-        if ($this->isDateAvailable($request, $id) === true) {
+    public function store(Request $request, int $id)
+    {  
+        $request->file('presentation')->store('public/presentations/');
+        $data = $request->validate([
+            'thema'=>'required',
+            'start_time'=>'required',
+            'end_time'=>'required',
+            'description'=>'required'
+        ]);
+        if ($this->isDateAvailable($request->start_time, $request->end_time, $id) === true) { 
             $data['conference_id'] = $id;
             $data['user_id'] = Auth::user()->id;
+            $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
         }
-
     }
 
     public function update(CreateReportRequest $request, int $conference_id, int $report_id)

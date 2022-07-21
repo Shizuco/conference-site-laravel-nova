@@ -115,7 +115,13 @@ export default {
         join() {
             let conference_id = this.$store.getters.getConference.id
             this.$store.dispatch('userConferenceJoin', conference_id)
-            this.$router.go()
+            if(this.$store.getters.getUser.role == "announcer"){
+                this.$router.replace({name: 'Create'})
+            }
+            else{
+                this.$router.go()
+            }
+            
         },
         out() {
             let conference_id = this.$store.getters.getConference.id

@@ -222,6 +222,32 @@ export default new Vuex.Store({
                 }).catch(error=>{
                 })
         },
+        ajaxCreateReport({commit}, data){
+            /*const fd = new FormData()
+            fd.append('presentation', data[0].presentation, data[0].presentation.name)
+            data[0].presentation = fd
+            console.log(data[0])*/
+            let datas = new FormData();
+            datas.append("presentation", data[0].presentation)
+            datas.append("thema", data[0].thema);
+            datas.append("start_time", data[0].start_time);
+            datas.append("end_time", data[0].end_time);
+            datas.append("description", data[0].description);
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/conferences/' + data[1] + '/reports',
+                data: datas,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>"
+                  }
+                }).then(response=>{
+                    commit('setReports', response.data)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
     },
     mutations:{
         setConferences(state, data){
