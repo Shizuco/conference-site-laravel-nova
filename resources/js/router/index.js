@@ -9,7 +9,7 @@ import Auth from '../components/Auth/Auth.vue'
 import List from '../components/Report/List.vue'
 import Details from '../components/Report/Details.vue'
 import Create from '../components/Report/Create.vue'
-import Edit from '../components/Report/Create.vue'
+import Edit from '../components/Report/Edit.vue'
 
 function isAuth(){
    return ("Authorized" in localStorage) ? true : false
@@ -128,7 +128,7 @@ export default new VueRouter({
             name: 'Create',
         },
         {
-            path:'/conferences/:id/reports/:rep_id',
+            path:'/conferences/:id/reports/:r_id',
             beforeEnter(to, from, next){
                 if(!isAuth()){
                     next('/conferences')

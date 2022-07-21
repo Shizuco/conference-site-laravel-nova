@@ -66,13 +66,21 @@ class ReportController extends Controller
         }
     }
 
-    public function update(CreateReportRequest $request, int $conference_id, int $report_id)
+    public function update(Request $request, int $conference_id, int $report_id)
     {
         $rep = Report::findOrFail($report_id);
+        $request->file('presentation')->store('public/presentations/');
+        $data = $request->validate([
+            'thema'=>'required',
+            'start_time'=>'required',
+            'end_time'=>'required',
+            'description'=>'required'
+        ]);
         if ($rep->user_id === Auth::user()->id) {
-            $data = $request->validated();
             $data['conference_id'] = $conference_id;
             $data['user_id'] = Auth::user()->id;
+            $data['presentation'] = $request->file('presentation')->getClientOriginalName();
+
             Report::whereId($report_id)->update($data);
         }
     }

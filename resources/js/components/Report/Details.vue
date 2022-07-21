@@ -14,6 +14,8 @@
                     </v-card-text>
                 </v-card>
             </v-col>
+            <v-btn depressed color="warning" big
+                :to="{ name: 'Edit', params:{id : getReport.conference_id, r_id : getReport.id}} ">Edit</v-btn>
         </v-row>
     </v-app>
 </template>
@@ -43,6 +45,7 @@ export default {
     },
     computed: {
         getReport() {
+            
             return this.$store.getters.getReport
         }
     },

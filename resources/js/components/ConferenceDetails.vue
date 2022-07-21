@@ -54,7 +54,7 @@
                                         x-big block color="success" class="white--text">Join</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth()" depressed color="warning" big
+                                    <v-btn v-if="isAuth()" depressed color="warning" x-big
                                         :to="{ name: 'List', params: { id: getConference.id } }">Reports</v-btn>
                                 </v-col>
                                 <v-col>
