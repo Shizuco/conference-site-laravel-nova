@@ -256,16 +256,17 @@ export default new Vuex.Store({
             datas.append("description", data[0].description);
             datas.append("_method", 'PUT');
             let token = 'Bearer '+ localStorage.getItem('Authorized')
-            return axios({
+            axios({
                 method: 'post',
                 url: 'api/conferences/' + data[1] + '/reports/' + data[2],
                 data: datas,
                 headers: {
                     "Authorization": token,
-                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>"
+                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>;charset=UTF-8"
                   }
                 }).then(response=>{
-                    commit('setReports', response.data)
+                    console.log(response.data)
+                    commit('setReport', response.data)
                 }).catch(error=>{
                     console.log(error.response);
                 })

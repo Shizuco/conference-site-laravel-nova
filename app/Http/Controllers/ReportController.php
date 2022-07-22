@@ -51,7 +51,6 @@ class ReportController extends Controller
 
     public function store(CreateReportRequest $request, int $id)
     {  
-        //return $request->file('presentation')->getName();
         $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());
         $data = $request->validated();
         if ($this->isDateAvailable($request->start_time, $request->end_time, $id) === true) { 
@@ -65,13 +64,17 @@ class ReportController extends Controller
     public function update(CreateReportRequest $request, int $conference_id, int $report_id)
     {
         $rep = Report::findOrFail($report_id);
-        $request->file('presentation')->store('public/presentations/');
         $data = $request->validated();
-        if ($rep->user_id === Auth::user()->id) {
+        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $id) === true) {
             $data['conference_id'] = $conference_id;
             $data['user_id'] = Auth::user()->id;
-            $data['presentation'] = $request->file('presentation')->getClientOriginalName();
-
+            if(gettype($request->file('presentation')) == 'object'){
+                $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());   
+                $data['presentation'] = $request->file('presentation')->getClientOriginalName();  
+            }
+            else{
+                $data['presentation'] = $rep->presentation;
+            }
             Report::whereId($report_id)->update($data);
         }
     }
@@ -87,11 +90,6 @@ class ReportController extends Controller
     public function getFile(int $conference_id, int $report_id)
     {
         $rep = Report::findOrFail($report_id);
-        if (Storage::exists('presentatins/', $rep->presentation)) {
-           return response()->json($rep);
-        }
-        else{
-            return response()->json(Storage::get($rep->presentation));
-        }
+        return Storage::get($rep->presentation);
     }
 }

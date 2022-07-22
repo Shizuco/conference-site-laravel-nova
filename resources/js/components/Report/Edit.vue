@@ -43,7 +43,7 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-file-input label="Presentation" v-model="formData.presentation" outlined required class="rounded-0"></v-file-input>
+                                        <v-file-input label="Presentation" v-model="formData.presentation" outlined class="rounded-0"></v-file-input>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -85,11 +85,13 @@ export default {
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.r_id]).then(() => {
-                this.$data.formData.thema = this.getReport.thema
-                this.$data.formData.start_time = this.getReport.start_time
-                this.$data.formData.end_time = this.getReport.end_time
-                this.$data.formData.description = this.getReport.description
-                this.$data.formData.presentation = this.getReport.presentation
+                this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.r_id]).then(() => {
+                    this.$data.formData.thema = this.getReport.thema
+                    this.$data.formData.start_time = this.getReport.start_time
+                    this.$data.formData.end_time = this.getReport.end_time
+                    this.$data.formData.description = this.getReport.description
+                    this.$data.formData.presentation = this.$store.getters.getFile
+                })
             })
         }
     },

@@ -95,7 +95,6 @@ export default {
                 'description': this.formData.description,
                 'presentation': this.formData.presentation
             }
-            console.log(this.formData)
             this.$store.dispatch('ajaxCreateReport', [data, this.$route.params.id])
             this.$router.replace('/conferences')
         }

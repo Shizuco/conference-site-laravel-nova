@@ -43,6 +43,7 @@ export default {
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
+                    console.log(JSON.stringify(this.$store.getters.getFile))
                 })
             })
         }
@@ -54,10 +55,10 @@ export default {
     },
     methods: {
         onClick() {
-            const url = window.URL.createObjectURL(new Blob([this.$store.getters.getFile]))
+            const url = window.URL.createObjectURL(new Blob([JSON.stringify(this.$store.getters.getFile)]))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', 'file.json') //or any other extension
+            link.setAttribute('download', this.$data.formData.presentation) //or any other extension
             document.body.appendChild(link)
             link.click()
         }
