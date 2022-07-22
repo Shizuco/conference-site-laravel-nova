@@ -1,7 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
-import { message } from 'laravel-mix/src/Log';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -11,7 +10,8 @@ export default new Vuex.Store({
         user:[],
         userOnConferenceStatus:[],
         reports: [],
-        report: []
+        report: [],
+        file: []
     },
     getters:{
         getConferences(state){
@@ -32,6 +32,9 @@ export default new Vuex.Store({
         getReport(state){
             return state.report;
         },
+        getFile(state){
+            return state.file
+        }
     },
     actions:{
         ajaxConferences({commit}){
@@ -267,6 +270,21 @@ export default new Vuex.Store({
                     console.log(error.response);
                 })
         },
+        ajaxGetReportFile({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/conferences/' + data[0] + '/reports/' + data[1] + '/file',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    commit('setFile', response.data)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
     },
     mutations:{
         setConferences(state, data){
@@ -290,6 +308,9 @@ export default new Vuex.Store({
         },
         setReport(state, data){
             return state.report = data
+        },
+        setFile(state, data){
+            return state.file = data
         }
     }
     }

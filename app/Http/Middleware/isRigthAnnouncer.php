@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+use Auth, Exception;
 
 class isRigthAnnouncer
 {
@@ -17,8 +17,8 @@ class isRigthAnnouncer
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || Auth::user()->role !== 'announccer') {
-            return 'Access denide';
+        if (!Auth::check() || Auth::user()->role !== 'announcer') {
+            throw new Exception('Access denide');
         }
         return $next($request);
     }

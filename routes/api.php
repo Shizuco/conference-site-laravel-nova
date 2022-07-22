@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
+    Route::get('/conferences/{conference_id}/reports/{report_id}/file', [ReportController::class, 'getFile']);
     Route::get('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'index']);
     Route::post('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'store']);
 

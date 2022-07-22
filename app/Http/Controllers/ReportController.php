@@ -6,10 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Report;
 use App\Models\User;
-use Auth;
-use DateTime;
+use Auth, DateTime;
 
 class ReportController extends Controller
 {
@@ -49,15 +49,11 @@ class ReportController extends Controller
         return ($isDateOk === 0) ? true : false;
     }
 
-    public function store(Request $request, int $id)
+    public function store(CreateReportRequest $request, int $id)
     {  
-        $request->file('presentation')->store('public/presentations/');
-        $data = $request->validate([
-            'thema'=>'required',
-            'start_time'=>'required',
-            'end_time'=>'required',
-            'description'=>'required'
-        ]);
+        //return $request->file('presentation')->getName();
+        $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());
+        $data = $request->validated();
         if ($this->isDateAvailable($request->start_time, $request->end_time, $id) === true) { 
             $data['conference_id'] = $id;
             $data['user_id'] = Auth::user()->id;
@@ -66,16 +62,11 @@ class ReportController extends Controller
         }
     }
 
-    public function update(Request $request, int $conference_id, int $report_id)
+    public function update(CreateReportRequest $request, int $conference_id, int $report_id)
     {
         $rep = Report::findOrFail($report_id);
         $request->file('presentation')->store('public/presentations/');
-        $data = $request->validate([
-            'thema'=>'required',
-            'start_time'=>'required',
-            'end_time'=>'required',
-            'description'=>'required'
-        ]);
+        $data = $request->validated();
         if ($rep->user_id === Auth::user()->id) {
             $data['conference_id'] = $conference_id;
             $data['user_id'] = Auth::user()->id;
@@ -93,4 +84,14 @@ class ReportController extends Controller
         }
     }
 
+    public function getFile(int $conference_id, int $report_id)
+    {
+        $rep = Report::findOrFail($report_id);
+        if (Storage::exists('presentatins/', $rep->presentation)) {
+           return response()->json($rep);
+        }
+        else{
+            return response()->json(Storage::get($rep->presentation));
+        }
+    }
 }
