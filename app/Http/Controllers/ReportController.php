@@ -7,9 +7,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReportRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use App\Models\Report;
+use App\Models\Conference;
 use App\Models\User;
-use Auth, DateTime;
+use App\Models\Comment;
+use Auth, DateTime, Exception;
 
 class ReportController extends Controller
 {
@@ -20,7 +23,7 @@ class ReportController extends Controller
 
     public function show(int $conference_id, int $report_id)
     {
-        return response()->json(Report::All()->where('conference_id', $conference_id)->where('id', $report_id));
+        return Report::with('comments.users')->where('id', $report_id)->get();
     }
 
     public function isInRange(DateTime $dateToCheck, DateTime $startDate, DateTime $endDate)
@@ -28,20 +31,22 @@ class ReportController extends Controller
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    public function isDateAvailable($start_time, $end_time, int $id)
+    public function isDateAvailable(Datetime $start_time, Datetime $end_time, int $id)
     {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
-        $startTime = new Datetime($start_time);
-        $endTime = new Datetime($end_time);
         foreach($reports as $report){
             $startTimeExist = new Datetime($report->start_time);
             $endTimeExist = new Datetime($report->end_time);
-            if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
+            if ($this->isInRange($start_time, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
             }
-            if ($this->isInRange($endTime, $startTimeExist, $endTimeExist) === true) {
+            if ($this->isInRange($end_time, $startTimeExist, $endTimeExist) === true) {
+                $isDateOk++;
+                break;
+            }
+            if($start_time >= $end_time){
                 $isDateOk++;
                 break;
             }
@@ -51,13 +56,72 @@ class ReportController extends Controller
 
     public function store(CreateReportRequest $request, int $id)
     {  
+        $conference = Conference::Find($id)->first();
+        $startTimeExist = new Datetime($request->start_time);
+        $endTimeExist = new Datetime($request->end_time);
+        $interval = ($startTimeExist->diff($endTimeExist));
+        if($interval->format('%h') > 1){
+            $error = ValidationException::withMessages([
+                'start_time' => ['Maximum time of report should be less than hour']
+             ]);
+             throw $error;
+        }
         $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());
+        $conStartTime = new DateTime($conference->date . 'T' . $conference->time . 'Z');
+        $conEndTime = new DateTime($conference->date . 'T23:59:59.000000Z');
+        if($startTimeExist<$conStartTime){
+            $error = ValidationException::withMessages([
+                'start_time' => ['Date must be in range of conference']
+            ]);
+            throw $error;
+        }
         $data = $request->validated();
-        if ($this->isDateAvailable($request->start_time, $request->end_time, $id) === true) { 
+        if($endTimeExist->diff($conEndTime)->format('%d') >= 1){
+            $error = ValidationException::withMessages([
+                'end_time' => ['Date must be in range of conference']
+            ]);
+            throw $error;
+        }
+        if ($this->isDateAvailable($startTimeExist, $endTimeExist, $id) === true) { 
             $data['conference_id'] = $id;
             $data['user_id'] = Auth::user()->id;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
+        }
+        else{
+            $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
+            $start_time = new Datetime($conference->date . 'T' . $conference->time . 'Z');
+            $end_time = 0;
+            for($a = 0; $a < count($results); $a++){
+                if( $a !== 0 && $a !== count($results) - 1){
+                    $start_time = new Datetime($results[$a+1]->start_time);
+                }
+                if($a === count($results) - 1){
+                    $end_time = new DateTime($conference->date . ' 23:59:59.000');
+                    $start_time = new Datetime($results[$a]->end_time);
+                }
+                else if($a===0){
+                    $end_time = new Datetime($results[$a]->start_time);
+                }
+                else{
+                    $end_time = new Datetime($results[$a]->end_time); 
+                }
+                $interval = $end_time->diff($start_time);
+                $err = $interval->format('%i')>=10;
+                if($err){
+                    if($a === 0){
+                        $error = ValidationException::withMessages([
+                            'start_time' => ['Nearest time for start is ' . $start_time->format('Y-m-d H:i:s')]
+                        ]);
+                    }
+                    else{
+                       $error = ValidationException::withMessages([
+                        'start_time' => ['Nearest time for start is ' . $results[$a]->end_time]
+                    ]); 
+                    }  
+                    throw $error;
+                }
+            }   
         }
     }
 
@@ -65,7 +129,7 @@ class ReportController extends Controller
     {
         $rep = Report::findOrFail($report_id);
         $data = $request->validated();
-        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $id) === true) {
+        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conference_id) === true) {
             $data['conference_id'] = $conference_id;
             $data['user_id'] = Auth::user()->id;
             if(gettype($request->file('presentation')) == 'object'){
@@ -79,17 +143,17 @@ class ReportController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    public function destroy(int $conference_id)
     {
-        $rep = Report::findOrFail($id);
-        if ($rep->user_id === Auth::user()->id) {
-            Report::findOrFail($id)->delete();
-        }
+        $rep = Report::where('user_id', Auth::user()->id)->where('conference_id', $conference_id)->get();
+        $rep[0]->delete();
     }
 
     public function getFile(int $conference_id, int $report_id)
     {
         $rep = Report::findOrFail($report_id);
-        return Storage::get($rep->presentation);
+        return response()->file(Storage::path($rep->presentation), [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ]);
     }
 }

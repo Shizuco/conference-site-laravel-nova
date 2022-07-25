@@ -33,6 +33,7 @@
         "v-calendar": "^2.4.1",
         "v-mask": "^2.3.0",
         "vue-browser-geolocation": "^1.8.0",
+        "vue-lazyload": "^3.0.0-rc.2",
         "vue-router": "^3.5.4",
         "vue-social-sharing": "^3.0.9",
         "vuetify": "^2.6.7",

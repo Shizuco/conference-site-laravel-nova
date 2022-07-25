@@ -11,7 +11,8 @@ export default new Vuex.Store({
         userOnConferenceStatus:[],
         reports: [],
         report: [],
-        file: []
+        file: [],
+        comments: []
     },
     getters:{
         getConferences(state){
@@ -34,6 +35,9 @@ export default new Vuex.Store({
         },
         getFile(state){
             return state.file
+        },
+        getComments(state){
+            return state.comments
         }
     },
     actions:{
@@ -53,6 +57,7 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8"
                   }
                 }).then(response=>{
+                    console.log(response.data)
                     commit('setConference', response.data)
                 }).catch(error=>{
                 })
@@ -221,11 +226,13 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8"
                   }
                 }).then(response=>{
-                    commit('setReport', response.data[id[1] - 1])
+                    commit('setReport', response.data[0])
                 }).catch(error=>{
+                    console.log(error.response.data)
                 })
         },
         ajaxCreateReport({commit}, data){
+            console.log(data[0].presentation)
             let datas = new FormData();
             datas.append("presentation", data[0].presentation)
             datas.append("thema", data[0].thema);
@@ -239,13 +246,12 @@ export default new Vuex.Store({
                 data: datas,
                 headers: {
                     "Authorization": token,
-                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>"
+                    "Content-type": "application/vnd.openxmlformats-officedocument.presentationml.presentation;"
                   }
-                }).then(response=>{
-                    commit('setReports', response.data)
-                }).catch(error=>{
-                    console.log(error.response);
-                })
+                }).then(function(response) {
+                    console.log(response.data)
+                    commit('setReport', response.data)
+                });
         },
         ajaxEditReport({commit}, data){
             let datas = new FormData();
@@ -262,13 +268,26 @@ export default new Vuex.Store({
                 data: datas,
                 headers: {
                     "Authorization": token,
-                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>;charset=UTF-8"
+                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>"
                   }
                 }).then(response=>{
                     console.log(response.data)
                     commit('setReport', response.data)
                 }).catch(error=>{
                     console.log(error.response);
+                })
+        },
+        ajaxReportDelete({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'delete',
+                url: 'api/conferences/' + data + '/reports',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
                 })
         },
         ajaxGetReportFile({commit}, data){
@@ -278,10 +297,56 @@ export default new Vuex.Store({
                 url: 'api/conferences/' + data[0] + '/reports/' + data[1] + '/file',
                 headers: {
                     "Authorization": token,
-                    "Content-type": "application/json; charset=UTF-8"
+                    "Content-type": "application/vnd.openxmlformats-officedocument.presentationml.presentation;"
                   }
                 }).then(response=>{
                     commit('setFile', response.data)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetComments({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/conferences/report/' + data[0] + '/comment',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setComments', response.data)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxSendComment({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/conferences/' + data[0] + '/report/' + data[1] + '/comment',
+                data: data[2],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxSetComment({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'put',
+                url: 'api/conferences/' + data[0] + '/report/' + data[1] + '/comment/' + data[2],
+                data: data[3],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
                 }).catch(error=>{
                     console.log(error.response);
                 })
@@ -312,6 +377,9 @@ export default new Vuex.Store({
         },
         setFile(state, data){
             return state.file = data
+        },
+        setComments(state, data){
+            return state.comments = data
         }
     }
     }

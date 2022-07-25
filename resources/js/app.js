@@ -45,8 +45,9 @@ import {ValidationObserver} from 'vee-validate'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
 import VCalendar from 'v-calendar';
+import DatetimePicker from 'vuetify-datetime-picker'
 
-
+Vue.use(DatetimePicker)
 Vue.use(VueSocialSharing)
 Vue.use(Vuetify)
 Vue.use(VueRouter)

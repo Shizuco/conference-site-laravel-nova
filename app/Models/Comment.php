@@ -9,7 +9,7 @@ use App\Models\Report;
 
 class Comment extends Model
 {
-    public $table = "comment";
+    public $table = "comment_user_reports";
     use HasFactory;
 
     protected $fillable = [
@@ -26,10 +26,10 @@ class Comment extends Model
 
     public function users()
 	{
-		return $this->belongsToOne(User::class);
+		return $this->belongsTo(User::class, 'user_id');
 	}
 
     public function comments(){
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Comment::class);
     }
 }

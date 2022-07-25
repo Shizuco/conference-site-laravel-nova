@@ -40,6 +40,9 @@
                             </v-row>
                             <br>
                             <v-row>
+                                <h3 v-if="getConference.hasTime == false" style="color:brown">No free time for reports</h3>
+                            </v-row>
+                            <v-row>
                                 <v-col>
                                     <v-btn x-big block color="primary" :to="{ name: 'MainPage' }" class="white--text">
                                         Back
@@ -50,7 +53,7 @@
                                         class="white--text">Delete</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth() && isOnConference() == null && !isAdmin()" @click="join()"
+                                    <v-btn v-if="isAuth() && isOnConference() == null && !isAdmin() && getConference.hasTime ==true" @click="join()"
                                         x-big block color="success" class="white--text">Join</v-btn>
                                 </v-col>
                                 <v-col>
@@ -86,7 +89,6 @@
     </v-app>
 </template>
 <script>
-import { isThisExpression } from '@babel/types'
 
 export default {
     mounted() {
@@ -120,13 +122,15 @@ export default {
             }
             else{
                 this.$router.go()
-            }
-            
+            }     
         },
         out() {
             let conference_id = this.$store.getters.getConference.id
-            this.$store.dispatch('userConferenceOut', conference_id)
-            this.$router.go()
+            this.$store.dispatch('userConferenceOut', conference_id).then(()=>{
+                this.$store.dispatch('ajaxReportDelete', conference_id)
+            }).then(()=>{
+                this.$router.go()
+            })   
         },
         deleteConference() {
             let id = this.$route.params.id

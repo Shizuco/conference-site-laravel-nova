@@ -20,19 +20,20 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="start time">
+                                        <ValidationProvider rules="required" ref="provider" v-slot="{ errors }" name="start_time">
                                             <span>{{ errors[0] }}</span>
-                                            <h6 style="color:black">Date of start</h6>
-                                            <vc-date-picker mode="dateTime" v-model="formData.start_time" :model-config="modelConfig"/>
+                                            <v-datetime-picker label="Date of start" v-model="formData.start_time"> </v-datetime-picker>
+                                            
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="end time">
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="end_time">
                                             <span>{{ errors[0] }}</span>
-                                            <h6 style="color:black">Date of end</h6>
-                                            <vc-date-picker mode="dateTime" v-model="formData.end_time" :model-config="modelConfig" />
+                                            <v-datetime-picker label="Date of end" v-model="formData.end_time"> </v-datetime-picker>
                                         </ValidationProvider>
                                     </v-col>
+                                </v-row>
+                                <v-row>
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="description">
                                             <span>{{ errors[0] }}</span>
@@ -76,28 +77,33 @@ export default {
             end_time: '',
             description: '',
             presentation: ''
-        },
-        modelConfig:{
-            type: 'string',
-            mask: 'iso',
-            timeAdjust: '24:00:00',
         }
     }),
     mounted() {
         this.$store.dispatch('ajaxUser')
     },
     computed: {
-        onSubmit() {
+},
+methods:{
+    onSubmit() {
             let data = {
                 'thema': this.formData.thema,
-                'start_time': this.formData.start_time,
-                'end_time': this.formData.end_time,
+                'start_time': new Date(this.formData.start_time).toLocaleString(),
+                'end_time': new Date(this.formData.end_time).toLocaleString(),
                 'description': this.formData.description,
                 'presentation': this.formData.presentation
             }
-            this.$store.dispatch('ajaxCreateReport', [data, this.$route.params.id])
-            this.$router.replace('/conferences')
-        }
+            this.$store.dispatch('ajaxCreateReport', [data, this.$route.params.id]).then(()=>{
+                this.$router.replace('/conferences')
+            }).catch(error => {
+            this.$refs.provider.applyResult({
+               errors: error.response.data.errors.start_time,
+               valid: false, 
+               failedRules: {} 
+            });
+            console.log(error.response.data)
+            })
     },
+}
 }
 </script>

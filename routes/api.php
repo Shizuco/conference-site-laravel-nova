@@ -31,12 +31,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
     Route::get('/conferences/{conference_id}/reports/{report_id}/file', [ReportController::class, 'getFile']);
-    Route::get('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'index']);
+    Route::get('/conferences/{conference_id}/reports/uploadFile', [ReportController::class, 'uploadFile']);
+    Route::get('/conferences/report/{id}/comment', [CommentController::class, 'index']);
     Route::post('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'store']);
-
+    
     Route::group(['middleware' => ['isRigthAnnouncer']], function () {
         Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
-        Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
+        Route::delete('/conferences/{conference_id}/reports', [ReportController::class, 'destroy']);
         Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
     });
 

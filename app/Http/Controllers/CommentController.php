@@ -7,13 +7,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCommentRequest;
 use App\Models\Comment;
 use App\Models\User;
-use Auth, DateTime, DateTimeZone, DateTimeInterface;
+use Auth, DateTime, DateTimeInterface;
 
 class CommentController extends Controller
 {
     public function index(int $id)
     {
-        return response()->json(Comment::All()->where('report_id', $id));
+        return Comment::with('users')->where('report_id', $id)->get();
     }
 
     public function store(CreateCommentRequest $request, int $conference_id, int $report_id)
