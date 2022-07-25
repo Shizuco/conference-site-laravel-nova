@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 use App\Models\Conference;
 use App\Models\User;
-use App\Models\Comment;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
@@ -24,21 +24,22 @@ class Report extends Model
     ];
 
     public function conferences()
-	{
-		return $this->belongsToOne(Conference::class);
-	}
+    {
+        return $this->belongsToOne(Conference::class);
+    }
 
     public function users()
-	{
-		return $this->belongsToOne(User::class);
-	}
+    {
+        return $this->belongsToOne(User::class);
+    }
 
     public function comments()
-	{
-		return $this->hasMany(Comment::class);
-	}
+    {
+        return $this->hasMany(Comment::class);
+    }
 
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(Report::class);
     }
 }

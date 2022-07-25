@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Report;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Report;
 
 class Comment extends Model
 {
@@ -20,16 +20,17 @@ class Comment extends Model
     ];
 
     public function reports()
-	{
-		return $this->belongsToOne(Report::class);
-	}
+    {
+        return $this->belongsToOne(Report::class);
+    }
 
     public function users()
-	{
-		return $this->belongsTo(User::class, 'user_id');
-	}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->belongsTo(Comment::class);
     }
 }

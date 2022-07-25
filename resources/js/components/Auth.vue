@@ -42,7 +42,7 @@ export default {
          this.$router.go()
       },
       isAdmin() {
-         return (this.$store.getters.getUser.role == "admin")? true : false
+         return (this.$store.getters.getUser.role == "admin") ? true : false
       },
    }
 }

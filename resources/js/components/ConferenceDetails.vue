@@ -40,7 +40,8 @@
                             </v-row>
                             <br>
                             <v-row>
-                                <h3 v-if="getConference.hasTime == false" style="color:brown">No free time for reports</h3>
+                                <h3 v-if="getConference.hasTime == false" style="color:brown">No free time for reports
+                                </h3>
                             </v-row>
                             <v-row>
                                 <v-col>
@@ -53,8 +54,9 @@
                                         class="white--text">Delete</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth() && isOnConference() == null && !isAdmin() && getConference.hasTime ==true" @click="join()"
-                                        x-big block color="success" class="white--text">Join</v-btn>
+                                    <v-btn
+                                        v-if="isAuth() && isOnConference() == null && !isAdmin() && getConference.hasTime == true"
+                                        @click="join()" x-big block color="success" class="white--text">Join</v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth()" depressed color="warning" x-big
@@ -98,7 +100,7 @@ export default {
             this.$store.dispatch('isUserOnConference', id)
             this.$store.dispatch('ajaxUser')
         }
-        else{
+        else {
             this.$router.replace('/conferences')
         }
     },
@@ -112,25 +114,25 @@ export default {
             return ("Authorized" in localStorage) ? true : false
         },
         isAdmin() {
-            return (this.$store.getters.getUser.role == "admin")? true : false
+            return (this.$store.getters.getUser.role == "admin") ? true : false
         },
         join() {
             let conference_id = this.$store.getters.getConference.id
             this.$store.dispatch('userConferenceJoin', conference_id)
-            if(this.$store.getters.getUser.role == "announcer"){
-                this.$router.replace({name: 'Create'})
+            if (this.$store.getters.getUser.role == "announcer") {
+                this.$router.replace({ name: 'Create' })
             }
-            else{
+            else {
                 this.$router.go()
-            }     
+            }
         },
         out() {
             let conference_id = this.$store.getters.getConference.id
-            this.$store.dispatch('userConferenceOut', conference_id).then(()=>{
+            this.$store.dispatch('userConferenceOut', conference_id).then(() => {
                 this.$store.dispatch('ajaxReportDelete', conference_id)
-            }).then(()=>{
+            }).then(() => {
                 this.$router.go()
-            })   
+            })
         },
         deleteConference() {
             let id = this.$route.params.id

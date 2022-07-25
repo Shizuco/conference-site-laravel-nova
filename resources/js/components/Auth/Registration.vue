@@ -17,7 +17,7 @@
                            <ValidationObserver tag="form" ref="form" @submit.prevent="register">
                               <v-row>
                                  <v-col>
-                                    <ValidationProvider rules="required|alpha|min:2|max:255"  v-slot="{ errors }"
+                                    <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="name">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Name" name="name" id="name" prepend-inner-icon="mdi-mail"
@@ -35,11 +35,11 @@
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
-                              <ValidationProvider rules="required|email" v-slot="{ errors }"
-                                 name="email">
+                              <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
                                  <span>{{ errors[0] }}</span>
-                                 <v-text-field label="Email" name="email" id="email" vid="email" prepend-inner-icon="mdi-lock"
-                                    type="email" class="rounded-0" outlined v-model="formData.email">
+                                 <v-text-field label="Email" name="email" id="email" vid="email"
+                                    prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined
+                                    v-model="formData.email">
                                  </v-text-field>
                               </ValidationProvider>
                               <v-row>
@@ -57,8 +57,8 @@
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Password again" name="password_confirmation"
                                           id="password_confirmation" prepend-inner-icon="mdi-lock" type="password"
-                                          min="8" class="rounded-0" outlined
-                                          v-model="formData.password_confirmation"></v-text-field>
+                                          min="8" class="rounded-0" outlined v-model="formData.password_confirmation">
+                                       </v-text-field>
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
@@ -73,7 +73,7 @@
                                  <span>{{ errors[0] }}</span>
                                  <v-text-field label="Phone" v-model="form.telephone" v-mask="'+38(###)-##-###-##'"
                                     name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0"
-                                    outlined ></v-text-field>
+                                    outlined></v-text-field>
                               </ValidationProvider>
                               <v-row>
                                  <v-col>

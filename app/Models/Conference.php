@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Conference extends Model
 {
@@ -18,18 +18,19 @@ class Conference extends Model
         'date',
         'time',
     ];
-    
+
     public function users()
-	{
-		return $this->belongsToMany(User::class, 'conference_user');
-	}
+    {
+        return $this->belongsToMany(User::class, 'conference_user');
+    }
 
-	public function conferences()
-	{
-		return $this->hasMany(Conference::class);
-	}
+    public function conferences()
+    {
+        return $this->hasMany(Conference::class);
+    }
 
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(Report::class, 'conference_user_reports');
     }
 }

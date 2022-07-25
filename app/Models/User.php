@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Comment;
+use App\Models\Conference;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Auth;
-use App\Models\Conference;
-use App\Models\Report;
-use App\Models\Comment;
 
 class User extends Authenticatable
 {
@@ -29,7 +27,7 @@ class User extends Authenticatable
         'phone',
         'birthday',
         'country',
-        'surname'
+        'surname',
     ];
 
     /**
@@ -52,19 +50,22 @@ class User extends Authenticatable
     ];
 
     public function conferences()
-	{
-		return $this->belongsToMany(Conference::class, 'conference_user');
-	}
+    {
+        return $this->belongsToMany(Conference::class, 'conference_user');
+    }
 
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(Report::class, 'conference_user_reports');
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function users(){
+    public function users()
+    {
         return $this->belongsTo(User::class);
     }
 }

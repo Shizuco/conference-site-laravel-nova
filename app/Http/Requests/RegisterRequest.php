@@ -1,10 +1,12 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,7 +18,6 @@ class AuthRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
-            'password' =>'required|string|confirmed',
             'role' => 'required|string',
             'surname' => 'required|string',
             'birthday' => 'required|string',

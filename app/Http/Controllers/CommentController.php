@@ -7,7 +7,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateCommentRequest;
 use App\Models\Comment;
 use App\Models\User;
-use Auth, DateTime, DateTimeInterface;
+use Auth;
+use DateTime;
+use DateTimeInterface;
 
 class CommentController extends Controller
 {
@@ -25,7 +27,7 @@ class CommentController extends Controller
         Comment::create($data);
     }
 
-    function serializeDate(DateTimeInterface $date)
+    public function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
     }
@@ -42,7 +44,7 @@ class CommentController extends Controller
         $today->format('Y-m-d H:i:s');
         $comDate = new Datetime($this->serializeDate($rep->updated_at));
         $today = new Datetime($this->serializeDate($today));
-        if ($rep->user_id === Auth::user()->id && $this->IsInRange($today, $comDate) == 1) {
+        if ($rep->user_id === Auth::user()->id && $this->IsInRange($today, $comDate) === false) {
             $data = $request->validated();
             $data['conference_id'] = $conference_id;
             $data['report_id'] = $report_id;

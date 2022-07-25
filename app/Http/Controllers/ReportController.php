@@ -22,9 +22,9 @@ class ReportController extends Controller
         return response()->json(Report::All()->where('conference_id', $id));
     }
 
-    public function show(int $conference_id, int $report_id)
+    public function show(int $conferenceId, int $reportId)
     {
-        return Report::with('comments.users')->where('id', $report_id)->get();
+        return Report::with('comments.users')->where('id', $reportId)->get();
     }
 
     public function isInRange(DateTime $dateToCheck, DateTime $startDate, DateTime $endDate)
@@ -32,22 +32,22 @@ class ReportController extends Controller
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    public function isDateAvailable(Datetime $start_time, Datetime $end_time, int $id)
+    public function isDateAvailable(Datetime $startTime, Datetime $endTime, int $id)
     {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
         foreach($reports as $report){
             $startTimeExist = new Datetime($report->start_time);
             $endTimeExist = new Datetime($report->end_time);
-            if ($this->isInRange($start_time, $startTimeExist, $endTimeExist) === true) {
+            if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
             }
-            if ($this->isInRange($end_time, $startTimeExist, $endTimeExist) === true) {
+            if ($this->isInRange($endTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
             }
-            if($start_time >= $end_time){
+            if($startTime >= $endTime){
                 $isDateOk++;
                 break;
             }
@@ -142,16 +142,16 @@ class ReportController extends Controller
         }
     }
 
-    public function update(CreateReportRequest $request, int $conference_id, int $report_id)
+    public function update(CreateReportRequest $request, int $conferenceId, int $reportId)
     {
-        $rep = Report::findOrFail($report_id);
+        $rep = Report::findOrFail($reportId);
         $startTimeExist = new Datetime($request->start_time);
         $endTimeExist = new Datetime($request->end_time);
         $this->isReportDurationLessThanHour($startTimeExist, $endTimeExist);
-        $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $conference_id);
+        $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $conferenceId);
         $data = $request->validated();
-        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conference_id) === true) {
-            $data['conference_id'] = $conference_id;
+        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
+            $data['conference_id'] = $conferenceId;
             $data['user_id'] = Auth::user()->id;
             if(gettype($request->file('presentation')) == 'object'){
                 $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());   
@@ -160,22 +160,22 @@ class ReportController extends Controller
             else{
                 $data['presentation'] = $rep->presentation;
             }
-            Report::whereId($report_id)->update($data);
+            Report::whereId($reportId)->update($data);
         }
         else{
             $this->NearestTime($id);
         }
     }
 
-    public function destroy(int $conference_id)
+    public function destroy(int $conferenceId)
     {
-        $rep = Report::where('user_id', Auth::user()->id)->where('conference_id', $conference_id)->get();
+        $rep = Report::where('user_id', Auth::user()->id)->where('conference_id', $conferenceId)->get();
         $rep[0]->delete();
     }
 
-    public function getFile(int $conference_id, int $report_id)
+    public function getFile(int $conferenceId, int $reportId)
     {
-        $rep = Report::findOrFail($report_id);
+        $rep = Report::findOrFail($reportId);
         return response()->download(storage_path() . "/app/" . $rep->presentation);
     }
 }

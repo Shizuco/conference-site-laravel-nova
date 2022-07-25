@@ -20,8 +20,8 @@
                     </v-card-text>
                 </v-card>
             </div>
-            <v-btn x-big block color="primary" :to="{ name: 'ConferenceDetails', params: { id: this.$route.params.id } }"
-                class="white--text">Back
+            <v-btn x-big block color="primary"
+                :to="{ name: 'ConferenceDetails', params: { id: this.$route.params.id } }" class="white--text">Back
             </v-btn>
         </div>
     </v-app>
