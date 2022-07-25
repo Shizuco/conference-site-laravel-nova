@@ -14,10 +14,10 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
-                           <ValidationObserver tag="form" @submit.prevent="register">
+                           <ValidationObserver tag="form" ref="form" @submit.prevent="register">
                               <v-row>
                                  <v-col>
-                                    <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
+                                    <ValidationProvider rules="required|alpha|min:2|max:255"  v-slot="{ errors }"
                                        name="name">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Name" name="name" id="name" prepend-inner-icon="mdi-mail"
@@ -35,10 +35,10 @@
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
-                              <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }"
+                              <ValidationProvider rules="required|email" v-slot="{ errors }"
                                  name="email">
                                  <span>{{ errors[0] }}</span>
-                                 <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-lock"
+                                 <v-text-field label="Email" name="email" id="email" vid="email" prepend-inner-icon="mdi-lock"
                                     type="email" class="rounded-0" outlined v-model="formData.email">
                                  </v-text-field>
                               </ValidationProvider>
@@ -156,10 +156,16 @@ export default {
             })
          }).catch(error => {
             console.log(error.response.data.errors)
-            this.$refs.observer.applyResult({
-               errors: error.response.data.errors, // array of string errors
-               valid: false, // boolean state
-               failedRules: {} // should be empty since this is a manual error.
+            this.$refs.form.setErrors({
+               email: error.response.data.errors.email,
+               name: error.response.data.errors.name,
+               surname: error.response.data.errors.surname,
+               password: error.response.data.errors.password,
+               password_confimation: error.response.data.errors.password_confimation,
+               country: error.response.data.errors.country,
+               date: error.response.data.errors.birthday,
+               phone: error.response.data.errors.phone,
+               role: error.response.data.errors.role
             });
          })
       },

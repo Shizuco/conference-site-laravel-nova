@@ -6,30 +6,30 @@
                 <v-card elevation="10">
                     <v-card-text>
                         <v-form>
-                            <ValidationObserver tag="form" @submit.prevent="onSubmit">
+                            <ValidationObserver tag="form" ref="form" @submit.prevent="onSubmit">
                                 <v-row>
                                     <v-col>
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                             name="title">
                                             <span>{{ errors[0] }}</span>
                                             <v-text-field label="Thema" name="title" id="title" type="text"
-                                                class="rounded-0" min="2" max="255" outlined required
+                                                class="rounded-0" min="2" max="255" outlined
                                                 v-model="formData.thema"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <ValidationProvider rules="required" ref="provider" v-slot="{ errors }" name="start_time">
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="start_time">
                                             <span>{{ errors[0] }}</span>
-                                            <v-datetime-picker label="Date of start" v-model="formData.start_time"> </v-datetime-picker>
+                                            <v-datetime-picker label="Date of start" v-model="formData.start_time" name="start_time"> </v-datetime-picker>
                                             
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="end_time">
                                             <span>{{ errors[0] }}</span>
-                                            <v-datetime-picker label="Date of end" v-model="formData.end_time"> </v-datetime-picker>
+                                            <v-datetime-picker label="Date of end" v-model="formData.end_time" name="end_time"> </v-datetime-picker>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
@@ -38,13 +38,13 @@
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="description">
                                             <span>{{ errors[0] }}</span>
                                             <v-textarea label="Enter description" v-model="formData.description"
-                                                outlined required class="rounded-0"></v-textarea>
+                                                outlined  class="rounded-0"></v-textarea>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-file-input label="Presentation" v-model="formData.presentation" outlined required class="rounded-0"></v-file-input>
+                                        <v-file-input label="Presentation" v-model="formData.presentation" outlined  class="rounded-0"></v-file-input>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -96,12 +96,14 @@ methods:{
             this.$store.dispatch('ajaxCreateReport', [data, this.$route.params.id]).then(()=>{
                 this.$router.replace('/conferences')
             }).catch(error => {
-            this.$refs.provider.applyResult({
-               errors: error.response.data.errors.start_time,
-               valid: false, 
-               failedRules: {} 
+                console.log(error.response)
+            
+            this.$refs.form.setErrors({
+               title: error.response.data.errors.thema,
+               start_time: error.response.data.errors.start_time,
+               end_time: error.response.data.errors.end_time,
+               description: error.response.data.errors.description,
             });
-            console.log(error.response.data)
             })
     },
 }

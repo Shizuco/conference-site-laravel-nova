@@ -6,38 +6,36 @@
                 <v-card elevation="10">
                     <v-card-text>
                         <v-form>
-                            <ValidationObserver tag="form" @submit.prevent="setReport">
+                            <ValidationObserver tag="form" ref="form" @submit.prevent="setReport" >
                                 <v-row>
                                     <v-col>
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                             name="title">
                                             <span>{{ errors[0] }}</span>
                                             <v-text-field label="Thema" name="title" id="title" type="text"
-                                                class="rounded-0" min="2" max="255" outlined required
+                                                class="rounded-0" min="2" max="255" outlined
                                                 v-model="formData.thema"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="start time">
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="start_time">
                                             <span>{{ errors[0] }}</span>
-                                            <h6 style="color:black">Date of start</h6>
-                                            <vc-date-picker mode="dateTime" v-model="formData.start_time" :model-config="modelConfig"/>
+                                            <v-datetime-picker label="Date of start" v-model="formData.start_time" name="start_time" vid="start_time"> </v-datetime-picker>
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="end time">
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="end_time">
                                             <span>{{ errors[0] }}</span>
-                                            <h6 style="color:black">Date of end</h6>
-                                            <vc-date-picker mode="dateTime" v-model="formData.end_time" :model-config="modelConfig" />
+                                             <v-datetime-picker label="Date of end" v-model="formData.end_time" name="end_time"> </v-datetime-picker>
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="description">
                                             <span>{{ errors[0] }}</span>
                                             <v-textarea label="Enter description" v-model="formData.description"
-                                                outlined required class="rounded-0"></v-textarea>
+                                                outlined class="rounded-0"></v-textarea>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
@@ -75,11 +73,6 @@ export default {
             end_time: '',
             description: '',
             presentation: ''
-        },
-        modelConfig:{
-            type: 'string',
-            mask: 'iso',
-            timeAdjust: '24:00:00',
         }
     }),
     mounted() {
@@ -102,12 +95,22 @@ export default {
         setReport(){
             let data = {
                 'thema': this.formData.thema,
-                'start_time': this.formData.start_time,
-                'end_time': this.formData.end_time,
+                'start_time': new Date(this.formData.start_time).toLocaleString(),
+                'end_time': new Date(this.formData.end_time).toLocaleString(),
                 'description': this.formData.description,
                 'presentation': this.formData.presentation
             }
-            this.$store.dispatch('ajaxEditReport', [data, this.$route.params.id, this.$route.params.r_id])
+            this.$store.dispatch('ajaxEditReport', [data, this.$route.params.id, this.$route.params.r_id]).then(()=>{
+                this.$router.replace('/conferences')
+            }).catch(error => {
+                console.log(error.response)
+            this.$refs.form.setErrors({
+               title: error.response.data.errors.thema,
+               start_time: error.response.data.errors.start_time,
+               end_time: error.response.data.errors.end_time,
+               description: error.response.data.errors.description,
+            });
+            })
         }
     },
 }

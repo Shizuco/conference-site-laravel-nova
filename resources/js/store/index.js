@@ -57,7 +57,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8"
                   }
                 }).then(response=>{
-                    console.log(response.data)
                     commit('setConference', response.data)
                 }).catch(error=>{
                 })
@@ -262,7 +261,7 @@ export default new Vuex.Store({
             datas.append("description", data[0].description);
             datas.append("_method", 'PUT');
             let token = 'Bearer '+ localStorage.getItem('Authorized')
-            axios({
+            return axios({
                 method: 'post',
                 url: 'api/conferences/' + data[1] + '/reports/' + data[2],
                 data: datas,
@@ -273,8 +272,6 @@ export default new Vuex.Store({
                 }).then(response=>{
                     console.log(response.data)
                     commit('setReport', response.data)
-                }).catch(error=>{
-                    console.log(error.response);
                 })
         },
         ajaxReportDelete({commit}, data){
@@ -297,10 +294,11 @@ export default new Vuex.Store({
                 url: 'api/conferences/' + data[0] + '/reports/' + data[1] + '/file',
                 headers: {
                     "Authorization": token,
-                    "Content-type": "application/vnd.openxmlformats-officedocument.presentationml.presentation;"
+                    "Content-type": "application/json"
                   }
                 }).then(response=>{
-                    commit('setFile', response.data)
+                    console.log(response)
+                    commit('setFile', response.config.url)
                 }).catch(error=>{
                     console.log(error.response);
                 })

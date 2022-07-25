@@ -11,7 +11,7 @@
                         <p>Duration: {{ formData.start_time }} to {{ formData.end_time}}</p>
                         <h4>About</h4>
                         <p>{{ formData.description }}</p>
-                        <a @click="onClick()">{{ formData.presentation }}</a>
+                        <a :href="getFile">{{ formData.presentation }}</a>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
@@ -80,16 +80,20 @@ export default {
         },
         getUser(){
             return this.$store.getters.getUser
+        },
+        getFile(){
+            return this.$store.getters.getFile
         }
     },
     methods: {
         onClick() {
-            const url = window.URL.createObjectURL(new Blob([this.$store.getters.getFile]))
-            const link = document.createElement('a')
-            link.href = url
+            /*const url = window.URL.createObjectURL(new Blob([this.$store.getters.getFile], {type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'}))
+            //const link = document.createElement('a')
+            console.log(new Blob([this.$store.getters.getFile], {type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'}))
+            //link.href = url
             link.setAttribute('download', this.$data.formData.presentation)
             document.body.appendChild(link)
-            link.click()
+            link.click()*/
         },
         sendComment(){
             let data = {
