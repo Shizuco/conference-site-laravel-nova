@@ -57,8 +57,10 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8"
                   }
                 }).then(response=>{
+                    console.log(response.data)
                     commit('setConference', response.data)
                 }).catch(error=>{
+                    console.log(error.response)
                 })
         },
         ajaxConferenceDelete({commit}, id){

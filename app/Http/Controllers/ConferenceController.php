@@ -52,15 +52,15 @@ class ConferenceController extends Controller
         $hasTime = 0;
         for ($a = 0; $a < count($results); $a++) {
             if ($a !== 0 && $a !== count($results) - 1) {
-                $startTime = new Datetime($results[$a + 1]->startTime);
+                $startTime = new Datetime($results[$a + 1]->start_time);
             }
             if ($a === count($results) - 1) {
                 $endTime = new DateTime($conference->date . ' 23:59:59.000');
-                $startTime = new Datetime($results[$a]->endTime);
+                $startTime = new Datetime($results[$a]->end_time);
             } else if ($a === 0) {
-                $endTime = new Datetime($results[$a]->startTime);
+                $endTime = new Datetime($results[$a]->start_time);
             } else {
-                $endTime = new Datetime($results[$a]->endTime);
+                $endTime = new Datetime($results[$a]->end_time);
             }
             $interval = $endTime->diff($startTime);
             $err = (($interval->format('%i') >= 10));
@@ -68,6 +68,7 @@ class ConferenceController extends Controller
                 $hasTime++;
             }
         }
+        
         return ($hasTime !== 0) ? true : false;
     }
 }

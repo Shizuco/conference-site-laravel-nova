@@ -5,15 +5,14 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Conference;
+use App\Models\Report;
+use App\Models\User;
+use Auth;
+use DateTime;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
-use App\Models\Report;
-use App\Models\Conference;
-use App\Models\User;
-use App\Models\Comment;
-use Auth, DateTime, Exception, Response;
 
 class ReportController extends Controller
 {
@@ -36,7 +35,7 @@ class ReportController extends Controller
     {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
-        foreach($reports as $report){
+        foreach ($reports as $report) {
             $startTimeExist = new Datetime($report->start_time);
             $endTimeExist = new Datetime($report->end_time);
             if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
@@ -47,7 +46,7 @@ class ReportController extends Controller
                 $isDateOk++;
                 break;
             }
-            if($startTime >= $endTime){
+            if ($startTime >= $endTime) {
                 $isDateOk++;
                 break;
             }
@@ -55,68 +54,68 @@ class ReportController extends Controller
         return ($isDateOk === 0) ? true : false;
     }
 
-    public function isReportDurationLessThanHour(Datetime $startTimeExist, Datetime $endTimeExist){
+    public function isReportDurationLessThanHour(Datetime $startTimeExist, Datetime $endTimeExist)
+    {
         $interval = ($startTimeExist->diff($endTimeExist));
-        if($interval->format('%h') > 1){
+        if ($interval->format('%h') > 1) {
             $error = ValidationException::withMessages([
                 'start_time' => ['Maximum time of report should be less than hour'],
-                'end_time' => ['Maximum time of report should be less than hour']
-             ]);
+                'end_time' => ['Maximum time of report should be less than hour'],
+            ]);
             throw $error;
         }
     }
 
-    public function NearestTime(int $id){
+    public function NearestTime(int $id)
+    {
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
-            $start_time = new Datetime($conference->date . 'T' . $conference->time . 'Z');
-            $end_time = 0;
-            for($a = 0; $a < count($results); $a++){
-                if( $a !== 0 && $a !== count($results) - 1){
-                    $start_time = new Datetime($results[$a+1]->start_time);
+        $start_time = new Datetime($conference->date . 'T' . $conference->time . 'Z');
+        $end_time = 0;
+        for ($a = 0; $a < count($results); $a++) {
+            if ($a !== 0 && $a !== count($results) - 1) {
+                $start_time = new Datetime($results[$a + 1]->start_time);
+            }
+            if ($a === count($results) - 1) {
+                $end_time = new DateTime($conference->date . ' 23:59:59.000');
+                $start_time = new Datetime($results[$a]->end_time);
+            } else if ($a === 0) {
+                $end_time = new Datetime($results[$a]->start_time);
+            } else {
+                $end_time = new Datetime($results[$a]->end_time);
+            }
+            $interval = $end_time->diff($start_time);
+            $err = $interval->format('%i') >= 10;
+            if ($err) {
+                if ($a === 0) {
+                    $error = ValidationException::withMessages([
+                        'start_time' => ['Nearest time for start is ' . $start_time->format('Y-m-d H:i:s')],
+                    ]);
+                } else {
+                    $error = ValidationException::withMessages([
+                        'start_time' => ['Nearest time for start is ' . $results[$a]->end_time],
+                    ]);
                 }
-                if($a === count($results) - 1){
-                    $end_time = new DateTime($conference->date . ' 23:59:59.000');
-                    $start_time = new Datetime($results[$a]->end_time);
-                }
-                else if($a===0){
-                    $end_time = new Datetime($results[$a]->start_time);
-                }
-                else{
-                    $end_time = new Datetime($results[$a]->end_time); 
-                }
-                $interval = $end_time->diff($start_time);
-                $err = $interval->format('%i')>=10;
-                if($err){
-                    if($a === 0){
-                        $error = ValidationException::withMessages([
-                            'start_time' => ['Nearest time for start is ' . $start_time->format('Y-m-d H:i:s')]
-                        ]);
-                    }
-                    else{
-                        $error = ValidationException::withMessages([
-                            'start_time' => ['Nearest time for start is ' . $results[$a]->end_time]
-                        ]);
-                    }  
-                    throw $error;
-                }
-            }   
+                throw $error;
+            }
+        }
     }
 
-    public function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id){
+    public function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
+    {
         $conference = Conference::Find($id)->first();
         $conStartTime = new DateTime($conference->date . 'T' . $conference->time . 'Z');
         $conEndTime = new DateTime($conference->date . 'T23:59:59.000000Z');
-        if($startTimeExist<$conStartTime){
+        if ($startTimeExist < $conStartTime) {
             $error = ValidationException::withMessages([
-                'start_time' => ['Date must be in range of conference']
+                'start_time' => ['Date must be in range of conference'],
             ]);
             throw $error;
         }
 
-        if(($endTimeExist->diff($conEndTime)->format('%d') >= 1) || ($startTimeExist->diff($conStartTime)->format('%d') >= 1)){
+        if (($endTimeExist->diff($conEndTime)->format('%d') >= 1) || ($startTimeExist->diff($conStartTime)->format('%d') >= 1)) {
             $error = ValidationException::withMessages([
                 'start_time' => ['Date must be in range of conference'],
-                'end_time' => ['Date must be in range of conference']
+                'end_time' => ['Date must be in range of conference'],
             ]);
             throw $error;
         }
@@ -124,20 +123,19 @@ class ReportController extends Controller
     }
 
     public function store(CreateReportRequest $request, int $id)
-    {  
+    {
         $startTimeExist = new Datetime($request->start_time);
         $endTimeExist = new Datetime($request->end_time);
         $this->isReportDurationLessThanHour($startTimeExist, $endTimeExist);
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $id);
-        $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());
+        $request->file('presentation')->storeAs('', $request->file('presentation')->getClientOriginalName());
         $data = $request->validated();
-        if ($this->isDateAvailable($startTimeExist, $endTimeExist, $id) === true) { 
+        if ($this->isDateAvailable($startTimeExist, $endTimeExist, $id) === true) {
             $data['conference_id'] = $id;
             $data['user_id'] = Auth::user()->id;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
-        }
-        else{
+        } else {
             $this->NearestTime($id);
         }
     }
@@ -153,16 +151,14 @@ class ReportController extends Controller
         if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
             $data['conference_id'] = $conferenceId;
             $data['user_id'] = Auth::user()->id;
-            if(gettype($request->file('presentation')) == 'object'){
-                $request->file('presentation')-> storeAs('',$request->file('presentation')->getClientOriginalName());   
-                $data['presentation'] = $request->file('presentation')->getClientOriginalName();  
-            }
-            else{
+            if (gettype($request->file('presentation')) == 'object') {
+                $request->file('presentation')->storeAs('', $request->file('presentation')->getClientOriginalName());
+                $data['presentation'] = $request->file('presentation')->getClientOriginalName();
+            } else {
                 $data['presentation'] = $rep->presentation;
             }
             Report::whereId($reportId)->update($data);
-        }
-        else{
+        } else {
             $this->NearestTime($id);
         }
     }
@@ -176,6 +172,13 @@ class ReportController extends Controller
     public function getFile(int $conferenceId, int $reportId)
     {
         $rep = Report::findOrFail($reportId);
+        //$headers = array('Content-Type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation','Content-Disposition' =>  'attachment; filename="' . $rep->presentation . '"');
+
+        //return response()->download(storage_path() . "/app/" . $rep->presentation, $rep->presentation, $headers);
+        //return new Response(storage_path() . "/app/" . $rep->presentation, 200, array(
+           // 'Content-Type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+           // 'Content-Disposition' =>  'attachment; filename="' . $rep->presentation . '"'
+       // ));
         return response()->download(storage_path() . "/app/" . $rep->presentation);
     }
 }

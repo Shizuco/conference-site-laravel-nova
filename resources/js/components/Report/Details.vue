@@ -11,7 +11,8 @@
                         <p>Duration: {{ formData.start_time }} to {{ formData.end_time }}</p>
                         <h4>About</h4>
                         <p>{{ formData.description }}</p>
-                        <a :href="getFile">{{ formData.presentation }}</a>
+                        <a>{{ formData.presentation }}</a>
+                        <v-btn @click="onClick" depressed color="primary" x-small>Download</v-btn>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
@@ -33,7 +34,8 @@
                     <v-card-title>
                         <p>
                         <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
-                                    v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id" @click="plusEdit">
+                                    v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
+                                    @click="plusEdit" depressed color="warning" x-small>Edit
                                 </v-btn>
                             </h5>
                         </h3>
@@ -43,9 +45,10 @@
                         v-if="(!isDateOk(index)) || (edit == 0 && isDateOk(index) && comment.users.id == getUser.id) || comment.users.id != getUser.id">
                         <p>{{ comment.comment }}</p>
                     </v-card-text>
-                    <v-textarea v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id" v-model="comment.comment"
-                        label="Enter your comment" outlined></v-textarea>
-                    <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id" @click="setComment(index)">Edit
+                    <v-textarea v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
+                        v-model="comment.comment" label="Enter your comment" outlined></v-textarea>
+                    <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
+                        @click="setComment(index)">Edit
                     </v-btn>
                 </v-card>
             </v-col>
@@ -97,13 +100,23 @@ export default {
     },
     methods: {
         onClick() {
-            /*const url = window.URL.createObjectURL(new Blob([this.$store.getters.getFile], {type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'}))
-            //const link = document.createElement('a')
-            console.log(new Blob([this.$store.getters.getFile], {type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'}))
-            //link.href = url
-            link.setAttribute('download', this.$data.formData.presentation)
-            document.body.appendChild(link)
-            link.click()*/
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: this.getFile,
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                responseType: 'blob',
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.getElementsByTagName('a');
+                link.href = url;
+                link.setAttribute('download', this.formData.presentation); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+            });
         },
         sendComment() {
             let data = {
