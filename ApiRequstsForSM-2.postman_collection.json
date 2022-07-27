@@ -380,6 +380,385 @@
 				"description": "exit user from conference"
 			},
 			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/report/1/comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/report/1/comment",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"report",
+						"1",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reports",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\": \"from postman\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"report",
+						"1",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"comment\" : \"put from postman\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"report",
+						"1",
+						"comment",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|LwBnqzSruMsAIXvQ2VkP5Ob9dQJlpFGhW3w8aLTq",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "thema",
+							"value": "Postman",
+							"type": "text"
+						},
+						{
+							"key": "start_time",
+							"value": "05.09.2023, 15:15:00",
+							"type": "text"
+						},
+						{
+							"key": "end_time",
+							"value": "05.09.2023, 15:20:00",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "pwjepghwwhwhn",
+							"type": "text"
+						},
+						{
+							"key": "presentation",
+							"type": "file",
+							"src": "/C:/Users/suvorova_ma/Downloads/Introducing Myself by Slidesgo.pptx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "2|RWoxOD8xNvy614mGYzvdGbiDnO172GhgflrZ1Tw0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "thema",
+							"value": "PostmanChange",
+							"type": "text"
+						},
+						{
+							"key": "start_time",
+							"value": "05.09.2023, 15:15:00",
+							"type": "text"
+						},
+						{
+							"key": "end_time",
+							"value": "05.09.2023, 15:20:00",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "gvwrhbwrhnwrnn",
+							"type": "text"
+						},
+						{
+							"key": "presentation",
+							"type": "file",
+							"src": "/C:/Users/suvorova_ma/Downloads/Introducing Myself by Slidesgo.pptx"
+						},
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reports",
+						"1"
+					],
+					"query": [
+						{
+							"key": "thema",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1/file",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reports/1/file",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reports",
+						"1",
+						"file"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

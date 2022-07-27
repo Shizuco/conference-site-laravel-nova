@@ -40,8 +40,13 @@
                             </v-row>
                             <br>
                             <v-row>
+                                <h3 v-if="getConference.hasTime == false" style="color:brown">No free time for reports
+                                </h3>
+                            </v-row>
+                            <v-row>
                                 <v-col>
-                                    <v-btn x-big block color="primary" :to="{ name: 'MainPage' }" class="white--text">Back
+                                    <v-btn x-big block color="primary" :to="{ name: 'MainPage' }" class="white--text">
+                                        Back
                                     </v-btn>
                                 </v-col>
                                 <v-col>
@@ -49,12 +54,17 @@
                                         class="white--text">Delete</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth() && isOnConference() == null && !isAdmin()" @click="join()" x-big
-                                        block color="success" class="white--text">Join</v-btn>
+                                    <v-btn
+                                        v-if="isAuth() && isOnConference() == null && !isAdmin() && getConference.hasTime == true"
+                                        @click="join()" x-big block color="success" class="white--text">Join</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()" x-big
-                                        block color="error" class="white--text">Exit</v-btn>
+                                    <v-btn v-if="isAuth()" depressed color="warning" x-big
+                                        :to="{ name: 'List', params: { id: getConference.id } }">Reports</v-btn>
+                                </v-col>
+                                <v-col>
+                                    <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()"
+                                        x-big block color="error" class="white--text">Exit</v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="!isAdmin()" x-big block color="primary">
@@ -81,14 +91,18 @@
     </v-app>
 </template>
 <script>
-import { gmapApi } from 'vue2-google-maps';
+
 export default {
     mounted() {
         let id = this.$route.params.id
-        this.$store.dispatch('ajaxGetConference', id)
-        this.$store.dispatch('isUserOnConference', id)
-        this.$store.dispatch('ajaxUser')
-        google: gmapApi
+        if (this.isAuth()) {
+            this.$store.dispatch('ajaxGetConference', id)
+            this.$store.dispatch('isUserOnConference', id)
+            this.$store.dispatch('ajaxUser')
+        }
+        else {
+            this.$router.replace('/conferences')
+        }
     },
     computed: {
         getConference() {
@@ -97,30 +111,28 @@ export default {
     },
     methods: {
         isAuth() {
-            if ("Authorized" in localStorage) {
-                return true
-            }
-            else {
-                return false
-            }
+            return ("Authorized" in localStorage) ? true : false
         },
         isAdmin() {
-            if (this.$store.getters.getUser.role == "admin") {
-                return true
-            }
-            else {
-                return false
-            }
+            return (this.$store.getters.getUser.role == "admin") ? true : false
         },
         join() {
             let conference_id = this.$store.getters.getConference.id
             this.$store.dispatch('userConferenceJoin', conference_id)
-            this.$router.go()
+            if (this.$store.getters.getUser.role == "announcer") {
+                this.$router.replace({ name: 'Create' })
+            }
+            else {
+                this.$router.go()
+            }
         },
         out() {
             let conference_id = this.$store.getters.getConference.id
-            this.$store.dispatch('userConferenceOut', conference_id)
-            this.$router.go()
+            this.$store.dispatch('userConferenceOut', conference_id).then(() => {
+                this.$store.dispatch('ajaxReportDelete', conference_id)
+            }).then(() => {
+                this.$router.go()
+            })
         },
         deleteConference() {
             let id = this.$route.params.id

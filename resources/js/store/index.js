@@ -1,7 +1,6 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import axios from 'axios';
-import { message } from 'laravel-mix/src/Log';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -10,7 +9,10 @@ export default new Vuex.Store({
         conference:[],
         user:[],
         userOnConferenceStatus:[],
-        errors: []
+        reports: [],
+        report: [],
+        file: [],
+        comments: []
     },
     getters:{
         getConferences(state){
@@ -25,8 +27,17 @@ export default new Vuex.Store({
         getUserOnConferenceStatus(state){
             return state.userOnConferenceStatus;
         },
-        getErrors(state){
-            return state.errors;
+        getReports(state){
+            return state.reports;
+        },
+        getReport(state){
+            return state.report;
+        },
+        getFile(state){
+            return state.file
+        },
+        getComments(state){
+            return state.comments
         }
     },
     actions:{
@@ -34,7 +45,6 @@ export default new Vuex.Store({
             axios.get("api/conferences").then(response=>{
                 commit('setConferences', response.data)
             }).catch(error=>{
-                console.log('Error', error)
             })
         },
         ajaxGetConference({commit}, id){
@@ -50,7 +60,7 @@ export default new Vuex.Store({
                     console.log(response.data)
                     commit('setConference', response.data)
                 }).catch(error=>{
-                    console.log('Error', error)
+                    console.log(error.response)
                 })
         },
         ajaxConferenceDelete({commit}, id){
@@ -63,10 +73,8 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8"
                   }
                 }).then(response=>{
-                    console.log(response.data)
                     commit('setConference', response.data)
                 }).catch(error=>{
-                    console.log('Error', error)
             })
         },
         ajaxConferenceCreate({commit}, data) {
@@ -74,14 +82,7 @@ export default new Vuex.Store({
             axios({
                 method: 'post',
                 url: 'api/conferences',
-                data: {
-                    title: data.title,
-                    date : data.date,
-                    time : data.time,
-                    address_lat : data.address_lat,
-                    address_lon : data.address_lon,
-                    country : data.country
-                },
+                data: data,
                 headers: {
                     "Authorization": token,
                     "Content-type": "application/json; charset=UTF-8"
@@ -89,11 +90,8 @@ export default new Vuex.Store({
               })
               .then(function(response) {
                 commit('setConferences', response.data)
-                console.log('Ответ сервера успешно получен!');
-                console.log(response.data)
               })
               .catch(function(error) {
-                console.log(error.response.data.errors);
               });
         },
         ajaxConferenceEdit({commit}, data) {
@@ -101,15 +99,7 @@ export default new Vuex.Store({
             axios({
                 method: 'put',
                 url: 'api/conferences/' + data.id,
-                data: {
-                    id: data.id,
-                    title: data.title,
-                    date : data.date,
-                    time : data.time,
-                    address_lat : data.address_lat,
-                    address_lon : data.address_lon,
-                    country : data.country
-                },
+                data: data,
                 headers: {
                     "Authorization": token,
                     "Content-type": "application/json; charset=UTF-8"
@@ -117,28 +107,15 @@ export default new Vuex.Store({
               })
               .then(function(response) {
                 commit('setConferences', response.data)
-                console.log('Ответ сервера успешно получен!');
-                console.log(response.data);
               })
               .catch(function(error) {
-                console.log(error);
               });
         },
-        REGISTER({commit}, data) {
+        register({commit}, data) {
             return axios({
                 method: 'post',
                 url: 'api/register',
-                data:{
-                    name: data.name,
-                    surname: data.surname,
-                    password: data.password,
-                    password_confirmation: data.password_confirmation,
-                    country: data.country,
-                    birthday: data.birthday,
-                    phone: data.phone,
-                    role: data.role,
-                    email: data.email
-                },
+                data: data,
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                   }
@@ -148,14 +125,11 @@ export default new Vuex.Store({
                     localStorage.setItem('Authorized', response.data.token)
                 })
         },
-        AUTH({commit}, data) {
+        auth({commit}, data) {
             return axios({
                 method: 'post',
                 url: 'api/login',
-                data:{
-                    email: data.email,
-                    password: data.password      
-                },
+                data: data,
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                   }
@@ -165,7 +139,7 @@ export default new Vuex.Store({
                     localStorage.setItem('Authorized', response.data.token)
                 });
         },
-        LOGOUT({commit}) {
+        logout({commit}) {
             let token = 'Bearer '+ localStorage.getItem('Authorized')
             axios({
                 method: 'post',
@@ -186,8 +160,6 @@ export default new Vuex.Store({
                     "Authorization": token,
                     "Content-type": "application/json; charset=UTF-8"
                 }
-            }).then(response=>{
-                console.log(response.data)
             })
         },
         userConferenceOut({commit}, conference_id){
@@ -199,8 +171,6 @@ export default new Vuex.Store({
                     "Authorization": token,
                     "Content-type": "application/json; charset=UTF-8"
                 }
-            }).then(response=>{
-                console.log(response.data)
             })
         },
         ajaxUser({commit}){
@@ -229,12 +199,158 @@ export default new Vuex.Store({
                 })
                 .then((response)=>{
                     commit('setUserOnConferenceStatus', response.data)
-                    console.log(response.data)
             })
         },
         changePoint({commit}, data){
             commit('setConferencePoint', data)
-        }
+        },
+        ajaxReports({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: "api/conferences/" + id + '/reports',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            }).then(response=>{
+                commit('setReports', response.data)
+            })
+        },
+        ajaxGetReport({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/conferences/' + id[0] + '/reports/' + id[1],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    commit('setReport', response.data[0])
+                }).catch(error=>{
+                    console.log(error.response.data)
+                })
+        },
+        ajaxCreateReport({commit}, data){
+            console.log(data[0].presentation)
+            let datas = new FormData();
+            datas.append("presentation", data[0].presentation)
+            datas.append("thema", data[0].thema);
+            datas.append("start_time", data[0].start_time);
+            datas.append("end_time", data[0].end_time);
+            datas.append("description", data[0].description);
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/conferences/' + data[1] + '/reports',
+                data: datas,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/vnd.openxmlformats-officedocument.presentationml.presentation;"
+                  }
+                }).then(function(response) {
+                    console.log(response.data)
+                    commit('setReport', response.data)
+                });
+        },
+        ajaxEditReport({commit}, data){
+            let datas = new FormData();
+            datas.append("presentation", data[0].presentation)
+            datas.append("thema", data[0].thema);
+            datas.append("start_time", data[0].start_time);
+            datas.append("end_time", data[0].end_time);
+            datas.append("description", data[0].description);
+            datas.append("_method", 'PUT');
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/conferences/' + data[1] + '/reports/' + data[2],
+                data: datas,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "multipart/form-data; boundary=<calculated when request is sent>"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setReport', response.data)
+                })
+        },
+        ajaxReportDelete({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'delete',
+                url: 'api/conferences/' + data + '/reports',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                })
+        },
+        ajaxGetReportFile({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/conferences/' + data[0] + '/reports/' + data[1] + '/file',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                  }
+                }).then(response=>{
+                    console.log(response)
+                    commit('setFile', response.config.url)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetComments({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/conferences/report/' + data[0] + '/comment',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setComments', response.data)
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxSendComment({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/conferences/' + data[0] + '/report/' + data[1] + '/comment',
+                data: data[2],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxSetComment({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'put',
+                url: 'api/conferences/' + data[0] + '/report/' + data[1] + '/comment/' + data[2],
+                data: data[3],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
     },
     mutations:{
         setConferences(state, data){
@@ -253,8 +369,17 @@ export default new Vuex.Store({
         setUserOnConferenceStatus(state, data){
             return state.userOnConferenceStatus = data
         },
-        setErrors(state, data){
-            return state.errors = data
+        setReports(state, data){
+            return state.reports = data
+        },
+        setReport(state, data){
+            return state.report = data
+        },
+        setFile(state, data){
+            return state.file = data
+        },
+        setComments(state, data){
+            return state.comments = data
         }
     }
     }

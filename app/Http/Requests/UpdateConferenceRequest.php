@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -28,7 +30,7 @@ class UpdateConferenceRequest extends FormRequest
             'date' => 'required',
             'time' => 'required',
             'country' => 'required',
-            'address_lat' => 'required|min:-180|max:180',
+            'address_lat' => 'required|min:-90|max:90',
             'address_lon' => 'required|min:-180|max:180',
         ];
     }

@@ -14,14 +14,14 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
-                           <ValidationObserver tag="form" @submit.prevent="register">
+                           <ValidationObserver tag="form" ref="form" @submit.prevent="register">
                               <v-row>
                                  <v-col>
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="name">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Name" name="name" id="name" prepend-inner-icon="mdi-mail"
-                                          type="name" class="rounded-0" outlined required v-model="formData.name">
+                                          type="name" class="rounded-0" outlined v-model="formData.name">
                                        </v-text-field>
                                     </ValidationProvider>
                                  </v-col>
@@ -30,16 +30,16 @@
                                        name="surname">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Surname" name="surname" id="surname"
-                                          prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined required
+                                          prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined
                                           v-model="formData.surname"></v-text-field>
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
-                              <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }"
-                                 name="email">
+                              <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
                                  <span>{{ errors[0] }}</span>
-                                 <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-lock"
-                                    type="email" class="rounded-0" outlined required v-model="formData.email">
+                                 <v-text-field label="Email" name="email" id="email" vid="email"
+                                    prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined
+                                    v-model="formData.email">
                                  </v-text-field>
                               </ValidationProvider>
                               <v-row>
@@ -48,7 +48,7 @@
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Password" name="password" id="password"
                                           prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0"
-                                          outlined required v-model="formData.password"></v-text-field>
+                                          outlined v-model="formData.password"></v-text-field>
                                     </ValidationProvider>
                                  </v-col>
                                  <v-col>
@@ -57,15 +57,15 @@
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Password again" name="password_confirmation"
                                           id="password_confirmation" prepend-inner-icon="mdi-lock" type="password"
-                                          min="8" class="rounded-0" outlined required
-                                          v-model="formData.password_confirmation"></v-text-field>
+                                          min="8" class="rounded-0" outlined v-model="formData.password_confirmation">
+                                       </v-text-field>
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
                               <ValidationProvider rules="required" v-slot="{ errors }" name="role">
                                  <span>{{ errors[0] }}</span>
                                  <v-select label="Role" name="role" id="role" prepend-inner-icon="mdi-lock"
-                                    class="rounded-0" outlined required :items="role" item-text="roleName"
+                                    class="rounded-0" outlined :items="role" item-text="roleName"
                                     v-model="selectedRole">
                                  </v-select>
                               </ValidationProvider>
@@ -73,20 +73,20 @@
                                  <span>{{ errors[0] }}</span>
                                  <v-text-field label="Phone" v-model="form.telephone" v-mask="'+38(###)-##-###-##'"
                                     name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0"
-                                    outlined required></v-text-field>
+                                    outlined></v-text-field>
                               </ValidationProvider>
                               <v-row>
                                  <v-col>
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="date">
                                        <span>{{ errors[0] }}</span>
-                                       <v-text-field type="date" id="date" class="rounded-0" outlined required
+                                       <v-text-field type="date" id="date" class="rounded-0" outlined
                                           v-model="formData.date" name="date"></v-text-field>
                                     </ValidationProvider>
                                  </v-col>
                                  <v-col>
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="country">
                                        <span>{{ errors[0] }}</span>
-                                       <v-select name="country" id="country" class="rounded-0" outlined required
+                                       <v-select name="country" id="country" class="rounded-0" outlined
                                           v-model="formData.country" :items="countries">
                                        </v-select>
                                     </ValidationProvider>
@@ -128,7 +128,7 @@ export default {
          password: '',
          password_confirmation: '',
          date: '',
-         country: '',
+         country: 'Japan',
          phone: '',
       },
       selectedRole: null,
@@ -146,19 +146,26 @@ export default {
             surname: this.formData.surname,
             phone: this.form.telephone
          }
-         this.$store.dispatch('REGISTER', data).then(() => {
+         this.$store.dispatch('register', data).then(() => {
             let data = {
                email: this.formData.email,
                password: this.formData.password,
             }
-            this.$store.dispatch('AUTH', data).then(() => {
+            this.$store.dispatch('auth', data).then(() => {
                this.$router.go()
             })
          }).catch(error => {
-            this.$refs.provider.applyResult({
-               errors: error.response.data.errors.email, // array of string errors
-               valid: false, // boolean state
-               failedRules: {} // should be empty since this is a manual error.
+            console.log(error.response.data.errors)
+            this.$refs.form.setErrors({
+               email: error.response.data.errors.email,
+               name: error.response.data.errors.name,
+               surname: error.response.data.errors.surname,
+               password: error.response.data.errors.password,
+               password_confimation: error.response.data.errors.password_confimation,
+               country: error.response.data.errors.country,
+               date: error.response.data.errors.birthday,
+               phone: error.response.data.errors.phone,
+               role: error.response.data.errors.role
             });
          })
       },

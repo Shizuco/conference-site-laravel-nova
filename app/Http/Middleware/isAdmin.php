@@ -1,10 +1,12 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+use Auth, Exception;
 
 class isAdmin
 {
@@ -18,7 +20,7 @@ class isAdmin
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check() || Auth::user()->role !== 'admin') {
-            return 'Access denide';
+            throw new Exception('Access denide');
         }
         return $next($request);
     }

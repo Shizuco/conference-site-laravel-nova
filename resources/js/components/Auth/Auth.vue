@@ -56,7 +56,7 @@ export default {
             email: this.formData.email,
             password: this.formData.password,
          }
-         this.$store.dispatch('AUTH', data).then(() => {
+         this.$store.dispatch('auth', data).then(() => {
             this.$router.go()
          })
       },

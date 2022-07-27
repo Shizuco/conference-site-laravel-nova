@@ -2,9 +2,8 @@
     <v-app>
         <auth style="height: 80px"></auth>
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <br>
-                <v-card v-for="conference in getConferences" :value="conference.id" :key="conference.id" elevation="3">
+            <div class="col-md-8" v-for="conference in getConferences" :value="conference.id" :key="conference.id">
+                <v-card  elevation="3">
                     <v-card-title>{{ conference.title }}</v-card-title>
                     <v-card-text>
                         Appointed time: {{ conference.date }} {{ conference.time }}
@@ -25,10 +24,9 @@
                         <span>
                             <v-btn v-if="isAdmin()" x-big depressed color="error"
                                 @click="deleteConference(conference.id)">Delete</v-btn>
-                        </span>
+                        </span>            
                     </v-card-text>
                 </v-card>
-                <br>
             </div>
         </div>
     </v-app>
@@ -36,10 +34,13 @@
 </template>
 
 <script>
+
 export default {
     mounted() {
         this.$store.dispatch('ajaxConferences')
-        this.$store.dispatch('ajaxUser')
+        if(this.isAuth()){
+            this.$store.dispatch('ajaxUser')
+        }       
     },
     computed: {
         getConferences() {
@@ -48,20 +49,10 @@ export default {
     },
     methods: {
         isAuth() {
-            if ("Authorized" in localStorage) {
-                return true
-            }
-            else {
-                return false
-            }
+            return ("Authorized" in localStorage) ? true : false
         },
         isAdmin() {
-            if (this.$store.getters.getUser.role == "admin") {
-                return true
-            }
-            else {
-                return false
-            }
+           return (this.$store.getters.getUser.role == "admin")? true : false
         },
         deleteConference(id) {
             this.$store.dispatch('ajaxConferenceDelete', id)
