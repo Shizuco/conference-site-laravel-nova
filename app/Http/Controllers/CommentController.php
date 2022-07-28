@@ -44,7 +44,7 @@ class CommentController extends Controller
         $today->format('Y-m-d H:i:s');
         $comDate = new Datetime($this->serializeDate($rep->updated_at));
         $today = new Datetime($this->serializeDate($today));
-        if ($rep->user_id === Auth::user()->id && $this->IsInRange($today, $comDate) === false) {
+        if ($rep->user_id === Auth::user()->id && $this->IsInRange($today, $comDate) === true) {
             $data = $request->validated();
             $data['conference_id'] = $conference_id;
             $data['report_id'] = $report_id;
