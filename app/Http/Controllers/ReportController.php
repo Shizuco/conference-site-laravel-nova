@@ -57,7 +57,7 @@ class ReportController extends Controller
     public function isReportDurationLessThanHour(Datetime $startTimeExist, Datetime $endTimeExist)
     {
         $interval = ($startTimeExist->diff($endTimeExist));
-        if ($interval->format('%h') > 1) {
+        if (($interval->h > 1) || ($interval->h === 1 && $interval->i > 0)) {
             $error = ValidationException::withMessages([
                 'start_time' => ['Maximum time of report should be less than hour'],
                 'end_time' => ['Maximum time of report should be less than hour'],
