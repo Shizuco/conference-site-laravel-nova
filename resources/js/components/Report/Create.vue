@@ -91,8 +91,8 @@ export default {
         onSubmit() {
             let data = {
                 'thema': this.formData.thema,
-                'start_time': new Date(this.formData.start_time).toLocaleString(),
-                'end_time': new Date(this.formData.end_time).toLocaleString(),
+                'start_time': new Date(this.formData.start_time).toUTCString(),
+                'end_time': new Date(this.formData.end_time).toUTCString(),
                 'description': this.formData.description,
                 'presentation': this.formData.presentation
             }
