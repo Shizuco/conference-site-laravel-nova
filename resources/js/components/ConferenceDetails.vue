@@ -63,7 +63,7 @@
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth()" depressed color="warning" x-big
-                                        :to="{ name: 'List', params: { id: getConference.id } }">Reports</v-btn>
+                                        @click="toReports">Reports</v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()"
@@ -165,6 +165,9 @@ export default {
         url() {
             return document.location.origin
         },
+        toReports(){
+            this.$router.replace('/conferences/' + this.$store.getters.getConference.id + '/reports')
+    }
     },
 }
 </script>
