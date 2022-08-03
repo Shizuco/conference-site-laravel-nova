@@ -9,9 +9,11 @@ use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
 use Auth;
-use DateTime, DateTimeZone, DateInterval;
-use Illuminate\Support\Facades\Response;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 
 class ReportController extends Controller
@@ -26,12 +28,12 @@ class ReportController extends Controller
         return Report::with('comments.users')->where('id', $reportId)->get();
     }
 
-    public function isInRange(DateTime $dateToCheck, DateTime $startDate, DateTime $endDate)
+    private function isInRange(DateTime $dateToCheck, DateTime $startDate, DateTime $endDate)
     {
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    public function isDateAvailable(Datetime $startTime, Datetime $endTime, int $id)
+    private function isDateAvailable(Datetime $startTime, Datetime $endTime, int $id)
     {
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
@@ -54,7 +56,7 @@ class ReportController extends Controller
         return ($isDateOk === 0) ? true : false;
     }
 
-    public function isReportDurationLessThanHour(Datetime $startTimeExist, Datetime $endTimeExist)
+    private function isReportDurationLessThanHour(Datetime $startTimeExist, Datetime $endTimeExist)
     {
         $interval = ($startTimeExist->diff($endTimeExist));
         if ($interval->format('%h') > 1) {
@@ -66,7 +68,7 @@ class ReportController extends Controller
         }
     }
 
-    public function NearestTime(int $id)
+    private function NearestTime(int $id)
     {
         $conference = Conference::Find($id)->first();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
@@ -101,7 +103,7 @@ class ReportController extends Controller
         }
     }
 
-    public function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
+    private function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
     {
         $conference = Conference::Find($id)->first();
         $conStartTime = new DateTime($conference->date . ' ' . $conference->time);
@@ -110,12 +112,12 @@ class ReportController extends Controller
         $conEndTime->setTimezone(new DateTimeZone('GMT'));
         if ($startTimeExist < $conStartTime) {
             $error = ValidationException::withMessages([
-                'start_time' => ['Date must be in range of conference']
+                'start_time' => ['Date must be in range of conference'],
             ]);
             throw $error;
         }
 
-        if (($endTimeExist->diff($conEndTime)-> d >= 1) || ($startTimeExist->diff($conStartTime)-> d >= 1)) {
+        if (($endTimeExist->diff($conEndTime)->d >= 1) || ($startTimeExist->diff($conStartTime)->d >= 1)) {
             $error = ValidationException::withMessages([
                 'start_time' => ['Date must be in range of conference'],
                 'end_time' => ['Date must be in range of conference'],
@@ -140,7 +142,7 @@ class ReportController extends Controller
         $data = $request->validated();
         if ($this->isDateAvailable($startTimeExist, $endTimeExist, $id) === true) {
             $data['start_time'] = $startTimeExist->format('Y-m-d H:i:s');
-            $data['end_time']  = $endTimeExist->format('Y-m-d H:i:s');
+            $data['end_time'] = $endTimeExist->format('Y-m-d H:i:s');
             $data['conference_id'] = $id;
             $data['category_id'] = $request->category_id;
             $data['user_id'] = Auth::user()->id;

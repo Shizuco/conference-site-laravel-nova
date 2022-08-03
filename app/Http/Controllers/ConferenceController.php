@@ -68,7 +68,7 @@ class ConferenceController extends Controller
                 $hasTime++;
             }
         }
-        
+
         return ($hasTime !== 0) ? true : false;
     }
 }

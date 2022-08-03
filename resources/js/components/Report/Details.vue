@@ -85,7 +85,8 @@ export default {
                 text: 'conferences',
                 disabled: false,
                 exact: true,
-                to: { name: 'MainPage' }
+                to: { name: 'MainPage' },
+                replace: true
             },
         ],
         comments: [],
@@ -105,7 +106,8 @@ export default {
                             text: this.$store.getters.getCurrentCategory[0].name,
                             disabled: false,
                             exact: true,
-                            to: '/conferences/' + this.$route.params.id
+                            to: '/conferences/' + this.$route.params.id,
+                            replace: true
                         })
                     }).then(()=>{
                         this.$store.dispatch('ajaxGetCurrentCategory', this.getReport.category_id).then(()=>{

@@ -59,7 +59,8 @@
                                         <gmap-map :zoom="15" :center="{
                                             lat: 0,
                                             lng: 0
-                                        }" mapTypeId='roadmap' style="width:100%;height:300px" id="map" @click="change">
+                                        }" mapTypeId='roadmap' style="width:100%;height:300px" id="map"
+                                            @click="change">
                                             <gmap-marker :position="{
                                                 lat: Number(formData.address_lat),
                                                 lng: Number(formData.address_lon)
@@ -103,8 +104,8 @@ export default {
         countries: ['Japan', 'Russia', 'Ukraine', 'Belarus', 'Canada', 'France', 'England', 'USA', 'China', 'Korea'],
         categories: []
     }),
-    mounted(){
-        this.$store.dispatch('ajaxGetRootCategories').then(()=>{
+    mounted() {
+        this.$store.dispatch('ajaxGetRootCategories').then(() => {
             this.$store.getters.getRootCategories.forEach(element => {
                 this.categories.push(element.name)
             });
@@ -113,7 +114,7 @@ export default {
     computed: {
         createConference() {
             this.$store.getters.getRootCategories.forEach(element => {
-                if(this.formData.category == element.name){
+                if (this.formData.category == element.name) {
                     this.formData.category = element.id
                 }
             });
@@ -126,8 +127,10 @@ export default {
                 'address_lon': this.formData.address_lon,
                 'country': this.formData.country
             }
-            this.$store.dispatch('ajaxConferenceCreate', data)
-            this.$router.replace('/conferences')
+            this.$store.dispatch('ajaxConferenceCreate', data).then(() => {
+                this.$router.replace('/conferences')
+            })
+
         }
     },
     methods: {

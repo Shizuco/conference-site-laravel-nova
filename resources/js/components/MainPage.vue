@@ -45,16 +45,18 @@ export default {
         selected: 'All'
     }),
     mounted() {
-        this.$store.dispatch('ajaxConferences')
-        this.$store.dispatch('ajaxGetRootCategories').then(() => {
-            this.$store.getters.getRootCategories.forEach(element => {
-                this.categories.push(element.name)
-            });
-            console.log(this.categories)
-            this.$store.getters.getConferences.forEach(element => {
-                this.sortedProducts.push(element)
+        this.$store.dispatch('ajaxConferences').then(() => {
+            this.$store.dispatch('ajaxGetRootCategories').then(() => {
+                this.$store.getters.getRootCategories.forEach(element => {
+                    this.categories.push(element.name)
+                });
+                console.log(this.categories)
+                this.$store.getters.getConferences.forEach(element => {
+                    this.sortedProducts.push(element)
+                })
             })
         })
+
         if (this.isAuth()) {
             this.$store.dispatch('ajaxUser')
         }

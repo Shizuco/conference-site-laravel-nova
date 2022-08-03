@@ -102,7 +102,8 @@ export default {
                 text: 'conferences',
                 disabled: false,
                 exact: true,
-                to: { name: 'MainPage' }
+                to: { name: 'MainPage' },
+                replace: true
             }
         ],
     }),

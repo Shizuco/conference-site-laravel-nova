@@ -5,7 +5,7 @@
             <span>
                <v-btn v-if="!isAuth()" depressed color="primary" small>
                   <router-link :to="{ name: 'Registration' }" class="white--text"
-                     style="text-decoration: none; color: inherit;">Sign in</router-link>
+                     style="text-decoration: none; color: inherit;">Sign up</router-link>
                </v-btn>
             </span>
             <span>
