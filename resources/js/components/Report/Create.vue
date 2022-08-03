@@ -37,12 +37,9 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="category">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-select name="category" id="category" class="rounded-0" outlined
-                                                v-model="formData.category" :items="categories">
-                                            </v-select>
-                                        </ValidationProvider>
+                                        <v-select name="category" id="category" class="rounded-0" outlined
+                                            v-model="formData.category" :items="categories">
+                                        </v-select>
                                     </v-col>
                                 </v-row>
                                 <v-row>
@@ -96,7 +93,7 @@ export default {
     }),
     mounted() {
         this.$store.dispatch('ajaxUser')
-        this.$store.dispatch('ajaxGetSubCategories', this.$route.params.id).then(()=>{
+        this.$store.dispatch('ajaxGetSubCategories', this.$route.params.id).then(() => {
             this.$store.getters.getSubCategories.forEach(element => {
                 this.categories.push(element.name)
             });
@@ -106,8 +103,8 @@ export default {
     },
     methods: {
         onSubmit() {
-             this.$store.getters.getSubCategories.forEach(element => {
-                if(this.formData.category == element.name){
+            this.$store.getters.getSubCategories.forEach(element => {
+                if (this.formData.category == element.name) {
                     this.formData.category = element.id
                 }
             });

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('conference_id');
             $table->integer('user_id');
-            $table->integer('category_id');
+            $table->integer('category_id')->nullable();
             $table->string('thema');
             $table->string('start_time');
             $table->string('end_time');
