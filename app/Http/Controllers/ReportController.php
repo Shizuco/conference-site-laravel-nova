@@ -39,7 +39,9 @@ class ReportController extends Controller
         $isDateOk = 0;
         foreach ($reports as $report) {
             $startTimeExist = new Datetime($report->start_time);
+            $startTimeExist->setTimezone(new DateTimeZone('GMT'));
             $endTimeExist = new Datetime($report->end_time);
+            $endTimeExist->setTimezone(new DateTimeZone('GMT'));
             if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
                 break;
@@ -132,10 +134,10 @@ class ReportController extends Controller
         $conference = Conference::Find($id)->first();
         $startTimeExist = new Datetime($request->start_time);
         $startTimeExist->setTimezone(new DateTimeZone('GMT'));
-        $startTimeExist->add(new DateInterval('PT2H'));
+        $startTimeExist->add(new DateInterval('PT3H'));
         $endTimeExist = new Datetime($request->end_time);
         $endTimeExist->setTimezone(new DateTimeZone('GMT'));
-        $endTimeExist->add(new DateInterval('PT2H'));
+        $endTimeExist->add(new DateInterval('PT3H'));
         $this->isReportDurationLessThanHour($startTimeExist, $endTimeExist);
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $id);
         $request->file('presentation')->storeAs('', $request->file('presentation')->getClientOriginalName());
