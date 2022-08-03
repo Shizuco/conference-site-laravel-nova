@@ -74,7 +74,7 @@ export default new Vuex.Store({
     },
     actions:{
         ajaxConferences({commit}){
-            axios.get("api/conferences").then(response=>{
+            return axios.get("api/conferences").then(response=>{
                 commit('setConferences', response.data)
             }).catch(error=>{
             })
@@ -525,7 +525,7 @@ export default new Vuex.Store({
                   }
                 }).then(response=>{
                     console.log(response.data)
-                    commit('setCategoryConferences', response.data[0].conferences.length)
+                    commit('setConferences', response.data)
 
                 }).catch(error=>{
                     console.log(error.response);
@@ -542,7 +542,7 @@ export default new Vuex.Store({
                   }
                 }).then(response=>{
                     console.log(response.data)
-                    commit('setCategoryReports', response.data[0].reports.length)
+                    commit('setReports', response.data)
 
                 }).catch(error=>{
                     console.log(error.response);

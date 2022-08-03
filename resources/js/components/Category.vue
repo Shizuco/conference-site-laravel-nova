@@ -110,14 +110,14 @@ export default {
         },
         getConferencesNumber() {
             this.$store.dispatch('ajaxGetCategoryConferenceNumber', this.formData.parentCategory[0].id).then(() => {
-                this.conferences = this.$store.getters.getCategoryConferences
+                this.conferences = this.$store.getters.getConferences[0].conferences.length
                 this.isConferences = '0'
                 this.isReports = ''
             })
         },
         getReportsNumber() {
             this.$store.dispatch('ajaxGetCategoryReportNumber', this.formData.parentCategory[0].id).then(() => {
-                this.reports = this.$store.getters.getCategoryReports
+                this.reports = this.$store.getters.getReports[0].reports.length
                 this.isReports = '0'
                 this.isConferences = ''
             })
