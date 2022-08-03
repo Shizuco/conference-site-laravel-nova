@@ -30,7 +30,6 @@ class CreateConferenceRequest extends FormRequest
             'date' => 'required',
             'time' => 'required',
             'country' => 'required',
-            'category_id' => 'required',
             'address_lat' => 'required|min:-90|max:90',
             'address_lon' => 'required|min:-180|max:180',
         ];

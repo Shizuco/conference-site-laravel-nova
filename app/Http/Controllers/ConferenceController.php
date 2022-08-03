@@ -27,7 +27,9 @@ class ConferenceController extends Controller
 
     public function store(CreateConferenceRequest $request)
     {
-        Conference::create($request->validated());
+        $data = $request->validated();
+        $data['category_id'] = $request->category_id;
+        Conference::create($data);
     }
 
     public function update(UpdateConferenceRequest $request, int $id)

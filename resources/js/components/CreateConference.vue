@@ -46,12 +46,9 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <ValidationProvider rules="required" v-slot="{ errors }" name="category">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-select name="category" id="category" class="rounded-0" outlined
-                                                v-model="formData.category" :items="categories">
-                                            </v-select>
-                                        </ValidationProvider>
+                                        <v-select name="category" id="category" class="rounded-0" outlined
+                                            v-model="formData.category" :items="categories">
+                                        </v-select>
                                     </v-col>
                                 </v-row>
                                 <v-row>
