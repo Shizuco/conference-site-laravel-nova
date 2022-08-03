@@ -2,7 +2,8 @@
     <v-app>
         <auth style="height: 80px"></auth>
         <div class="row justify-content-center">
-            <v-select :items="categories" v-model="selected" @change="sortByCategory" class="rounded-0 col-md-8" outlined/>
+            <v-select :items="categories" v-model="selected" @change="sortByCategory" class="rounded-0 col-md-8"
+                outlined />
             <div class="col-md-8" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
                 <v-card elevation="3">
                     <v-card-title>{{ conference.title }}</v-card-title>

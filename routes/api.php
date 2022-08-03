@@ -39,7 +39,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
     Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
-
+    Route::get('/category/{id}/getConferences', [CategoryController::class, 'getConferences']);
+    Route::get('/category/{id}/getReports', [CategoryController::class, 'getReports']);
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
     Route::get('/conferences/{conference_id}/reports/{report_id}/file', [ReportController::class, 'getFile']);
@@ -62,11 +63,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
 
         Route::get('/categories', [CategoryController::class, 'index']);
-        
+
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
-        Route::get('/category/{id}/getConferences', [CategoryController::class, 'getConferences']);
-        Route::get('/category/{id}/getReports', [CategoryController::class, 'getReports']);
+
     });
 });
 

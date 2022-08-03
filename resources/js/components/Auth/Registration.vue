@@ -30,7 +30,7 @@
                                        name="surname">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Surname" name="surname" id="surname"
-                                          prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined
+                                          prepend-inner-icon="mdi-email" type="text" class="rounded-0" outlined
                                           v-model="formData.surname"></v-text-field>
                                     </ValidationProvider>
                                  </v-col>

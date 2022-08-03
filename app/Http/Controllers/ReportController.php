@@ -18,7 +18,7 @@ class ReportController extends Controller
 {
     public function index(int $id)
     {
-        return response()->json(Report::All()->where('conference_id', $id));
+        return response()->json(Report::where('conference_id', $id)->get());
     }
 
     public function show(int $conferenceId, int $reportId)

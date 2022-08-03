@@ -37,6 +37,7 @@
                   <router-link style="text-decoration: none; color: inherit;"
                      :to="{ name: 'UserFavorites' }">My Favorites
                   </router-link>
+                  <v-badge inline :content="getFavorites()"></v-badge>
                </v-btn>
             </span>
             <span>
@@ -53,6 +54,9 @@
 
 <script>
 export default {
+   mounted(){
+      this.$store.dispatch('ajaxGetFavorites')
+   },
    methods: {
       isAuth() {
          return ("Authorized" in localStorage) ? true : false
@@ -65,6 +69,23 @@ export default {
       isAdmin() {
          return (this.$store.getters.getUser.role == "admin") ? true : false
       },
+      getFavorites(){
+         if(this.$store.getters.getFavorites.length > 99){
+            return '99+'
+         }
+         return this.$store.getters.getFavorites.length
+      }
    }
 }
 </script>
+
+<style>
+#fav{
+   color: azure;
+   text-transform: lowercase;
+   display:inline-block;
+}
+#fav:first-letter{
+   text-transform: uppercase;
+}
+</style>

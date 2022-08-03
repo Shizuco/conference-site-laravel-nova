@@ -31,7 +31,7 @@
                                                     v-slot="{ errors }" name="surname">
                                                     <span>{{ errors[0] }}</span>
                                                     <v-text-field label="Surname" name="surname" id="surname"
-                                                        prepend-inner-icon="mdi-lock" type="text" class="rounded-0"
+                                                        prepend-inner-icon="mdi-mail" type="text" class="rounded-0"
                                                         outlined v-model="formData.surname"></v-text-field>
                                                 </ValidationProvider>
                                             </v-col>
@@ -39,7 +39,7 @@
                                         <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
                                             <span>{{ errors[0] }}</span>
                                             <v-text-field label="Email" name="email" id="email" vid="email"
-                                                prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined
+                                                prepend-inner-icon="mdi-email" type="email" class="rounded-0" outlined
                                                 v-model="formData.email">
                                             </v-text-field>
                                         </ValidationProvider>
@@ -70,7 +70,7 @@
                                             <span>{{ errors[0] }}</span>
                                             <v-text-field label="Phone" v-model="form.telephone"
                                                 v-mask="'+38(###)-##-###-##'" name="phone" id="phone"
-                                                prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined>
+                                                prepend-inner-icon="mdi-phone" type="text" class="rounded-0" outlined>
                                             </v-text-field>
                                         </ValidationProvider>
                                         <v-row>
