@@ -1,13 +1,6 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
-        <Slide right style=" z-index: 100; position: relative; top: -100px">
-            <v-subheader>Number of reports</v-subheader>
-            <v-card-text>
-                <v-slider v-model="reportsNumber" :tick-labels="reports" :max="reports.length - 1" step="1" ticks="always"
-                    tick-size="4" @change="sortByReportsNumber"></v-slider>
-            </v-card-text>
-        </Slide>
         <div class="row justify-content-center">
             <v-select :items="categories" v-model="selected" @change="sortByCategory" class="rounded-0 col-md-8"
                 outlined />
@@ -38,44 +31,32 @@
                     </v-card-text>
                 </v-card>
             </div>
+            <Pagination :data="data" @pagination-change-page="getConferences" />
         </div>
     </v-app>
 
 </template>
 
 <script>
-
 export default {
     data: () => ({
         categories: ["All"],
         sortedProducts: [],
+        data: {},
         selected: "All",
         reportsNumber: '',
-        reports: [
-        ],
     }),
     mounted() {
-        this.$store.dispatch("ajaxConferences").then(() => {
-            this.$store.dispatch("ajaxGetRootCategories").then(() => {
-                this.$store.getters.getRootCategories.forEach(element => {
-                    this.categories.push(element.name);
-                });
-                this.$store.getters.getConferences.forEach(element => {
-                    this.sortedProducts.push(element);
-                    this.reports.push(String(element.reports.length))
-                });
-                this.reports = [...new Set(this.reports)]
-                this.reports.sort()
-                console.log(this.reports)
+        this.getConferences()
+        this.$store.dispatch("ajaxGetRootCategories").then(() => {
+
+            this.$store.getters.getRootCategories.forEach(element => {
+                this.categories.push(element.name);
             });
-        });
+        })
+
         if (this.isAuth()) {
             this.$store.dispatch("ajaxUser");
-        }
-    },
-    computed: {
-        getConferences() {
-            return this.$store.getters.getConferences;
         }
     },
     methods: {
@@ -112,13 +93,24 @@ export default {
                 });
             }
         },
-        sortByReportsNumber(){
+        sortByReportsNumber() {
             this.sortedProducts = [];
             this.getConferences.forEach(element => {
-                if(element.reports.length == this.reportsNumber){
+                if (element.reports.length == this.reportsNumber) {
                     this.sortedProducts.push(element)
                 }
             });
+        },
+        getConferences(page = 1) {
+            this.sortedProducts = []
+            this.$store.dispatch("ajaxConferences", page).then(() => {
+                this.$store.getters.getConferences.data.forEach(element => {
+                    this.sortedProducts.push(element);
+                })
+            }).then(() => {
+                this.data = this.$store.getters.getConferences
+                return this.$store.getters.getConferences;
+            })
         }
     },
 }

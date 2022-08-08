@@ -14,9 +14,9 @@ class ConferenceController extends Controller
 {
     public function index()
     {
-        return response()->json(Conference::with('reports')->get());
+        return response()->json(Conference::with('reports')->paginate(5));
     }
-    
+
     public function show(int $id)
     {
         $time = $this->hasTime($id);

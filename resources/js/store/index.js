@@ -73,8 +73,8 @@ export default new Vuex.Store({
         }
     },
     actions:{
-        ajaxConferences({commit}){
-            return axios.get("api/conferences").then(response=>{
+        ajaxConferences({commit}, page){
+            return axios.get("api/conferences?page=" + page).then(response=>{
                 commit('setConferences', response.data)
             }).catch(error=>{
             })

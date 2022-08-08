@@ -32,6 +32,7 @@ Vue.component('userfavorites', require('./components/Auth/UserFavorites.vue').de
 Vue.component('category', require('./components/Category.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('Pagination', LaravelVuePagination);
 Vue.component('Slide', Slide)
 
 import VueMask from 'v-mask'
@@ -53,6 +54,7 @@ import DatetimePicker from 'vuetify-datetime-picker'
 import VTreeview from "v-treeview"
 import VueBreadcrumbs from 'vue-breadcrumbs'
 import { Slide } from 'vue-burger-menu'
+import LaravelVuePagination from 'laravel-vue-pagination';
 
 Vue.use(VueBreadcrumbs)
 Vue.use(DatetimePicker)
