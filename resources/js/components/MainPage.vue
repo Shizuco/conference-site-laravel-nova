@@ -2,18 +2,11 @@
     <v-app>
         <auth style="height: 80px"></auth>
         <Slide right style=" z-index: 100; position: relative; top: -100px">
-         <v-subheader>Tick labels</v-subheader>
-
-    <v-card-text>
-      <v-slider
-        v-model="fruits"
-        :tick-labels="ticksLabels"
-        :max="3"
-        step="1"
-        ticks="always"
-        tick-size="4"
-      ></v-slider>
-    </v-card-text>
+            <v-subheader>Number of reports</v-subheader>
+            <v-card-text>
+                <v-slider v-model="reportsNumber" :tick-labels="reports" :max="reports.length - 1" step="1" ticks="always"
+                    tick-size="4" @change="sortByReportsNumber"></v-slider>
+            </v-card-text>
         </Slide>
         <div class="row justify-content-center">
             <v-select :items="categories" v-model="selected" @change="sortByCategory" class="rounded-0 col-md-8"
@@ -57,7 +50,8 @@ export default {
         categories: ["All"],
         sortedProducts: [],
         selected: "All",
-        ticksLabels: [
+        reportsNumber: '',
+        reports: [
         ],
     }),
     mounted() {
@@ -66,10 +60,13 @@ export default {
                 this.$store.getters.getRootCategories.forEach(element => {
                     this.categories.push(element.name);
                 });
-                console.log(this.categories);
                 this.$store.getters.getConferences.forEach(element => {
                     this.sortedProducts.push(element);
+                    this.reports.push(String(element.reports.length))
                 });
+                this.reports = [...new Set(this.reports)]
+                this.reports.sort()
+                console.log(this.reports)
             });
         });
         if (this.isAuth()) {
@@ -114,6 +111,14 @@ export default {
                     });
                 });
             }
+        },
+        sortByReportsNumber(){
+            this.sortedProducts = [];
+            this.getConferences.forEach(element => {
+                if(element.reports.length == this.reportsNumber){
+                    this.sortedProducts.push(element)
+                }
+            });
         }
     },
 }

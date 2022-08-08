@@ -16,7 +16,7 @@ class ConferenceController extends Controller
     {
         return response()->json(Conference::with('reports')->get());
     }
-
+    
     public function show(int $id)
     {
         $time = $this->hasTime($id);
