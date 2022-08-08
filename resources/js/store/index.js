@@ -79,6 +79,22 @@ export default new Vuex.Store({
             }).catch(error=>{
             })
         },
+        ajaxGetConferencesWithCat({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: "api/conferencesWithCat?page=" + data[0] + "&cat=" + data[1],
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                commit('setConferences', response.data)
+            }).catch(error=>{
+                console.log(error.response)
+            })
+        },
         ajaxGetConference({commit}, id){
             let token = 'Bearer '+ localStorage.getItem('Authorized')
             return axios({

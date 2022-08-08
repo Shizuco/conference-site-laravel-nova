@@ -9,12 +9,18 @@ use App\Http\Requests\UpdateConferenceRequest;
 use App\Models\Conference;
 use App\Models\Report;
 use Datetime;
+use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
     public function index()
     {
         return response()->json(Conference::with('reports')->paginate(5));
+    }
+
+    public function conferencesWithCategories(Request $request){
+        $cat = explode(",", $request->cat);
+        return response()->json(Conference::with('categories')->whereIn('category_id', $cat)->paginate(5));
     }
 
     public function show(int $id)

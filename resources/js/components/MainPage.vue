@@ -1,9 +1,12 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
+        <Slide right style=" z-index: 100; position: relative; top: -100px">
+            <div v-for="name in categories" :value="name" :key="name.id">
+                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences"></v-checkbox>
+            </div>    
+        </Slide>
         <div class="row justify-content-center">
-            <v-select :items="categories" v-model="selected" @change="sortByCategory" class="rounded-0 col-md-8"
-                outlined />
             <div class="col-md-8" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
                 <v-card elevation="3">
                     <v-card-title>{{ conference.title }}</v-card-title>
@@ -40,21 +43,20 @@
 <script>
 export default {
     data: () => ({
-        categories: ["All"],
+        formData: {
+            parentCategory: [],
+        },
+        categories: [],
         sortedProducts: [],
         data: {},
-        selected: "All",
-        reportsNumber: '',
     }),
     mounted() {
         this.getConferences()
-        this.$store.dispatch("ajaxGetRootCategories").then(() => {
-
-            this.$store.getters.getRootCategories.forEach(element => {
-                this.categories.push(element.name);
+        this.$store.dispatch('ajaxGetCategories').then(() => {
+            this.$store.getters.getCategories.forEach(element => {
+                this.categories.push(element.name)
             });
         })
-
         if (this.isAuth()) {
             this.$store.dispatch("ajaxUser");
         }
@@ -71,28 +73,6 @@ export default {
             this.$store.getters.deleteConference;
             this.$router.go();
         },
-        sortByCategory(category) {
-            if (category != "All") {
-                this.sortedProducts = [];
-                this.$store.getters.getRootCategories.forEach(element => {
-                    if (category == element.name) {
-                        this.$store.dispatch("ajaxGetCategoryConferenceNumber", element.id).then(() => {
-                            this.$store.getters.getConferences[0].conferences.forEach(element => {
-                                this.sortedProducts.push(element);
-                            });
-                        });
-                    }
-                });
-            }
-            else {
-                this.sortedProducts = [];
-                this.$store.dispatch("ajaxConferences").then(() => {
-                    this.$store.getters.getConferences.forEach(element => {
-                        this.sortedProducts.push(element);
-                    });
-                });
-            }
-        },
         sortByReportsNumber() {
             this.sortedProducts = [];
             this.getConferences.forEach(element => {
@@ -102,6 +82,30 @@ export default {
             });
         },
         getConferences(page = 1) {
+            if(this.formData.parentCategory.length != 0){
+               this.getConferencesWithCat(page, this.formData.parentCategory) 
+            }
+            else{
+                this.getAllConferences(page)
+            }
+        },
+        getConferencesWithCat(page, cat) {
+            this.sortedProducts = []
+            let selectedCat = []
+            this.$store.getters.getCategories.forEach(element => {
+                cat.forEach(cat=>{
+                    if(cat == element.name){
+                        selectedCat.push(element.id)
+                    }
+                })
+            });
+            this.$store.dispatch("ajaxGetConferencesWithCat", [page, selectedCat]).then(() => {
+                this.$store.getters.getConferences.data.forEach(element => {
+                    this.sortedProducts.push(element);
+                })
+            })
+        },
+        getAllConferences(page) {
             this.sortedProducts = []
             this.$store.dispatch("ajaxConferences", page).then(() => {
                 this.$store.getters.getConferences.data.forEach(element => {
