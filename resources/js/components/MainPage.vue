@@ -46,6 +46,9 @@
                 <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always"
                     @change="count++; getConferences()" max="10"></v-slider>
             </v-col>
+            <v-col>
+                <v-btn x-big depressed color="error" @click="resetFilters">Reset</v-btn>
+            </v-col>
         </Slide>
         <div class="row justify-content-center">
             <div class="col-md-8" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
@@ -166,6 +169,9 @@ export default {
                 return this.$store.getters.getConferences;
             })
         },
+        resetFilters(){
+            this.$router.go()
+        }
     }
 }
 </script>
