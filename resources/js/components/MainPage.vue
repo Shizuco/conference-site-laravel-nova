@@ -34,13 +34,16 @@
                     <v-date-picker v-model="date2" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="menu2 = false">
-                            Cancels
+                            Cancel
                         </v-btn>
                         <v-btn text color="primary" @click="$refs.menu2.save(date); getConferences()">
                             OK
                         </v-btn>
                     </v-date-picker>
                 </v-menu>
+            </v-col>
+            <v-col cols="12">
+                <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always" @change="getConferences()" max="10"></v-slider>
             </v-col>
         </Slide>
         <div class="row justify-content-center">
@@ -91,6 +94,7 @@ export default {
         menu: false,
         modal: false,
         menu2: false,
+        numberOfReports: 0
     }),
     mounted() {
         this.getConferences()
@@ -127,11 +131,15 @@ export default {
             if (this.formData.parentCategory.length != 0) {
                 this.getConferencesWithCat(page, this.formData.parentCategory)
             }
-            else if (this.date !== '') {
+            if (this.date !== '') {
                 this.getConferencesByTimeFrom(page, this.date)
             }
-            else if (this.date2 !== ''){
+            if (this.date2 !== '') {
                 this.getConferencesByTimeTo(page, this.date2)
+            }
+            if (this.numberOfReports !== 0) {
+                console.log(this.numberOfReports)
+                this.getConferencesByNumberOfReports(page, this.numberOfReports)
             }
             else {
                 this.getAllConferences(page)
@@ -181,6 +189,17 @@ export default {
         getConferencesByTimeTo(page, date) {
             this.sortedProducts = []
             this.$store.dispatch("ajaxGetConferencesByTimeTo", [page, date]).then(() => {
+                this.$store.getters.getConferences.data.forEach(element => {
+                    this.sortedProducts.push(element);
+                })
+            }).then(() => {
+                this.data = this.$store.getters.getConferences
+                return this.$store.getters.getConferences;
+            })
+        },
+        getConferencesByNumberOfReports(page, number){
+            this.sortedProducts = []
+            this.$store.dispatch("ajaxGetConferencesByNumberOfReports", [page, number]).then(() => {
                 this.$store.getters.getConferences.data.forEach(element => {
                     this.sortedProducts.push(element);
                 })

@@ -31,6 +31,10 @@ class ConferenceController extends Controller
         return response()->json(Conference::where('date', '<=', $request->date)->paginate(5));
     }
 
+    public function conferencesByNumberOfReports(Request $request){
+        return response()->json(Conference::withCount('reports')->having('reports_count', '=', $request->number)->paginate(5));
+    }
+
     public function show(int $id)
     {
         $time = $this->hasTime($id);
@@ -56,7 +60,7 @@ class ConferenceController extends Controller
         Conference::findOrFail($id)->delete();
     }
 
-    public function hasTime(int $id)
+    private function hasTime(int $id)
     {
         $conference = Conference::findOrFail($id);
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();

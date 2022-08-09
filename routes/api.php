@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/conferencesWithCat', [ConferenceController::class, 'conferencesWithCategories']);
     Route::get('/conferencesByTimeFrom', [ConferenceController::class, 'conferencesByTimeFrom']);
     Route::get('/conferencesByTimeTo', [ConferenceController::class, 'conferencesByTimeTo']);
+    Route::get('/conferencesByNumberOfReports', [ConferenceController::class, 'conferencesByNumberOfReports']);
     Route::get('/currentCategory/{id}', [CategoryController::class, 'currentCategory']);
     Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
     Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
