@@ -37,8 +37,8 @@ class Conference extends Model
         return $this->hasMany(Report::class);
     }
 
-    public function categories()
+    public function category()
     {
-        return $this->belongsTo(Category::class, 'category_conference');
+        return $this->belongsTo(Category::class);
     }
 }

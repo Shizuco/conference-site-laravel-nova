@@ -28,7 +28,7 @@
                 <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false" :return-value.sync="date2"
                     transition="scale-transition" offset-y min-width="auto">
                     <template v-slot:activator="{ on, attrs }">
-                        <v-text-field v-model="date2" label="Date from" prepend-icon="mdi-calendar" readonly
+                        <v-text-field v-model="date2" label="Date to" prepend-icon="mdi-calendar" readonly
                             v-bind="attrs" v-on="on"></v-text-field>
                     </template>
                     <v-date-picker v-model="date2" no-title scrollable>
@@ -36,14 +36,15 @@
                         <v-btn text color="primary" @click="menu2 = false">
                             Cancel
                         </v-btn>
-                        <v-btn text color="primary" @click="$refs.menu2.save(date); getConferences()">
+                        <v-btn text color="primary" @click="$refs.menu2.save(date2); getConferences()">
                             OK
                         </v-btn>
                     </v-date-picker>
                 </v-menu>
             </v-col>
             <v-col cols="12">
-                <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always" @change="getConferences()" max="10"></v-slider>
+                <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always" @change="count++; getConferences()"
+                    max="10"></v-slider>
             </v-col>
         </Slide>
         <div class="row justify-content-center">
@@ -94,7 +95,8 @@ export default {
         menu: false,
         modal: false,
         menu2: false,
-        numberOfReports: 0
+        numberOfReports: 0,
+        count: 0
     }),
     mounted() {
         this.getConferences()
@@ -128,41 +130,25 @@ export default {
             });
         },
         getConferences(page = 1) {
-            if (this.formData.parentCategory.length != 0) {
-                this.getConferencesWithCat(page, this.formData.parentCategory)
-            }
-            if (this.date !== '') {
-                this.getConferencesByTimeFrom(page, this.date)
-            }
-            if (this.date2 !== '') {
-                this.getConferencesByTimeTo(page, this.date2)
-            }
-            if (this.numberOfReports !== 0) {
-                console.log(this.numberOfReports)
-                this.getConferencesByNumberOfReports(page, this.numberOfReports)
-            }
-            else {
+            console.log(this.count)
+            if (this.count == 0) {
+                this.sortedProducts = []
                 this.getAllConferences(page)
             }
-        },
-        getConferencesWithCat(page, cat) {
-            this.sortedProducts = []
-            let selectedCat = []
-            this.$store.getters.getCategories.forEach(element => {
-                cat.forEach(cat => {
-                    if (cat == element.name) {
-                        selectedCat.push(element.id)
-                    }
+            else {
+                this.sortedProducts = []
+                this.$store.getters.getCategories.forEach(element => {
+                    if (element.name == this.formData.parentCategory) this.formData.parentCategory = element.id
+                });
+                this.$store.dispatch("ajaxGetConferencesF", [page, this.numberOfReports, this.formData.parentCategory, this.date, this.date2]).then(() => {
+                    this.$store.getters.getConferences.data.forEach(element => {
+                        this.sortedProducts.push(element);
+                    })
+                }).then(() => {
+                    this.data = this.$store.getters.getConferences
+                    return this.$store.getters.getConferences;
                 })
-            });
-            this.$store.dispatch("ajaxGetConferencesWithCat", [page, selectedCat]).then(() => {
-                this.$store.getters.getConferences.data.forEach(element => {
-                    this.sortedProducts.push(element);
-                })
-            }).then(() => {
-                this.data = this.$store.getters.getConferences
-                return this.$store.getters.getConferences;
-            })
+            }
         },
         getAllConferences(page) {
             this.sortedProducts = []
@@ -175,39 +161,6 @@ export default {
                 return this.$store.getters.getConferences;
             })
         },
-        getConferencesByTimeFrom(page, date) {
-            this.sortedProducts = []
-            this.$store.dispatch("ajaxGetConferencesByTimeFrom", [page, date]).then(() => {
-                this.$store.getters.getConferences.data.forEach(element => {
-                    this.sortedProducts.push(element);
-                })
-            }).then(() => {
-                this.data = this.$store.getters.getConferences
-                return this.$store.getters.getConferences;
-            })
-        },
-        getConferencesByTimeTo(page, date) {
-            this.sortedProducts = []
-            this.$store.dispatch("ajaxGetConferencesByTimeTo", [page, date]).then(() => {
-                this.$store.getters.getConferences.data.forEach(element => {
-                    this.sortedProducts.push(element);
-                })
-            }).then(() => {
-                this.data = this.$store.getters.getConferences
-                return this.$store.getters.getConferences;
-            })
-        },
-        getConferencesByNumberOfReports(page, number){
-            this.sortedProducts = []
-            this.$store.dispatch("ajaxGetConferencesByNumberOfReports", [page, number]).then(() => {
-                this.$store.getters.getConferences.data.forEach(element => {
-                    this.sortedProducts.push(element);
-                })
-            }).then(() => {
-                this.data = this.$store.getters.getConferences
-                return this.$store.getters.getConferences;
-            })
-        }
     },
 }
 </script>

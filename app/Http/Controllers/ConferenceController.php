@@ -18,23 +18,20 @@ class ConferenceController extends Controller
         return response()->json(Conference::with('reports')->paginate(5));
     }
 
-    public function conferencesWithCategories(Request $request){
-        $cat = explode(",", $request->cat);
-        return response()->json(Conference::with('categories')->whereIn('category_id', $cat)->paginate(5));
+    public function conferencesWithFilters(Request $request){
+        $query = Conference::withCount('reports')->having('reports_count', '=', $request->number);
+        if($request->cat !== null){
+            $cat = explode(",", $request->cat);
+            $query->with('category')->whereIn('category_id', [$cat]);
+        }
+        if($request->date !== null){
+            $query->where('date', '>=', $request->date);
+        }
+        if($request->date2 !== null){
+            $query->where('date', '<=', $request->date2);
+        }
+        return response()->json($query->paginate(5));
     }
-
-    public function conferencesByTimeFrom(Request $request){
-        return response()->json(Conference::where('date', '>=', $request->date)->paginate(5));
-    }
-
-    public function conferencesByTimeTo(Request $request){
-        return response()->json(Conference::where('date', '<=', $request->date)->paginate(5));
-    }
-
-    public function conferencesByNumberOfReports(Request $request){
-        return response()->json(Conference::withCount('reports')->having('reports_count', '=', $request->number)->paginate(5));
-    }
-
     public function show(int $id)
     {
         $time = $this->hasTime($id);

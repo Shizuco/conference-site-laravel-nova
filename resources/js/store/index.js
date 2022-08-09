@@ -81,81 +81,18 @@ export default new Vuex.Store({
                 })
                 .catch((error) => {});
         },
-        ajaxGetConferencesWithCat({ commit }, data) {
+        ajaxGetConferencesF({ commit }, data) {
+            console.log(data)
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
                 url:
-                    "api/conferencesWithCat?page=" +
-                    data[0] +
-                    "&cat=" +
-                    data[1],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setConferences", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        },
-        ajaxGetConferencesByTimeFrom({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/conferencesByTimeFrom?page=" +
-                    data[0] +
-                    "&date=" +
-                    data[1],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setConferences", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        },
-        ajaxGetConferencesByTimeTo({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/conferencesByTimeTo?page=" +
-                    data[0] +
-                    "&date=" +
-                    data[1],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setConferences", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        },
-        ajaxGetConferencesByNumberOfReports({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/conferencesByNumberOfReports?page=" +
+                    "api/conferencesWithFilters?page=" +
                     data[0] +
                     "&number=" +
-                    data[1],
+                    data[1] + 
+                    "&cat=" + 
+                    data[2] + '&date=' + data[3] + '&date2=' + data[4],
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
