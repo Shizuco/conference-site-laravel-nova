@@ -3,7 +3,7 @@
         <auth style="height: 80px"></auth>
         <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550">
             <div v-for="name in categories" :value="name" :key="name.id">
-                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences">
+                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences()">
                 </v-checkbox>
             </div>
             <v-col cols="12" sm="10" md="26">
@@ -43,8 +43,8 @@
                 </v-menu>
             </v-col>
             <v-col cols="12">
-                <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always" @change="count++; getConferences()"
-                    max="10"></v-slider>
+                <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always"
+                    @change="count++; getConferences()" max="10"></v-slider>
             </v-col>
         </Slide>
         <div class="row justify-content-center">
@@ -88,6 +88,7 @@ export default {
             parentCategory: [],
         },
         categories: [],
+        cats: [],
         sortedProducts: [],
         data: {},
         date: '',
@@ -138,9 +139,12 @@ export default {
             else {
                 this.sortedProducts = []
                 this.$store.getters.getCategories.forEach(element => {
-                    if (element.name == this.formData.parentCategory) this.formData.parentCategory = element.id
-                });
-                this.$store.dispatch("ajaxGetConferencesF", [page, this.numberOfReports, this.formData.parentCategory, this.date, this.date2]).then(() => {
+                    this.formData.parentCategory.forEach(cat => {
+                        if (element.name == cat) this.cats.push(element.id)
+                    })
+                })
+                this.cats = [...new Set(this.cats)]
+                this.$store.dispatch("ajaxGetConferencesF", [page, this.numberOfReports, this.cats, this.date, this.date2]).then(() => {
                     this.$store.getters.getConferences.data.forEach(element => {
                         this.sortedProducts.push(element);
                     })
@@ -148,6 +152,7 @@ export default {
                     this.data = this.$store.getters.getConferences
                     return this.$store.getters.getConferences;
                 })
+                this.cats = []
             }
         },
         getAllConferences(page) {
@@ -161,6 +166,6 @@ export default {
                 return this.$store.getters.getConferences;
             })
         },
-    },
+    }
 }
 </script>

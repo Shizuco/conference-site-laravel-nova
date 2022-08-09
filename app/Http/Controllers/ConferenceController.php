@@ -22,7 +22,7 @@ class ConferenceController extends Controller
         $query = Conference::withCount('reports')->having('reports_count', '=', $request->number);
         if($request->cat !== null){
             $cat = explode(",", $request->cat);
-            $query->with('category')->whereIn('category_id', [$cat]);
+            $query->with('category')->whereIn('category_id', $cat);
         }
         if($request->date !== null){
             $query->where('date', '>=', $request->date);

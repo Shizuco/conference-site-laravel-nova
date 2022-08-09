@@ -103,7 +103,7 @@ export default new Vuex.Store({
                     commit("setConferences", response.data);
                 })
                 .catch((error) => {
-                    console.log(error.response);
+                    console.log(error.response.data.message);
                 });
         },
         ajaxGetConference({ commit }, id) {
