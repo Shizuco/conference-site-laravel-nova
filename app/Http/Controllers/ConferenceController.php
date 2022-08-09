@@ -23,6 +23,14 @@ class ConferenceController extends Controller
         return response()->json(Conference::with('categories')->whereIn('category_id', $cat)->paginate(5));
     }
 
+    public function conferencesByTimeFrom(Request $request){
+        return response()->json(Conference::where('date', '>=', $request->date)->paginate(5));
+    }
+
+    public function conferencesByTimeTo(Request $request){
+        return response()->json(Conference::where('date', '<=', $request->date)->paginate(5));
+    }
+
     public function show(int $id)
     {
         $time = $this->hasTime($id);

@@ -1,10 +1,47 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
-        <Slide right style=" z-index: 100; position: relative; top: -100px">
+        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550">
             <div v-for="name in categories" :value="name" :key="name.id">
-                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences"></v-checkbox>
-            </div>    
+                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences">
+                </v-checkbox>
+            </div>
+            <v-col cols="12" sm="10" md="26">
+                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
+                    transition="scale-transition" offset-y min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field v-model="date" label="Date from" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">
+                            Cancel
+                        </v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(date); getConferences()">
+                            OK
+                        </v-btn>
+                    </v-date-picker>
+                </v-menu>
+            </v-col>
+            <v-col cols="12" sm="10" md="26">
+                <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false" :return-value.sync="date2"
+                    transition="scale-transition" offset-y min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field v-model="date2" label="Date from" prepend-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date2" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu2 = false">
+                            Cancels
+                        </v-btn>
+                        <v-btn text color="primary" @click="$refs.menu2.save(date); getConferences()">
+                            OK
+                        </v-btn>
+                    </v-date-picker>
+                </v-menu>
+            </v-col>
         </Slide>
         <div class="row justify-content-center">
             <div class="col-md-8" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
@@ -49,6 +86,11 @@ export default {
         categories: [],
         sortedProducts: [],
         data: {},
+        date: '',
+        date2: '',
+        menu: false,
+        modal: false,
+        menu2: false,
     }),
     mounted() {
         this.getConferences()
@@ -82,10 +124,16 @@ export default {
             });
         },
         getConferences(page = 1) {
-            if(this.formData.parentCategory.length != 0){
-               this.getConferencesWithCat(page, this.formData.parentCategory) 
+            if (this.formData.parentCategory.length != 0) {
+                this.getConferencesWithCat(page, this.formData.parentCategory)
             }
-            else{
+            else if (this.date !== '') {
+                this.getConferencesByTimeFrom(page, this.date)
+            }
+            else if (this.date2 !== ''){
+                this.getConferencesByTimeTo(page, this.date2)
+            }
+            else {
                 this.getAllConferences(page)
             }
         },
@@ -93,8 +141,8 @@ export default {
             this.sortedProducts = []
             let selectedCat = []
             this.$store.getters.getCategories.forEach(element => {
-                cat.forEach(cat=>{
-                    if(cat == element.name){
+                cat.forEach(cat => {
+                    if (cat == element.name) {
                         selectedCat.push(element.id)
                     }
                 })
@@ -103,11 +151,36 @@ export default {
                 this.$store.getters.getConferences.data.forEach(element => {
                     this.sortedProducts.push(element);
                 })
+            }).then(() => {
+                this.data = this.$store.getters.getConferences
+                return this.$store.getters.getConferences;
             })
         },
         getAllConferences(page) {
             this.sortedProducts = []
             this.$store.dispatch("ajaxConferences", page).then(() => {
+                this.$store.getters.getConferences.data.forEach(element => {
+                    this.sortedProducts.push(element);
+                })
+            }).then(() => {
+                this.data = this.$store.getters.getConferences
+                return this.$store.getters.getConferences;
+            })
+        },
+        getConferencesByTimeFrom(page, date) {
+            this.sortedProducts = []
+            this.$store.dispatch("ajaxGetConferencesByTimeFrom", [page, date]).then(() => {
+                this.$store.getters.getConferences.data.forEach(element => {
+                    this.sortedProducts.push(element);
+                })
+            }).then(() => {
+                this.data = this.$store.getters.getConferences
+                return this.$store.getters.getConferences;
+            })
+        },
+        getConferencesByTimeTo(page, date) {
+            this.sortedProducts = []
+            this.$store.dispatch("ajaxGetConferencesByTimeTo", [page, date]).then(() => {
                 this.$store.getters.getConferences.data.forEach(element => {
                     this.sortedProducts.push(element);
                 })

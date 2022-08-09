@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/favorite/{id}', [UserController::class, 'favorite']);
     Route::post('/unfavorite/{id}', [UserController::class, 'unfavorite']);
     Route::get('/conferencesWithCat', [ConferenceController::class, 'conferencesWithCategories']);
+    Route::get('/conferencesByTimeFrom', [ConferenceController::class, 'conferencesByTimeFrom']);
+    Route::get('/conferencesByTimeTo', [ConferenceController::class, 'conferencesByTimeTo']);
     Route::get('/currentCategory/{id}', [CategoryController::class, 'currentCategory']);
     Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
     Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
