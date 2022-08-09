@@ -27,6 +27,9 @@ Vue.component('list', require('./components/Report/List.vue').default);
 Vue.component('detail', require('./components/Report/Details.vue').default);
 Vue.component('create', require('./components/Report/Create.vue').default);
 Vue.component('edition', require('./components/Report/Edit.vue').default);
+Vue.component('userpage', require('./components/Auth/UserPage.vue').default);
+Vue.component('userfavorites', require('./components/Auth/UserFavorites.vue').default);
+Vue.component('category', require('./components/Category.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 
@@ -46,7 +49,10 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
 import VCalendar from 'v-calendar';
 import DatetimePicker from 'vuetify-datetime-picker'
+import VTreeview from "v-treeview"
+import VueBreadcrumbs from 'vue-breadcrumbs'
 
+Vue.use(VueBreadcrumbs)
 Vue.use(DatetimePicker)
 Vue.use(VueSocialSharing)
 Vue.use(Vuetify)
@@ -68,5 +74,6 @@ const app = new Vue({
     store,
     router,
     vuetify : new Vuetify(),
-    VueGoogleMaps
+    VueGoogleMaps,
+    VTreeview
 });

@@ -1,6 +1,9 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
+        <v-breadcrumbs :items="items"><template v-slot:divider>
+                <v-icon>mdi-forward</v-icon>
+            </template></v-breadcrumbs>
         <v-row align="center" justify="center" dense>
             <v-col cols="12" sm="8" md="4" lg="10">
                 <v-card elevation="10">
@@ -11,8 +14,8 @@
                         <p>Duration: {{ formData.start_time }} to {{ formData.end_time }}</p>
                         <h4>About</h4>
                         <p>{{ formData.description }}</p>
-                        <a>{{ formData.presentation }}</a>
-                        <v-btn @click="onClick" depressed color="primary" x-small>Download</v-btn>
+                        <a :href="getFile">{{ formData.presentation }}</a>
+                        <button @click="onClick">erthejh</button>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
@@ -35,7 +38,7 @@
                         <p>
                         <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
                                     v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
-                                    @click="plusEdit" depressed color="warning" x-small>Edit
+                                    @click="plusEdit">
                                 </v-btn>
                             </h5>
                         </h3>
@@ -52,6 +55,16 @@
                     </v-btn>
                 </v-card>
             </v-col>
+            <v-col>
+                <v-col>
+                    <v-btn v-if="isFavorite.length == 0" @click="join()" x-big block color="success"
+                        class="white--text">Add to favorite</v-btn>
+                </v-col>
+                <v-col>
+                    <v-btn v-if="isFavorite.length > 0" @click="out()" x-big block color="error" class="white--text">
+                        Delete from favorite</v-btn>
+                </v-col>
+            </v-col>
         </v-row>
     </v-app>
 </template>
@@ -67,22 +80,51 @@ export default {
             description: '',
             presentation: ''
         },
+        items: [
+            {
+                text: 'conferences',
+                disabled: false,
+                exact: true,
+                to: { name: 'MainPage' },
+                replace: true
+            },
+        ],
         comments: [],
         comment: '',
         commentNum: 0,
         newComment: [],
-        edit: 0
+        edit: 0,
     }),
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
+                    this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(()=>{
+                      this.$store.dispatch('ajaxGetCurrentCategory', this.$store.getters.getConference.category_id).then(() => {
+                        this.items.push({
+                            text: this.$store.getters.getCurrentCategory[0].name,
+                            disabled: false,
+                            exact: true,
+                            to: '/conferences/' + this.$route.params.id,
+                            replace: true
+                        })
+                    }).then(()=>{
+                        this.$store.dispatch('ajaxGetCurrentCategory', this.getReport.category_id).then(()=>{
+                            this.items.push({
+                                text: this.$store.getters.getCurrentCategory[0].name
+                            })
+                        })
+                    })  
+                    })
+                    this.link = this.$route.params.id
+                    this.$store.dispatch('isReportInFavorite', this.getReport.id)
                     this.$data.formData.thema = this.getReport.thema
                     this.$data.formData.start_time = this.getReport.start_time
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
+                    console.log(this.isFavorite.length)
                 })
             })
         }
@@ -96,27 +138,42 @@ export default {
         },
         getFile() {
             return this.$store.getters.getFile
-        }
+        },
+        isFavorite() {
+            return this.$store.getters.getReportStatus
+        },
     },
     methods: {
         onClick() {
             let token = 'Bearer ' + localStorage.getItem('Authorized')
             axios({
-                url: this.getFile,
+                url: this.getFile, //your url
                 method: 'GET',
                 headers: {
                     "Authorization": token,
                     "Content-type": "application/json"
                 },
-                responseType: 'blob',
+                responseType: 'blob', // important
             }).then((response) => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.getElementsByTagName('a');
+                const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', this.formData.presentation); //or any other extension
+                link.setAttribute('download', this.formData.presentation);
                 document.body.appendChild(link);
                 link.click();
             });
+        },
+        join() {
+            let report_id = this.$store.getters.getReport.id
+            this.$store.dispatch('ajaxAddToFavorites', report_id).then(() => {
+                this.$router.go()
+            })
+        },
+        out() {
+            let report_id = this.$store.getters.getReport.id
+            this.$store.dispatch('ajaxDeleteFromFavorites', report_id).then(() => {
+                this.$router.go()
+            })
         },
         sendComment() {
             let data = {
@@ -153,3 +210,9 @@ export default {
     }
 }
 </script>
+
+<style>
+a {
+    z-index: 0;
+}
+</style>

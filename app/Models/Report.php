@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Models\Conference;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,7 @@ class Report extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category_id',
         'conference_id',
         'user_id',
         'thema',
@@ -25,12 +27,12 @@ class Report extends Model
 
     public function conferences()
     {
-        return $this->belongsToOne(Conference::class);
+        return $this->belongsTo(Conference::class);
     }
 
     public function users()
     {
-        return $this->belongsToOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function comments()
@@ -41,5 +43,10 @@ class Report extends Model
     public function reports()
     {
         return $this->hasMany(Report::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class, 'category_report');
     }
 }

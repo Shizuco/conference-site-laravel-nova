@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +16,7 @@ class Conference extends Model
         'title',
         'country',
         'address_lat',
+        'category_id',
         'address_lon',
         'date',
         'time',
@@ -32,5 +35,10 @@ class Conference extends Model
     public function reports()
     {
         return $this->hasMany(Report::class, 'conference_user_reports');
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class, 'category_conference');
     }
 }

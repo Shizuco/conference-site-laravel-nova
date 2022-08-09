@@ -48,6 +48,7 @@ class CreateConferenceRequest extends FormRequest
             'address_lat.max' => 'Максимальное значение широты 90',
             'address_lon.min' => 'Минимальное значение долготы -180',
             'address_lon.max' => 'Максимальное значение долготы 180',
+            'category_id.required' => 'Category is required'
         ];
     }
 }

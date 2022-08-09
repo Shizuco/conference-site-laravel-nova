@@ -3,7 +3,7 @@
       <v-app-bar app color="black">
          <v-list-item-group>
             <v-list-item>
-               <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Конференции</router-link>
+               <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Conferences</router-link>
             </v-list-item>
          </v-list-item-group>
       </v-app-bar>
@@ -30,7 +30,7 @@
                                        name="surname">
                                        <span>{{ errors[0] }}</span>
                                        <v-text-field label="Surname" name="surname" id="surname"
-                                          prepend-inner-icon="mdi-lock" type="text" class="rounded-0" outlined
+                                          prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined
                                           v-model="formData.surname"></v-text-field>
                                     </ValidationProvider>
                                  </v-col>
@@ -38,7 +38,7 @@
                               <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
                                  <span>{{ errors[0] }}</span>
                                  <v-text-field label="Email" name="email" id="email" vid="email"
-                                    prepend-inner-icon="mdi-lock" type="email" class="rounded-0" outlined
+                                    prepend-inner-icon="mdi-email" type="email" class="rounded-0" outlined
                                     v-model="formData.email">
                                  </v-text-field>
                               </ValidationProvider>
@@ -72,7 +72,7 @@
                               <ValidationProvider rules="required" v-slot="{ errors }" name="phone">
                                  <span>{{ errors[0] }}</span>
                                  <v-text-field label="Phone" v-model="form.telephone" v-mask="'+38(###)-##-###-##'"
-                                    name="phone" id="phone" prepend-inner-icon="mdi-lock" type="text" class="rounded-0"
+                                    name="phone" id="phone" prepend-inner-icon="mdi-phone" type="text" class="rounded-0"
                                     outlined></v-text-field>
                               </ValidationProvider>
                               <v-row>

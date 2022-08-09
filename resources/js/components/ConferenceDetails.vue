@@ -1,6 +1,9 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
+        <v-breadcrumbs :items="items"><template v-slot:divider>
+                <v-icon>mdi-forward</v-icon>
+            </template></v-breadcrumbs>
         <v-row align="center" justify="center" dense>
             <v-col cols="12" sm="8" md="4" lg="10">
                 <v-card elevation="10">
@@ -60,7 +63,7 @@
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth()" depressed color="warning" x-big
-                                        :to="{ name: 'List', params: { id: getConference.id } }">Reports</v-btn>
+                                        @click="toReports">Reports</v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()"
@@ -93,13 +96,30 @@
 <script>
 
 export default {
+    data: () => ({
+        items: [
+            {
+                text: 'conferences',
+                disabled: false,
+                exact: true,
+                to: { name: 'MainPage' },
+                replace: true
+            }
+        ],
+    }),
     mounted() {
         let id = this.$route.params.id
         if (this.isAuth()) {
-            this.$store.dispatch('ajaxGetConference', id)
-            this.$store.dispatch('isUserOnConference', id)
-            this.$store.dispatch('ajaxUser')
-        }
+            this.$store.dispatch('ajaxGetConference', id).then(() => {
+                this.$store.dispatch('ajaxGetCurrentCategory', this.$store.getters.getConference.category_id).then(() => {
+                    this.items.push({
+                        text: this.$store.getters.getCurrentCategory[0].name,
+                        disabled: true
+                    })
+                })
+                this.$store.dispatch('isUserOnConference', id)
+                this.$store.dispatch('ajaxUser')
+            })}
         else {
             this.$router.replace('/conferences')
         }
@@ -145,6 +165,15 @@ export default {
         url() {
             return document.location.origin
         },
+        toReports(){
+            this.$router.replace('/conferences/' + this.$store.getters.getConference.id + '/reports')
+    }
     },
 }
 </script>
+
+<style>
+a {
+    z-index: 0;
+}
+</style>

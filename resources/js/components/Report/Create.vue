@@ -37,6 +37,13 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
+                                        <v-select name="category" id="category" class="rounded-0" outlined
+                                            v-model="formData.category" :items="categories">
+                                        </v-select>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="description">
                                             <span>{{ errors[0] }}</span>
                                             <v-textarea label="Enter description" v-model="formData.description"
@@ -78,21 +85,34 @@ export default {
             thema: '',
             start_time: '',
             end_time: '',
+            category: '',
             description: '',
             presentation: ''
-        }
+        },
+        categories: []
     }),
     mounted() {
         this.$store.dispatch('ajaxUser')
+        this.$store.dispatch('ajaxGetSubCategories', this.$route.params.id).then(() => {
+            this.$store.getters.getSubCategories.forEach(element => {
+                this.categories.push(element.name)
+            });
+        })
     },
     computed: {
     },
     methods: {
         onSubmit() {
+            this.$store.getters.getSubCategories.forEach(element => {
+                if (this.formData.category == element.name) {
+                    this.formData.category = element.id
+                }
+            });
             let data = {
                 'thema': this.formData.thema,
                 'start_time': new Date(this.formData.start_time).toUTCString(),
                 'end_time': new Date(this.formData.end_time).toUTCString(),
+                'category_id': this.formData.category,
                 'description': this.formData.description,
                 'presentation': this.formData.presentation
             }

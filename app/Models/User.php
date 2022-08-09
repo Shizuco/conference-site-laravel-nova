@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'conference_user_reports');
     }
 
+    public function favorite_reports()
+    {
+        return $this->belongsToMany(Report::class, 'user_report_favorites');
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

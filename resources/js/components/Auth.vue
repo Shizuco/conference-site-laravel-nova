@@ -5,7 +5,7 @@
             <span>
                <v-btn v-if="!isAuth()" depressed color="primary" small>
                   <router-link :to="{ name: 'Registration' }" class="white--text"
-                     style="text-decoration: none; color: inherit;">Sign in</router-link>
+                     style="text-decoration: none; color: inherit;">Sign up</router-link>
                </v-btn>
             </span>
             <span>
@@ -21,7 +21,29 @@
             <span>
                <v-btn depressed color="primary" small v-if="isAdmin()">
                   <router-link class="white--text" style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'CreateConference' }">Create
+                     :to="{ name: 'CreateConference' }">Create conference
+                  </router-link>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small v-if="isAuth() && !isAdmin()">
+                  <router-link style="text-decoration: none; color: inherit;"
+                     :to="{ name: 'UserPage' }">My Page
+                  </router-link>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small v-if="isAuth() && !isAdmin()">
+                  <router-link style="text-decoration: none; color: inherit;"
+                     :to="{ name: 'UserFavorites' }">My Favorites
+                  </router-link>
+                  <v-badge inline :content="getFavorites()"></v-badge>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small v-if="isAdmin()">
+                  <router-link style="text-decoration: none; color: inherit;"
+                     :to="{ name: 'Category' }">Create category
                   </router-link>
                </v-btn>
             </span>
@@ -32,6 +54,9 @@
 
 <script>
 export default {
+   mounted(){
+      this.$store.dispatch('ajaxGetFavorites')
+   },
    methods: {
       isAuth() {
          return ("Authorized" in localStorage) ? true : false
@@ -44,6 +69,23 @@ export default {
       isAdmin() {
          return (this.$store.getters.getUser.role == "admin") ? true : false
       },
+      getFavorites(){
+         if(this.$store.getters.getFavorites.length > 99){
+            return '99+'
+         }
+         return this.$store.getters.getFavorites.length
+      }
    }
 }
 </script>
+
+<style>
+#fav{
+   color: azure;
+   text-transform: lowercase;
+   display:inline-block;
+}
+#fav:first-letter{
+   text-transform: uppercase;
+}
+</style>

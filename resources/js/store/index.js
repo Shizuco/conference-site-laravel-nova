@@ -9,10 +9,18 @@ export default new Vuex.Store({
         conference:[],
         user:[],
         userOnConferenceStatus:[],
+        reportInFavoriteStatus: [],
         reports: [],
         report: [],
         file: [],
-        comments: []
+        comments: [],
+        favorites: [],
+        categories: [],
+        categoryConferences: '',
+        categoryReports: '',
+        rootCategories: [],
+        subCategories: [],
+        currentCategory: []
     },
     getters:{
         getConferences(state){
@@ -38,11 +46,35 @@ export default new Vuex.Store({
         },
         getComments(state){
             return state.comments
+        },
+        getFavorites(state){
+            return state.favorites
+        },
+        getReportStatus(state){
+            return state.reportInFavoriteStatus
+        },
+        getCategories(state){
+            return state.categories
+        },
+        getCategoryConferences(state){
+            return state.categoryConferences
+        },
+        getCategoryReports(state){
+            return state.categoryReports
+        },
+        getRootCategories(state){
+            return state.rootCategories
+        },
+        getSubCategories(state){
+            return state.subCategories
+        },
+        getCurrentCategory(state){
+            return state.currentCategory
         }
     },
     actions:{
         ajaxConferences({commit}){
-            axios.get("api/conferences").then(response=>{
+            return axios.get("api/conferences").then(response=>{
                 commit('setConferences', response.data)
             }).catch(error=>{
             })
@@ -135,9 +167,71 @@ export default new Vuex.Store({
                   }
                 })
                 .then(function(response) {
+                    console.log(response)
                     commit('setUser', response.data)
                     localStorage.setItem('Authorized', response.data.token)
                 });
+        },
+        changeUserData({commit}, data) {
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'put',
+                url: 'api/user/change',
+                data: data,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then(function(response) {
+                    commit('setUser', response.data)
+                    localStorage.setItem('Authorized', response.data.token)
+                }).catch(error=>{
+                    console.log(error.response)
+                })
+        },
+        ajaxGetFavorites({commit}){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/favorite',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    commit('setFavorites', response.data)
+                }).catch(error=>{
+                    console.log(error.response)
+                })
+        },
+        ajaxAddToFavorites({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/favorite/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                    console.log(error.response)
+                })
+        },
+        ajaxDeleteFromFavorites({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'post',
+                url: 'api/unfavorite/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                }).catch(error=>{
+                    console.log(error.response)
+                })
         },
         logout({commit}) {
             let token = 'Bearer '+ localStorage.getItem('Authorized')
@@ -185,6 +279,22 @@ export default new Vuex.Store({
                 })
                 .then((response)=>{
                     commit('setUser', response.data)
+            }).catch(error=>{
+                console.log(error.response)
+            })
+        },
+        isReportInFavorite({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'get',
+                url: 'api/isFavorite/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                })
+                .then((response)=>{
+                    commit('setOnFavorite', response.data)
             })
         },
         isUserOnConference({commit},conference_id){
@@ -233,13 +343,13 @@ export default new Vuex.Store({
                 })
         },
         ajaxCreateReport({commit}, data){
-            console.log(data[0].presentation)
             let datas = new FormData();
             datas.append("presentation", data[0].presentation)
             datas.append("thema", data[0].thema);
             datas.append("start_time", data[0].start_time);
             datas.append("end_time", data[0].end_time);
             datas.append("description", data[0].description);
+            datas.append("category_id", data[0].category_id)
             let token = 'Bearer '+ localStorage.getItem('Authorized')
             return axios({
                 method: 'post',
@@ -351,6 +461,145 @@ export default new Vuex.Store({
                     console.log(error.response);
                 })
         },
+        ajaxGetCategories({commit}){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/categories',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setCategories', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxCreateCategory({commit}, data){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'post',
+                url: 'api/categories',
+                data: data,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+              })
+              .then(function(response) {
+                console.log(response)
+              })
+              .catch(function(error) {
+                console.log(error.response) 
+              });
+        },
+        ajaxDeleteCategory({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            axios({
+                method: 'delete',
+                url: 'api/category/destroy',
+                data: id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+              })
+              .then(function(response) {
+                console.log(response)
+              })
+              .catch(function(error) {
+                console.log(error.response) 
+              });
+        },
+        ajaxGetCategoryConferenceNumber({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/category/' + id + '/getConferences',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setConferences', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetCategoryReportNumber({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/category/' + id + '/getReports',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setReports', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetRootCategories({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/rootCategories',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setRootCategories', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetSubCategories({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/subCategories/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setSubCategories', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        },
+        ajaxGetCurrentCategory({commit}, id){
+            let token = 'Bearer '+ localStorage.getItem('Authorized')
+            return axios({
+                method: 'get',
+                url: 'api/currentCategory/' + id,
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json; charset=UTF-8"
+                  }
+                }).then(response=>{
+                    console.log(response.data)
+                    commit('setCurrentCategory', response.data)
+
+                }).catch(error=>{
+                    console.log(error.response);
+                })
+        }
+
     },
     mutations:{
         setConferences(state, data){
@@ -380,6 +629,30 @@ export default new Vuex.Store({
         },
         setComments(state, data){
             return state.comments = data
+        },
+        setFavorites(state, data){
+            return state.favorites = data
+        },
+        setOnFavorite(state, data){
+            return state.reportInFavoriteStatus = data
+        },
+        setCategories(state, data){
+            return state.categories = data
+        },
+        setCategoryConferences(state, data){
+            return state.categoryConferences = data
+        },
+        setCategoryReports(state, data){
+            return state.categoryReports = data
+        },
+        setRootCategories(state, data){
+            return state.rootCategories = data
+        },
+        setSubCategories(state, data){
+            return state.subCategories = data
+        },
+        setCurrentCategory(state, data){
+            return state.currentCategory = data
         }
     }
     }

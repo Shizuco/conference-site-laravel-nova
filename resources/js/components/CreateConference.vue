@@ -38,7 +38,7 @@
                                     <v-col>
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="country">
                                             <span>{{ errors[0] }}</span>
-                                            <v-select name="country" id="country" class="rounded-0" outlined required
+                                            <v-select name="country" id="country" class="rounded-0" outlined
                                                 v-model="formData.country" :items="countries">
                                             </v-select>
                                         </ValidationProvider>
@@ -46,10 +46,18 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
+                                        <v-select name="category" id="category" class="rounded-0" outlined
+                                            v-model="formData.category" :items="categories">
+                                        </v-select>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
                                         <gmap-map :zoom="15" :center="{
                                             lat: 0,
                                             lng: 0
-                                        }" mapTypeId='roadmap' style="width:100%;height:300px" id="map" @click="change">
+                                        }" mapTypeId='roadmap' style="width:100%;height:300px" id="map"
+                                            @click="change">
                                             <gmap-marker :position="{
                                                 lat: Number(formData.address_lat),
                                                 lng: Number(formData.address_lon)
@@ -85,24 +93,41 @@ export default {
             title: '',
             date: '',
             time: '',
+            category: 'IT',
             address_lat: '0',
             address_lon: '0',
             country: 'Japan'
         },
-        countries: ['Japan', 'Russia', 'Ukraine', 'Belarus', 'Canada', 'France', 'England', 'USA', 'China', 'Korea']
+        countries: ['Japan', 'Russia', 'Ukraine', 'Belarus', 'Canada', 'France', 'England', 'USA', 'China', 'Korea'],
+        categories: []
     }),
+    mounted() {
+        this.$store.dispatch('ajaxGetRootCategories').then(() => {
+            this.$store.getters.getRootCategories.forEach(element => {
+                this.categories.push(element.name)
+            });
+        })
+    },
     computed: {
         createConference() {
+            this.$store.getters.getRootCategories.forEach(element => {
+                if (this.formData.category == element.name) {
+                    this.formData.category = element.id
+                }
+            });
             let data = {
                 'title': this.formData.title,
                 'date': this.formData.date,
                 'time': this.formData.time,
+                'category_id': this.formData.category,
                 'address_lat': this.formData.address_lat,
                 'address_lon': this.formData.address_lon,
                 'country': this.formData.country
             }
-            this.$store.dispatch('ajaxConferenceCreate', data)
-            this.$router.replace('/conferences')
+            this.$store.dispatch('ajaxConferenceCreate', data).then(() => {
+                this.$router.replace('/conferences')
+            })
+
         }
     },
     methods: {

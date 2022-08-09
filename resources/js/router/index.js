@@ -10,6 +10,9 @@ import List from '../components/Report/List.vue'
 import Details from '../components/Report/Details.vue'
 import Create from '../components/Report/Create.vue'
 import Edit from '../components/Report/Edit.vue'
+import UserPage from '../components/Auth/UserPage.vue'
+import UserFavorites from '../components/Auth/UserFavorites.vue'
+import Category from '../components/Category.vue'
 
 function isAuth(){
    return ("Authorized" in localStorage) ? true : false
@@ -139,6 +142,45 @@ export default new VueRouter({
             },
             component: Edit,
             name: 'Edit',
+        },
+        {
+            path:'/user',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
+            component: UserPage,
+            name: 'UserPage',
+        },
+        {
+            path:'/user/favorites',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
+            component: UserFavorites,
+            name: 'UserFavorites',
+        },
+        {
+            path:'/categories',
+            beforeEnter(to, from, next){
+                if(!isAuth()){
+                    next('/conferences')
+                }    
+                else{
+                    next()
+                }
+            },
+            component: Category,
+            name: 'Category',
         }
     ]
 })

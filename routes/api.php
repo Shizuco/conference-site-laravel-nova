@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\ReportController;
@@ -24,13 +25,22 @@ Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name(
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/user/change', [UserController::class, 'update']);
 
     Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
     Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);
     Route::post('/isOnConference/{id}', [UserController::class, 'getConference']);
+    Route::get('/isFavorite/{id}', [UserController::class, 'isFavorite']);
+    Route::get('/favorite', [UserController::class, 'getFavorite']);
+    Route::post('/favorite/{id}', [UserController::class, 'favorite']);
+    Route::post('/unfavorite/{id}', [UserController::class, 'unfavorite']);
 
+    Route::get('/currentCategory/{id}', [CategoryController::class, 'currentCategory']);
+    Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
+    Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
-
+    Route::get('/category/{id}/getConferences', [CategoryController::class, 'getConferences']);
+    Route::get('/category/{id}/getReports', [CategoryController::class, 'getReports']);
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);
     Route::get('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'show']);
     Route::get('/conferences/{conference_id}/reports/{report_id}/file', [ReportController::class, 'getFile']);
@@ -51,6 +61,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('/conferences/{id}', [ConferenceController::class, 'destroy']);
         Route::post('/conferences', [ConferenceController::class, 'store']);
         Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
+
+        Route::get('/categories', [CategoryController::class, 'index']);
+
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
+
     });
 });
 

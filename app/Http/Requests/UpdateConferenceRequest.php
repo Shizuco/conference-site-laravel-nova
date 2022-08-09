@@ -38,14 +38,14 @@ class UpdateConferenceRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'Название обезательно!',
-            'title.min' => 'Минимальное длинна названия 2 символа, введите еще!',
-            'title.max' => 'Максимальная длинна названия 255 символа, Вы ввели слишком много!',
-            'date.required' => 'Дата обезательна!',
-            'time.required' => 'Время обезательно!',
-            'country.required' => 'Страна обезательна!',
-            'address_lat.required' => 'Широта обезательна!',
-            'address_lon.required' => 'Долгота обезательна!',
+            'title.required' => 'Title is required!',
+            'title.min' => 'Minimun length of title is 2!',
+            'title.max' => 'Maximum length of title is 255!',
+            'date.required' => 'Date required!',
+            'time.required' => 'Time required!',
+            'country.required' => 'Country required!',
+            'address_lat.required' => 'Latitud required!',
+            'address_lon.required' => 'Longitude requred!',
             'address_lat.min' => 'Минимальное значение широты -90',
             'address_lat.max' => 'Максимальное значение широты 90',
             'address_lon.min' => 'Минимальное значение долготы -180',
