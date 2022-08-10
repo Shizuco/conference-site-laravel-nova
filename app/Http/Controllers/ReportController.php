@@ -24,6 +24,11 @@ class ReportController extends Controller
         return response()->json(Report::where('conference_id', $id)->paginate(5));
     }
 
+    public function reportsByName(Request $request)
+    {
+        return response()->json(Report::where('thema', $request->rep_title)->paginate(5));
+    }
+
     public function reportsWithFilters(Request $request, int $id){
         $query = Report::where('duration', '=', $request->duration * 60);
         if($request->cat !== null){

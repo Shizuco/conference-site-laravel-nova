@@ -34,6 +34,11 @@ class ConferenceController extends Controller
         return response()->json($query->paginate(5));
     }
 
+    public function conferencesByName(Request $request)
+    {
+        return response()->json(Conference::where('title', $request->conf_title)->paginate(5));
+    }
+
     public function show(int $id)
     {
         $time = $this->hasTime($id);

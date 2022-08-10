@@ -130,6 +130,48 @@ export default new Vuex.Store({
                     console.log(error.response.data.message);
                 });
         },
+        ajaxGetConferenceByName({commit}, data){
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url:
+                    "api/conferencesByName?page=" +
+                    data[0] +
+                    "&conf_title=" +
+                    data[1],
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }) .then((response) => {
+                console.log(response.data);
+                commit("setConferences", response.data);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });
+        },
+        ajaxGetReportsByName({commit}, data){
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url:
+                    "api/reportsByName?page=" +
+                    data[0] +
+                    "&rep_title=" +
+                    data[1],
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }) .then((response) => {
+                console.log(response.data);
+                commit("setReports", response.data);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });
+        },
         ajaxGetConference({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({

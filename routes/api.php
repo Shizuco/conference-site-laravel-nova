@@ -40,6 +40,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
     Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
     Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
+    Route::get('/conferencesByName', [ConferenceController::class, 'conferencesByName']);
+    Route::get('/reportsByName', [ReportController::class, 'reportsByName']);
     Route::get('/category/{id}/getConferences', [CategoryController::class, 'getConferences']);
     Route::get('/category/{id}/getReports', [CategoryController::class, 'getReports']);
     Route::get('/conferences/{id}/reports', [ReportController::class, 'index']);

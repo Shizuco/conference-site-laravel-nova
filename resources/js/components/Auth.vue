@@ -1,7 +1,7 @@
 <template>
    <v-app>
-      <v-app-bar app flat color="black">
-         <filter/>
+      <v-app-bar app fluid color="black">
+         <filter />
          <v-toolbar-title class="text-uppercase grey--text">
             <span>
                <v-btn v-if="!isAuth()" depressed color="primary" small>
@@ -46,6 +46,12 @@
                   </router-link>
                </v-btn>
             </span>
+            <span>
+               <v-btn depressed small v-if="isAuth()">
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Search' }">Search
+                  </router-link>
+               </v-btn>
+            </span>
          </v-toolbar-title>
       </v-app-bar>
    </v-app>
@@ -53,6 +59,9 @@
 
 <script>
 export default {
+   data: () => ({
+      message2: ' '
+   }),
    mounted() {
       this.$store.dispatch('ajaxGetFavorites')
    },
@@ -78,7 +87,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #fav {
    color: azure;
    text-transform: lowercase;
