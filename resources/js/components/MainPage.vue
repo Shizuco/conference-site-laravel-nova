@@ -3,7 +3,8 @@
         <auth style="height: 80px"></auth>
         <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550">
             <div v-for="name in categories" :value="name" :key="name.id">
-                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name" @change="getConferences()">
+                <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
+                    @change="count++; getConferences()">
                 </v-checkbox>
             </div>
             <v-col cols="12" sm="10" md="26">
@@ -18,7 +19,7 @@
                         <v-btn text color="primary" @click="menu = false">
                             Cancel
                         </v-btn>
-                        <v-btn text color="primary" @click="$refs.menu.save(date); getConferences()">
+                        <v-btn text color="primary" @click="$refs.menu.save(date); count++; getConferences()">
                             OK
                         </v-btn>
                     </v-date-picker>
@@ -36,7 +37,7 @@
                         <v-btn text color="primary" @click="menu2 = false">
                             Cancel
                         </v-btn>
-                        <v-btn text color="primary" @click="$refs.menu2.save(date2); getConferences()">
+                        <v-btn text color="primary" @click="$refs.menu2.save(date2); count++; getConferences()">
                             OK
                         </v-btn>
                     </v-date-picker>
@@ -134,7 +135,6 @@ export default {
             });
         },
         getConferences(page = 1) {
-            console.log(this.count)
             if (this.count == 0) {
                 this.sortedProducts = []
                 this.getAllConferences(page)
@@ -169,7 +169,7 @@ export default {
                 return this.$store.getters.getConferences;
             })
         },
-        resetFilters(){
+        resetFilters() {
             this.$router.go()
         }
     }

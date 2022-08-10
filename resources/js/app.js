@@ -34,6 +34,7 @@ Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('Pagination', LaravelVuePagination);
 Vue.component('Slide', Slide)
+Vue.component('vue-skeleton-loader', VueSkeletonLoader);
 
 import VueMask from 'v-mask'
 import store from './store'
@@ -55,6 +56,8 @@ import VTreeview from "v-treeview"
 import VueBreadcrumbs from 'vue-breadcrumbs'
 import { Slide } from 'vue-burger-menu'
 import LaravelVuePagination from 'laravel-vue-pagination';
+import VueSkeletonLoader from 'skeleton-loader-vue';
+
 
 Vue.use(VueBreadcrumbs)
 Vue.use(DatetimePicker)

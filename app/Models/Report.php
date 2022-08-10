@@ -18,6 +18,7 @@ class Report extends Model
         'category_id',
         'conference_id',
         'user_id',
+        'duration',
         'thema',
         'start_time',
         'end_time',
