@@ -22,7 +22,7 @@
                                 <span>
                                     <v-btn x-big depressed color="success">
                                         <router-link class="white--text" style="text-decoration: none; color: inherit;"
-                                            :to="{ name: 'ConferenceDetails', params: { id: conference.id } }">
+                                            :to="{ name: 'ConferenceDetails', params: { id: conference.id } }" target="_blank">
                                             More
                                         </router-link>
                                     </v-btn>
@@ -42,7 +42,7 @@
                                 <span>
                                     <v-btn x-big depressed color="success">
                                         <router-link class="white--text" style="text-decoration: none; color: inherit;"
-                                            :to="{ name: 'Details', params: { id: report.conference_id, rep_id: report.id } }">
+                                            :to="{ name: 'Details', params: { id: report.conference_id, rep_id: report.id } }" target="_blank">
                                             More
                                         </router-link>
                                     </v-btn>
