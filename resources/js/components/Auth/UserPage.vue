@@ -92,11 +92,7 @@
                                         </v-row>
                                         <br>
                                         <v-btn type="submit" class="rounded-0" color="#000000" x-large block dark>
-                                            Regestration</v-btn>
-                                        <v-card-actions class="text--secondary">
-                                            <v-spacer></v-spacer>
-                                            Have account? <router-link :to="{ name: 'Auth' }">Log in</router-link>
-                                        </v-card-actions>
+                                            change</v-btn>
                                     </ValidationObserver>
                                 </v-form>
                             </v-card-text>
