@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
-        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550">
+        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550" v-if="isAuth()">
             <div v-for="name in categories" :value="name" :key="name.id">
                 <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
                     @change="count++; getConferences()">
@@ -51,7 +51,9 @@
                 <v-btn x-big depressed color="error" @click="resetFilters">Reset</v-btn>
             </v-col>
         </Slide>
+        
         <div class="row justify-content-center">
+            <skeleton v-if="sortedProducts.length == 0"></skeleton>
             <div class="col-md-8" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
                 <v-card elevation="3">
                     <v-card-title>{{ conference.title }}</v-card-title>
@@ -78,7 +80,7 @@
                         </span>
                     </v-card-text>
                 </v-card>
-            </div>
+            </div>   
             <Pagination :data="data" @pagination-change-page="getConferences" />
         </div>
     </v-app>
@@ -104,6 +106,7 @@ export default {
         count: 0
     }),
     mounted() {
+        console.log(this.sortedProducts)
         this.getConferences()
         this.$store.dispatch('ajaxGetCategories').then(() => {
             this.$store.getters.getCategories.forEach(element => {

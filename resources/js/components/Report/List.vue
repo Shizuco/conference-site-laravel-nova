@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
-        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550">
+        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550"  v-if="isAuth()">
             <div v-for="name in categories" :value="name" :key="name.id">
                 <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
                     @change="count++; getReports()">
@@ -52,6 +52,7 @@
             </v-col>
         </Slide>
         <div class="row justify-content-center">
+            <skeleton v-if="sortedProducts.length == 0"></skeleton>
             <div class="col-md-8" v-for="report in sortedProducts" :value="report.id" :key="report.id">
                 <v-card elevation="3">
                     <v-card-title>{{ report.thema }}</v-card-title>

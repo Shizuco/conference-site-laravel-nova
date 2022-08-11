@@ -52,6 +52,12 @@
                   </router-link>
                </v-btn>
             </span>
+            <span>
+               <v-btn depressed small>
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
+                  </router-link>
+               </v-btn>
+            </span>
          </v-toolbar-title>
       </v-app-bar>
    </v-app>

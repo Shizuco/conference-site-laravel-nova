@@ -3,7 +3,7 @@
         <v-app-bar app color="black">
             <v-list-item-group>
                 <v-list-item>
-                    <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Конференции</router-link>
+                    <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Conferences</router-link>
                 </v-list-item>
             </v-list-item-group>
         </v-app-bar>
@@ -92,11 +92,7 @@
                                         </v-row>
                                         <br>
                                         <v-btn type="submit" class="rounded-0" color="#000000" x-large block dark>
-                                            Regestration</v-btn>
-                                        <v-card-actions class="text--secondary">
-                                            <v-spacer></v-spacer>
-                                            Have account? <router-link :to="{ name: 'Auth' }">Log in</router-link>
-                                        </v-card-actions>
+                                            update</v-btn>
                                     </ValidationObserver>
                                 </v-form>
                             </v-card-text>
@@ -153,7 +149,6 @@ export default {
                 surname: this.formData.surname,
                 phone: this.form.telephone
             }
-            console.log(data)
             this.$store.dispatch('changeUserData', data).then(() => {
             let data = {
                email: this.formData.email,
@@ -163,7 +158,6 @@ export default {
                this.$router.replace('/conferences')
             })
          }).catch(error => {
-                console.log(error.response.data.errors)
                 this.$refs.form.setErrors({
                     email: error.response.data.errors.email,
                     name: error.response.data.errors.name,

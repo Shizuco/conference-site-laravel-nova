@@ -279,9 +279,6 @@ export default new Vuex.Store({
                     commit("setUser", response.data);
                     localStorage.setItem("Authorized", response.data.token);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetFavorites({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");

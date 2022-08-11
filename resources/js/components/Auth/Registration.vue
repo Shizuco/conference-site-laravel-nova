@@ -155,7 +155,6 @@ export default {
                this.$router.go()
             })
          }).catch(error => {
-            console.log(error.response.data.errors)
             this.$refs.form.setErrors({
                email: error.response.data.errors.email,
                name: error.response.data.errors.name,

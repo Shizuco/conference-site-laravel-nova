@@ -31,6 +31,7 @@ Vue.component('userpage', require('./components/Auth/UserPage.vue').default);
 Vue.component('userfavorites', require('./components/Auth/UserFavorites.vue').default);
 Vue.component('category', require('./components/Category.vue').default);
 Vue.component('search', require('./components/Search.vue').default);
+Vue.component('skeleton', require('./components/Skeleton.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('Pagination', LaravelVuePagination);
