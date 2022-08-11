@@ -19,6 +19,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'role' => 'required|string',
+            'password' => 'required|string|min:8',
             'surname' => 'required|string',
             'birthday' => 'required|string',
             'country' => 'required|string',
