@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use App\Models\Conference;
 use App\Models\User;
@@ -28,7 +28,7 @@ class UserController extends Controller
         return json_encode(Auth::user()->conferences()->find($conferenceId));
     }
 
-    public function update(RegisterRequest $request)
+    public function update(UpdateUserRequest $request)
     {
         $fields = $request->validated();
         $fields['password'] = bcrypt($request->password);

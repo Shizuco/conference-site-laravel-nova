@@ -5,8 +5,10 @@ declare (strict_types = 1);
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Auth;
 
-class RegisterRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,9 +19,12 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'role' => 'required|string',
+            'email' => [
+                'required',
+                Rule::unique('users')->ignore(Auth::user()->id),
+            ],
             'password' => 'required|string|min:8',
+            'role' => 'required|string',
             'surname' => 'required|string',
             'birthday' => 'required|string',
             'country' => 'required|string',

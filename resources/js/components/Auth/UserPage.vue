@@ -3,7 +3,7 @@
         <v-app-bar app color="black">
             <v-list-item-group>
                 <v-list-item>
-                    <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Конференции</router-link>
+                    <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Conferences</router-link>
                 </v-list-item>
             </v-list-item-group>
         </v-app-bar>
@@ -92,11 +92,7 @@
                                         </v-row>
                                         <br>
                                         <v-btn type="submit" class="rounded-0" color="#000000" x-large block dark>
-                                            Regestration</v-btn>
-                                        <v-card-actions class="text--secondary">
-                                            <v-spacer></v-spacer>
-                                            Have account? <router-link :to="{ name: 'Auth' }">Log in</router-link>
-                                        </v-card-actions>
+                                            change</v-btn>
                                     </ValidationObserver>
                                 </v-form>
                             </v-card-text>
@@ -141,41 +137,40 @@ export default {
         getUser() {
             return this.$store.getters.getUser
         },
-        register() {
-            let data = {
-                name: this.formData.name,
-                email: this.formData.email,
-                password: this.formData.password,
-                password_confirmation: this.formData.password_confirmation,
-                country: this.formData.country,
-                birthday: this.formData.date,
-                role: this.getUser().role,
-                surname: this.formData.surname,
-                phone: this.form.telephone
-            }
-            console.log(data)
-            this.$store.dispatch('changeUserData', data).then(() => {
+         register() {
+         let data = {
+            name: this.formData.name,
+            email: this.formData.email,
+            password: this.formData.password,
+            password_confirmation: this.formData.password_confirmation,
+            country: this.formData.country,
+            birthday: this.formData.date,
+            role: this.getUser().role,
+            surname: this.formData.surname,
+            phone: this.form.telephone
+         }
+         this.$store.dispatch('changeUserData', data).then(() => {
             let data = {
                email: this.formData.email,
                password: this.formData.password,
             }
             this.$store.dispatch('auth', data).then(() => {
-               this.$router.replace('/conferences')
+               this.$router.go()
             })
          }).catch(error => {
-                console.log(error.response.data.errors)
-                this.$refs.form.setErrors({
-                    email: error.response.data.errors.email,
-                    name: error.response.data.errors.name,
-                    surname: error.response.data.errors.surname,
-                    password: error.response.data.errors.password,
-                    password_confimation: error.response.data.errors.password_confimation,
-                    country: error.response.data.errors.country,
-                    date: error.response.data.errors.birthday,
-                    phone: error.response.data.errors.phone
-                });
-            })
-        },
+            this.$refs.form.setErrors({
+               email: error.response.data.errors.email,
+               name: error.response.data.errors.name,
+               surname: error.response.data.errors.surname,
+               password: error.response.data.errors.password,
+               password_confimation: error.response.data.errors.password_confimation,
+               country: error.response.data.errors.country,
+               date: error.response.data.errors.birthday,
+               phone: error.response.data.errors.phone,
+               role: error.response.data.errors.role
+            });
+         })
+      },
     }
 }
 </script>
