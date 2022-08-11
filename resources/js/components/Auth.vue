@@ -1,6 +1,7 @@
 <template>
    <v-app>
-      <v-app-bar app flat color="black">
+      <v-app-bar app fluid color="black">
+         <filter />
          <v-toolbar-title class="text-uppercase grey--text">
             <span>
                <v-btn v-if="!isAuth()" depressed color="primary" small>
@@ -27,30 +28,33 @@
             </span>
             <span>
                <v-btn depressed small v-if="isAuth() && !isAdmin()">
-                  <router-link style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'UserPage' }">My Page
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserPage' }">My Page
                   </router-link>
                </v-btn>
             </span>
             <span>
                <v-btn depressed small v-if="isAuth() && !isAdmin()">
-                  <router-link style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'UserFavorites' }">My Favorites
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserFavorites' }">My
+                     Favorites
                   </router-link>
                   <v-badge inline :content="getFavorites()"></v-badge>
                </v-btn>
             </span>
             <span>
                <v-btn depressed small v-if="isAdmin()">
-                  <router-link style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'Category' }">Create category
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Category' }">Create category
+                  </router-link>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small v-if="isAuth()">
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Search' }">Search
                   </router-link>
                </v-btn>
             </span>
             <span>
                <v-btn depressed small>
-                  <router-link style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'MainPage' }">To main
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
                   </router-link>
                </v-btn>
             </span>
@@ -61,7 +65,10 @@
 
 <script>
 export default {
-   mounted(){
+   data: () => ({
+      message2: ' '
+   }),
+   mounted() {
       this.$store.dispatch('ajaxGetFavorites')
    },
    methods: {
@@ -76,8 +83,8 @@ export default {
       isAdmin() {
          return (this.$store.getters.getUser.role == "admin") ? true : false
       },
-      getFavorites(){
-         if(this.$store.getters.getFavorites.length > 99){
+      getFavorites() {
+         if (this.$store.getters.getFavorites.length > 99) {
             return '99+'
          }
          return this.$store.getters.getFavorites.length
@@ -86,13 +93,14 @@ export default {
 }
 </script>
 
-<style>
-#fav{
+<style scoped>
+#fav {
    color: azure;
    text-transform: lowercase;
-   display:inline-block;
+   display: inline-block;
 }
-#fav:first-letter{
+
+#fav:first-letter {
    text-transform: uppercase;
 }
 </style>

@@ -24,8 +24,8 @@ class CategoryController extends Controller
     public function subCategories(int $id)
     {
         $conf = Conference::whereId($id)->get();
-        $parent_id = $conf[0]->category_id;
-        return response()->json(Category::where('parent_id', $parent_id)->get());
+        $parentId = $conf[0]->category_id;
+        return response()->json(Category::where('parent_id', $parentId)->get());
     }
 
     public function currentCategory(int $id)
@@ -49,7 +49,7 @@ class CategoryController extends Controller
     }
     public function getConferences(int $id)
     {
-        return response()->json(Category::with('conferences')->whereId($id)->get());
+        return response()->json(Category::with('conferences')->whereId($id)->paginate(5));
     }
     public function getReports(int $id)
     {

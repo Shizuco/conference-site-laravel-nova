@@ -12,6 +12,7 @@ use Auth;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -20,7 +21,27 @@ class ReportController extends Controller
 {
     public function index(int $id)
     {
-        return response()->json(Report::where('conference_id', $id)->get());
+        return response()->json(Report::where('conference_id', $id)->paginate(5));
+    }
+
+    public function reportsByName(Request $request)
+    {
+        return response()->json(Report::where('thema', $request->rep_title)->paginate(5));
+    }
+
+    public function reportsWithFilters(Request $request, int $id){
+        $query = Report::where('duration', '=', $request->duration * 60);
+        if($request->cat !== null){
+            $cat = explode(",", $request->cat);
+            $query->with('category')->whereIn('category_id', $cat);
+        }
+        if($request->date !== null){
+            $query->where('start_time', '>=', $request->date.' 00:00:00');
+        }
+        if($request->date2 !== null){
+            $query->where('start_time', '<=', $request->date2.' 00:00:00.000');
+        }
+        return response()->json($query->paginate(5));
     }
 
     public function show(int $conferenceId, int $reportId)
@@ -138,6 +159,7 @@ class ReportController extends Controller
         $endTimeExist = new Datetime($request->end_time);
         $endTimeExist->setTimezone(new DateTimeZone('GMT'));
         $endTimeExist->add(new DateInterval('PT3H'));
+        $duration = ($endTimeExist->getTimestamp() - $startTimeExist->getTimestamp());
         $this->isReportDurationLessThanHour($startTimeExist, $endTimeExist);
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $id);
         $request->file('presentation')->storeAs('', $request->file('presentation')->getClientOriginalName());
@@ -148,6 +170,7 @@ class ReportController extends Controller
             $data['conference_id'] = $id;
             $data['category_id'] = $request->category_id;
             $data['user_id'] = Auth::user()->id;
+            $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
         } else {
@@ -163,6 +186,7 @@ class ReportController extends Controller
         $this->isReportDurationLessThanHour($startTimeExist, $endTimeExist);
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $conferenceId);
         $data = $request->validated();
+        $duration = ($endTimeExist->getTimestamp() - $startTimeExist->getTimestamp());
         if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
             $data['conference_id'] = $conferenceId;
             $data['user_id'] = Auth::user()->id;
@@ -172,6 +196,7 @@ class ReportController extends Controller
             } else {
                 $data['presentation'] = $rep->presentation;
             }
+            $data['duration'] = $duration;
             Report::whereId($reportId)->update($data);
         } else {
             $this->NearestTime($id);

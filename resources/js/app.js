@@ -30,8 +30,13 @@ Vue.component('edition', require('./components/Report/Edit.vue').default);
 Vue.component('userpage', require('./components/Auth/UserPage.vue').default);
 Vue.component('userfavorites', require('./components/Auth/UserFavorites.vue').default);
 Vue.component('category', require('./components/Category.vue').default);
+Vue.component('search', require('./components/Search.vue').default);
+Vue.component('skeleton', require('./components/Skeleton.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('Pagination', LaravelVuePagination);
+Vue.component('Slide', Slide)
+Vue.component('vue-skeleton-loader', VueSkeletonLoader);
 
 import VueMask from 'v-mask'
 import store from './store'
@@ -51,6 +56,10 @@ import VCalendar from 'v-calendar';
 import DatetimePicker from 'vuetify-datetime-picker'
 import VTreeview from "v-treeview"
 import VueBreadcrumbs from 'vue-breadcrumbs'
+import { Slide } from 'vue-burger-menu'
+import LaravelVuePagination from 'laravel-vue-pagination';
+import VueSkeletonLoader from 'skeleton-loader-vue';
+
 
 Vue.use(VueBreadcrumbs)
 Vue.use(DatetimePicker)

@@ -9,12 +9,34 @@ use App\Http\Requests\UpdateConferenceRequest;
 use App\Models\Conference;
 use App\Models\Report;
 use Datetime;
+use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
     public function index()
     {
-        return response()->json(Conference::all());
+        return response()->json(Conference::with('reports')->paginate(5));
+    }
+
+    public function conferencesWithFilters(Request $request)
+    {
+        $query = Conference::withCount('reports')->having('reports_count', '=', $request->number);
+        if ($request->cat !== null) {
+            $cat = explode(",", $request->cat);
+            $query->with('category')->whereIn('category_id', $cat);
+        }
+        if ($request->date !== null) {
+            $query->where('date', '>=', $request->date);
+        }
+        if ($request->date2 !== null) {
+            $query->where('date', '<=', $request->date2);
+        }
+        return response()->json($query->paginate(5));
+    }
+
+    public function conferencesByName(Request $request)
+    {
+        return response()->json(Conference::where('title', $request->conf_title)->paginate(5));
     }
 
     public function show(int $id)
@@ -42,7 +64,7 @@ class ConferenceController extends Controller
         Conference::findOrFail($id)->delete();
     }
 
-    public function hasTime(int $id)
+    private function hasTime(int $id)
     {
         $conference = Conference::findOrFail($id);
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();

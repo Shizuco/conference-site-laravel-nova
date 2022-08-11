@@ -92,7 +92,7 @@
                                         </v-row>
                                         <br>
                                         <v-btn type="submit" class="rounded-0" color="#000000" x-large block dark>
-                                            change</v-btn>
+                                            update</v-btn>
                                     </ValidationObserver>
                                 </v-form>
                             </v-card-text>
@@ -137,40 +137,39 @@ export default {
         getUser() {
             return this.$store.getters.getUser
         },
-         register() {
-         let data = {
-            name: this.formData.name,
-            email: this.formData.email,
-            password: this.formData.password,
-            password_confirmation: this.formData.password_confirmation,
-            country: this.formData.country,
-            birthday: this.formData.date,
-            role: this.getUser().role,
-            surname: this.formData.surname,
-            phone: this.form.telephone
-         }
-         this.$store.dispatch('changeUserData', data).then(() => {
+        register() {
+            let data = {
+                name: this.formData.name,
+                email: this.formData.email,
+                password: this.formData.password,
+                password_confirmation: this.formData.password_confirmation,
+                country: this.formData.country,
+                birthday: this.formData.date,
+                role: this.getUser().role,
+                surname: this.formData.surname,
+                phone: this.form.telephone
+            }
+            this.$store.dispatch('changeUserData', data).then(() => {
             let data = {
                email: this.formData.email,
                password: this.formData.password,
             }
             this.$store.dispatch('auth', data).then(() => {
-               this.$router.go()
+               this.$router.replace('/conferences')
             })
          }).catch(error => {
-            this.$refs.form.setErrors({
-               email: error.response.data.errors.email,
-               name: error.response.data.errors.name,
-               surname: error.response.data.errors.surname,
-               password: error.response.data.errors.password,
-               password_confimation: error.response.data.errors.password_confimation,
-               country: error.response.data.errors.country,
-               date: error.response.data.errors.birthday,
-               phone: error.response.data.errors.phone,
-               role: error.response.data.errors.role
-            });
-         })
-      },
+                this.$refs.form.setErrors({
+                    email: error.response.data.errors.email,
+                    name: error.response.data.errors.name,
+                    surname: error.response.data.errors.surname,
+                    password: error.response.data.errors.password,
+                    password_confimation: error.response.data.errors.password_confimation,
+                    country: error.response.data.errors.country,
+                    date: error.response.data.errors.birthday,
+                    phone: error.response.data.errors.phone
+                });
+            })
+        },
     }
 }
 </script>

@@ -34,11 +34,11 @@ class Conference extends Model
 
     public function reports()
     {
-        return $this->hasMany(Report::class, 'conference_user_reports');
+        return $this->hasMany(Report::class);
     }
 
-    public function categories()
+    public function category()
     {
-        return $this->belongsTo(Category::class, 'category_conference');
+        return $this->belongsTo(Category::class);
     }
 }

@@ -11,13 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    public $table = "conferece_user_reports";
+    public $table = "conference_user_reports";
     use HasFactory;
 
     protected $fillable = [
         'category_id',
         'conference_id',
         'user_id',
+        'duration',
         'thema',
         'start_time',
         'end_time',
