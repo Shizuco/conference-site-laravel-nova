@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('conference_user_reports', function (Blueprint $table) {
+        Schema::table('conferece_user_reports', function (Blueprint $table) {
             $table->string('duration');
         });
     }

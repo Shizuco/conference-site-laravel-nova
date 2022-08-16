@@ -34,8 +34,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/favorite', [UserController::class, 'getFavorite']);
     Route::post('/favorite/{id}', [UserController::class, 'favorite']);
     Route::post('/unfavorite/{id}', [UserController::class, 'unfavorite']);
-    Route::get('/conferencesWithFilters', [ConferenceController::class, 'conferencesWithFilters']);
-    Route::get('/reportsWithFilters/{id}', [ReportController::class, 'reportsWithFilters']);
     Route::get('/currentCategory/{id}', [CategoryController::class, 'currentCategory']);
     Route::get('/rootCategories', [CategoryController::class, 'rootCategories']);
     Route::get('/subCategories/{id}', [CategoryController::class, 'subCategories']);
@@ -64,12 +62,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('/conferences/{id}', [ConferenceController::class, 'destroy']);
         Route::post('/conferences', [ConferenceController::class, 'store']);
         Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
-
-        
-
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
-
     });
 });
 

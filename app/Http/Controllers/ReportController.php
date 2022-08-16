@@ -19,29 +19,28 @@ use Illuminate\Validation\ValidationException;
 
 class ReportController extends Controller
 {
-    public function index(int $id)
+    public function index(Request $request, int $id)
     {
-        return response()->json(Report::where('conference_id', $id)->paginate(5));
+        $query = Report::where('conference_id', $id);
+        if ($request->duration !== null) {
+            $query->where('duration', '=', $request->duration * 60);
+        }
+        if($request->categories !== null){
+            $categories = explode(",", $request->categories);
+            $query->with('category')->whereIn('category_id', $categories);
+        }
+        if($request->start_time !== null){
+            $query->where('start_time', '>=', $request->start_time.' 00:00:00');
+        }
+        if($request->end_time !== null){
+            $query->where('start_time', '<=', $request->end_time.' 00:00:00.000');
+        }
+        return response()->json($query->paginate(5));
     }
 
     public function reportsByName(Request $request)
     {
         return response()->json(Report::where('thema', $request->rep_title)->paginate(5));
-    }
-
-    public function reportsWithFilters(Request $request, int $id){
-        $query = Report::where('duration', '=', $request->duration * 60);
-        if($request->cat !== null){
-            $cat = explode(",", $request->cat);
-            $query->with('category')->whereIn('category_id', $cat);
-        }
-        if($request->date !== null){
-            $query->where('start_time', '>=', $request->date.' 00:00:00');
-        }
-        if($request->date2 !== null){
-            $query->where('start_time', '<=', $request->date2.' 00:00:00.000');
-        }
-        return response()->json($query->paginate(5));
     }
 
     public function show(int $conferenceId, int $reportId)

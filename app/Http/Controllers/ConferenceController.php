@@ -13,27 +13,24 @@ use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Conference::with('reports')->paginate(5));
-    }
-
-    public function conferencesWithFilters(Request $request)
-    {
-        $query = Conference::withCount('reports')->having('reports_count', '=', $request->number);
-        if ($request->cat !== null) {
-            $cat = explode(",", $request->cat);
-            $query->with('category')->whereIn('category_id', $cat);
+        $query = Conference::with('reports');
+        if ($request->number !== null) {
+            $query->withCount('reports')->having('reports_count', '=', $request->numberOfReports);
         }
-        if ($request->date !== null) {
-            $query->where('date', '>=', $request->date);
+        if ($request->categories !== null) {
+            $categories = explode(",", $request->categories);
+            $query->with('category')->whereIn('category_id', $categories);
         }
-        if ($request->date2 !== null) {
-            $query->where('date', '<=', $request->date2);
+        if ($request->dateFrom !== null) {
+            $query->where('date', '>=', $request->dateFrom);
+        }
+        if ($request->dateTo !== null) {
+            $query->where('date', '<=', $request->dateTo);
         }
         return response()->json($query->paginate(5));
     }
-
     public function conferencesByName(Request $request)
     {
         return response()->json(Conference::where('title', $request->conf_title)->paginate(5));

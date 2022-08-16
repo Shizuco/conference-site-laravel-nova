@@ -45,7 +45,7 @@
             </v-col>
             <v-col cols="12">
                 <v-slider v-model="numberOfReports" :thumb-size="24" thumb-label="always"
-                    @change="count++; getConferences()" max="10"></v-slider>
+                    @change="count++; number++; getConferences()" max="10"></v-slider>
             </v-col>
             <v-col>
                 <v-btn x-big depressed color="error" @click="resetFilters">Reset</v-btn>
@@ -102,8 +102,9 @@ export default {
         menu: false,
         modal: false,
         menu2: false,
-        numberOfReports: 0,
-        count: 0
+        numberOfReports: null,
+        count: 0,
+        number: 0
     }),
     mounted() {
         console.log(this.sortedProducts)
@@ -140,7 +141,7 @@ export default {
         getConferences(page = 1) {
             if (this.count == 0) {
                 this.sortedProducts = []
-                this.getAllConferences(page)
+                this.getAllConferences([page, this.numberOfReports, this.cats, this.date, this.date2])
             }
             else {
                 this.sortedProducts = []
@@ -150,7 +151,10 @@ export default {
                     })
                 })
                 this.cats = [...new Set(this.cats)]
-                this.$store.dispatch("ajaxGetConferencesF", [page, this.numberOfReports, this.cats, this.date, this.date2]).then(() => {
+                if(this.number == 0){
+                    this.numberOfReports = null
+                }
+                this.$store.dispatch("ajaxConferences", [page, this.numberOfReports, this.cats, this.date, this.date2]).then(() => {
                     this.$store.getters.getConferences.data.forEach(element => {
                         this.sortedProducts.push(element);
                     })

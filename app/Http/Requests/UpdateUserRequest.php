@@ -18,17 +18,15 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => 'string',
             'email' => [
-                'required',
                 Rule::unique('users')->ignore(Auth::user()->id),
             ],
-            'password' => 'required|string|min:8',
-            'role' => 'required|string',
-            'surname' => 'required|string',
-            'birthday' => 'required|string',
-            'country' => 'required|string',
-            'phone' => 'required|string'
+            'password' => 'string|min:8|nullable',
+            'surname' => 'string',
+            'birthday' => 'string',
+            'country' => 'string',
+            'phone' => 'string'
         ];
     }
 

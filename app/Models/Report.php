@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    public $table = "conference_user_reports";
+    public $table = "conferece_user_reports";
     use HasFactory;
 
     protected $fillable = [

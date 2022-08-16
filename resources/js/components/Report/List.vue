@@ -45,7 +45,7 @@
             </v-col>
             <v-col cols="12">
                 <v-slider v-model="duration" :thumb-size="24" thumb-label="always"
-                    @change="count++; getReports()" max="60" min="5" step="5"></v-slider>
+                    @change="count++; countForDuretion++; getReports()" max="60" min="5" step="5"></v-slider>
             </v-col>
             <v-col>
                 <v-btn x-big depressed color="error" @click="resetFilters">Reset</v-btn>
@@ -95,7 +95,8 @@ export default {
         modal: false,
         menu2: false,
         duration: 0,
-        count: 0
+        count: 0,
+        countForDuretion: 0
     }),
     mounted() {
         this.getReports()
@@ -112,7 +113,10 @@ export default {
         getReports(page = 1) {
             if (this.count == 0) {
                 this.sortedProducts = []
-                this.getAllReports(page, this.$route.params.id)
+                if(this.countForDuretion == 0){
+                    this.duration = ""
+                }
+                this.getAllReports([page, this.$route.params.id, this.duration, this.cats, this.date, this.date2])
             }
             else {
                 this.sortedProducts = []
@@ -122,7 +126,10 @@ export default {
                     })
                 })
                 this.cats = [...new Set(this.cats)]
-                this.$store.dispatch("ajaxGetReportsF", [page, this.$route.params.id, this.duration, this.cats, this.date, this.date2]).then(() => {
+                if(this.countForDuretion == 0){
+                    this.duration = ""
+                }
+                this.$store.dispatch("ajaxReports", [page, this.$route.params.id, this.duration, this.cats, this.date, this.date2]).then(() => {
                     this.$store.getters.getReports.data.forEach(element => {
                         this.sortedProducts.push(element);
                     })
@@ -133,9 +140,9 @@ export default {
                 this.cats = []
             }
         },
-        getAllReports(page, id) {
+        getAllReports(data) {
             this.sortedProducts = []
-            this.$store.dispatch('ajaxReports', [page, id]).then(() => {
+            this.$store.dispatch('ajaxReports', data).then(() => {
                 this.$store.getters.getReports.data.forEach(element => {
                     this.sortedProducts.push(element);
                 })
