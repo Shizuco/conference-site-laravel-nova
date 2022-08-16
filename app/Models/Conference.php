@@ -41,4 +41,22 @@ class Conference extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeFilters($query, $request)
+    {
+        if ($request->numberOfReports !== null) {
+            $query->withCount('reports')->having('reports_count', '=', $request->numberOfReports);
+        }
+        if ($request->categories !== null) {
+            $categories = explode(",", $request->categories);
+            $query->with('category')->whereIn('category_id', $categories);
+        }
+        if ($request->dateFrom !== null) {
+            $query->where('date', '>=', $request->dateFrom);
+        }
+        if ($request->dateTo !== null) {
+            $query->where('date', '<=', $request->dateTo);
+        }
+        return $query->paginate(5);
+    }
 }

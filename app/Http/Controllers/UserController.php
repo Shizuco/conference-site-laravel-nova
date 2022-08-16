@@ -31,8 +31,20 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $fields = $request->validated();
-        $fields['password'] = bcrypt($request->password);
+        if($request->password !== null){
+            $fields['password'] = bcrypt($request->password);  
+        }
+        else{
+            unset($fields['password']);
+        }
         User::whereId(Auth::user()->id)->update($fields);
+        $user = User::where('email', $request->email)->first();
+        $token = $user->createToken('mytasktoken')->plainTextToken;
+        $response = [
+            'user' => $user,
+            'token' => $token,
+        ];
+        return response()->json($response, 201);
     }
 
     public function isFavorite(int $id){

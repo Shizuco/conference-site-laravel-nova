@@ -73,62 +73,19 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        ajaxConferences({ commit }, page) {
+        ajaxConferences({ commit }, data) {
             return axios
-                .get("api/conferences?page=" + page)
+                .get("api/conferences?page=" +
+                data[0] +
+                "&numberOfReports=" +
+                data[1] + 
+                "&categories=" + 
+                data[2] + '&dateFrom=' + data[3] + '&dateTo=' + data[4],)
                 .then((response) => {
+                    console.log(response.data)
                     commit("setConferences", response.data);
                 })
-                .catch((error) => {});
-        },
-        ajaxGetConferencesF({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/conferencesWithFilters?page=" +
-                    data[0] +
-                    "&number=" +
-                    data[1] + 
-                    "&cat=" + 
-                    data[2] + '&date=' + data[3] + '&date2=' + data[4],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setConferences", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response.data.message);
-                });
-        },
-        ajaxGetReportsF({commit}, data){
-            console.log(data)
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/reportsWithFilters/" + data[1] + "?page=" +
-                    data[0] +
-                    "&duration=" +
-                    data[2] + 
-                    "&cat=" + 
-                    data[3] + '&date=' + data[4] + '&date2=' + data[5],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setReports", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response.data.message);
-                });
+                .catch((error) => {console.log(error.response)});
         },
         ajaxGetConferenceByName({commit}, data){
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -259,7 +216,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             }).then(function (response) {
-                console.log(response);
                 commit("setUser", response.data);
                 localStorage.setItem("Authorized", response.data.token);
             });
@@ -411,7 +367,10 @@ export default new Vuex.Store({
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
-                url: "api/conferences/" + data[1] + "/reports?page=" + data[0],
+                url: "api/conferences/" + data[1] + "/reports?page=" + data[0] + "&duration=" +
+                data[2] + 
+                "&categories=" + 
+                data[3] + '&start_time=' + data[4] + '&end_time=' + data[5],
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",

@@ -145,19 +145,11 @@ export default {
                 password_confirmation: this.formData.password_confirmation,
                 country: this.formData.country,
                 birthday: this.formData.date,
-                role: this.getUser().role,
                 surname: this.formData.surname,
                 phone: this.form.telephone
             }
-            this.$store.dispatch('changeUserData', data).then(() => {
-            let data = {
-               email: this.formData.email,
-               password: this.formData.password,
-            }
-            this.$store.dispatch('auth', data).then(() => {
-               this.$router.replace('/conferences')
-            })
-         }).catch(error => {
+            this.$store.dispatch('changeUserData', data).catch(error => {
+            console.log(error.response)
                 this.$refs.form.setErrors({
                     email: error.response.data.errors.email,
                     name: error.response.data.errors.name,

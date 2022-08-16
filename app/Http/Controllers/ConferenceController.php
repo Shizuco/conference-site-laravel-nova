@@ -13,27 +13,10 @@ use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Conference::with('reports')->paginate(5));
+        return response()->json(Conference::Filters($request));
     }
-
-    public function conferencesWithFilters(Request $request)
-    {
-        $query = Conference::withCount('reports')->having('reports_count', '=', $request->number);
-        if ($request->cat !== null) {
-            $cat = explode(",", $request->cat);
-            $query->with('category')->whereIn('category_id', $cat);
-        }
-        if ($request->date !== null) {
-            $query->where('date', '>=', $request->date);
-        }
-        if ($request->date2 !== null) {
-            $query->where('date', '<=', $request->date2);
-        }
-        return response()->json($query->paginate(5));
-    }
-
     public function conferencesByName(Request $request)
     {
         return response()->json(Conference::where('title', $request->conf_title)->paginate(5));
