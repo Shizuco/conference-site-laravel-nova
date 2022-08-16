@@ -21,21 +21,7 @@ class ReportController extends Controller
 {
     public function index(Request $request, int $id)
     {
-        $query = Report::where('conference_id', $id);
-        if ($request->duration !== null) {
-            $query->where('duration', '=', $request->duration * 60);
-        }
-        if($request->categories !== null){
-            $categories = explode(",", $request->categories);
-            $query->with('category')->whereIn('category_id', $categories);
-        }
-        if($request->start_time !== null){
-            $query->where('start_time', '>=', $request->start_time.' 00:00:00');
-        }
-        if($request->end_time !== null){
-            $query->where('start_time', '<=', $request->end_time.' 00:00:00.000');
-        }
-        return response()->json($query->paginate(5));
+        return response()->json(Report::Filters($request, $id));
     }
 
     public function reportsByName(Request $request)

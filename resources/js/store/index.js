@@ -82,6 +82,7 @@ export default new Vuex.Store({
                 "&categories=" + 
                 data[2] + '&dateFrom=' + data[3] + '&dateTo=' + data[4],)
                 .then((response) => {
+                    console.log(response.data)
                     commit("setConferences", response.data);
                 })
                 .catch((error) => {console.log(error.response)});

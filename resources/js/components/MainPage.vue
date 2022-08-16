@@ -141,6 +141,9 @@ export default {
         getConferences(page = 1) {
             if (this.count == 0) {
                 this.sortedProducts = []
+                if(this.number == 0){
+                    this.numberOfReports = ""
+                }
                 this.getAllConferences([page, this.numberOfReports, this.cats, this.date, this.date2])
             }
             else {
@@ -152,7 +155,7 @@ export default {
                 })
                 this.cats = [...new Set(this.cats)]
                 if(this.number == 0){
-                    this.numberOfReports = null
+                    this.numberOfReports = ""
                 }
                 this.$store.dispatch("ajaxConferences", [page, this.numberOfReports, this.cats, this.date, this.date2]).then(() => {
                     this.$store.getters.getConferences.data.forEach(element => {

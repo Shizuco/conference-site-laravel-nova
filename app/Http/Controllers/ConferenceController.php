@@ -15,21 +15,7 @@ class ConferenceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Conference::with('reports');
-        if ($request->number !== null) {
-            $query->withCount('reports')->having('reports_count', '=', $request->numberOfReports);
-        }
-        if ($request->categories !== null) {
-            $categories = explode(",", $request->categories);
-            $query->with('category')->whereIn('category_id', $categories);
-        }
-        if ($request->dateFrom !== null) {
-            $query->where('date', '>=', $request->dateFrom);
-        }
-        if ($request->dateTo !== null) {
-            $query->where('date', '<=', $request->dateTo);
-        }
-        return response()->json($query->paginate(5));
+        return response()->json(Conference::Filters($request));
     }
     public function conferencesByName(Request $request)
     {
