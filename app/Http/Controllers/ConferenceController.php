@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
+use App\Jobs\SendMailWithQueue;
 use App\Models\Conference;
 use App\Models\Report;
 use Datetime;
@@ -17,6 +18,7 @@ class ConferenceController extends Controller
     {
         return response()->json(Conference::Filters($request));
     }
+
     public function conferencesByName(Request $request)
     {
         return response()->json(Conference::where('title', $request->conf_title)->paginate(5));
@@ -44,6 +46,17 @@ class ConferenceController extends Controller
 
     public function destroy(int $id)
     {
+        $users = Conference::with('users')->whereId($id)->get();
+        $usersEmails = [];
+        foreach($users as $user){
+            foreach($user->users as $userEmail){
+                array_push($usersEmails, $userEmail->email);
+            }
+            
+        }
+        foreach($usersEmails as $email){
+            dispatch(new SendMailWithQueue($email, 'delete'));
+        }
         Conference::findOrFail($id)->delete();
     }
 

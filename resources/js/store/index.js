@@ -74,6 +74,7 @@ export default new Vuex.Store({
     },
     actions: {
         ajaxConferences({ commit }, data) {
+            console.log(data)
             return axios
                 .get("api/conferences?page=" +
                 data[0] +
