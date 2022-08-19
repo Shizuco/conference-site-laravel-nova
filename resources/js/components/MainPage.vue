@@ -6,7 +6,7 @@
             </v-col>
             <v-col align="right" style=" z-index: 100; position: relative; height: fit-content; top: -3px;">
                 <v-text-field @click="toggleMarker" @click:append="toggleMarker" clickable solo color="white"
-                    placeholder="Search..." :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'">
+                    placeholder="Search..." v-model="title" :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'">
                 </v-text-field>
             </v-col>
             <v-col align="right" style=" z-index: 100; height: 94px; width: 30px; top: -20px; position: relative;">
