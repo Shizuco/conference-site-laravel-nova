@@ -180,7 +180,7 @@ export default {
                 'comment': this.comment
             }
             this.$store.dispatch('ajaxSendComment', [this.getReport.conference_id, this.getReport.id, data]).then(() => {
-                this.$router.go()
+                //this.$router.go()
             })
 
         },

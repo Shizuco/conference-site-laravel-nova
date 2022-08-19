@@ -305,12 +305,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            }).then((response) => {
-                
             })
-            .catch((error) => {
-                console.log(error.response);
-            });;
         },
         userConferenceOut({ commit }, conference_id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
