@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportRequest;
+use App\Jobs\SendMailWithQueue;
 use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
@@ -158,6 +159,7 @@ class ReportController extends Controller
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
+            $this->sendMessage($request, $id);
         } else {
             $this->NearestTime($id);
         }
@@ -198,5 +200,33 @@ class ReportController extends Controller
     {
         $rep = Report::findOrFail($reportId);
         return response()->download(storage_path() . "/app/" . $rep->presentation);
+    }
+
+    private function sendMessage(CreateReportRequest $request, int $id)
+    {
+        if (Auth::user()->role == 'announcer') {
+            $startTimeExist = new Datetime($request->start_time);
+            $startTimeExist->setTimezone(new DateTimeZone('GMT'));
+            $startTimeExist->add(new DateInterval('PT3H'));
+            $startTimeExist = $startTimeExist->format('Y-m-d H:i:s');
+            $users = Conference::with('users')->whereId($id)->get();
+            $report = Report::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+            $usersEmails = [];
+            $message = '';
+            foreach ($users as $user) {
+                $confLink = env('APP_URL') . '#/conferences/' . $id;
+                $repLink = env('APP_URL') . '#/conferences/' . $id . '/reports/' . $report->id;
+                $message = 'Good afternoon, a new participant ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' ('. '<a href=' . $confLink . '>conference</a>'. ') with a report on the topic ' . $request->thema . ' ('. '<a href=' . $repLink . '>report</a>)</br>
+                Presentation time: ' . $startTimeExist;
+                foreach ($user->users as $user) {
+                    if ($user->role == 'listener') {
+                        array_push($usersEmails, $user->email);
+                    }
+                }
+            }
+            foreach ($usersEmails as $email) {
+                dispatch(new SendMailWithQueue($email, $message));
+            }
+        }
     }
 }

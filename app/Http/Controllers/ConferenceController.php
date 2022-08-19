@@ -46,18 +46,7 @@ class ConferenceController extends Controller
 
     public function destroy(int $id)
     {
-        $users = Conference::with('users')->whereId($id)->get();
-        $usersEmails = [];
-        $message = '';
-        foreach($users as $user){
-            $message = 'Good afternoon, unfortunately the conference '. $user->title . ' has been deleted by the administration.';
-            foreach($user->users as $userEmail){
-                array_push($usersEmails, $userEmail->email);
-            }     
-        }
-        foreach($usersEmails as $email){
-            dispatch(new SendMailWithQueue($email, $message));
-        }
+        $this->sendMessage($id);
         Conference::findOrFail($id)->delete();
     }
 
@@ -91,5 +80,20 @@ class ConferenceController extends Controller
         }
 
         return ($hasTime !== 0) ? true : false;
+    }
+
+    private function sendMessage(int $id){
+        $users = Conference::with('users')->whereId($id)->get();
+        $usersEmails = [];
+        $message = '';
+        foreach($users as $user){
+            $message = 'Good afternoon, unfortunately the conference '. $user->title . ' has been deleted by the administration.';
+            foreach($user->users as $userEmail){
+                array_push($usersEmails, $userEmail->email);
+            }     
+        }
+        foreach($usersEmails as $email){
+            dispatch(new SendMailWithQueue($email, $message));
+        }
     }
 }

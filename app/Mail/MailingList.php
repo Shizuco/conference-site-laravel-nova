@@ -41,6 +41,5 @@ class MailingList extends Mailable
             ->with([
                 'text' => $this->emailText
             ]);;
-        //return $this->view('mail', ['text' => $this->emailText]);
     }
 }

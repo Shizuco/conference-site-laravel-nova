@@ -28,7 +28,7 @@
  </tr>
  <tr>
   <td style="padding: 20px 0 30px 0;">
-   {{$text}}
+   {!! $text !!}
   </td>
  </tr>
 </table>
