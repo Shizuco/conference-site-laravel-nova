@@ -3,9 +3,10 @@
 declare (strict_types = 1);
 
 namespace App\Http\Controllers;
-
+use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\Conference;
 use Auth;
 
 class UserController extends Controller
@@ -13,6 +14,9 @@ class UserController extends Controller
 
     public function conferenceJoin(int $conferenceId)
     {
+        if (Auth::user()->role === 'listener') {
+            $this->sendMessage($conferenceId);
+        }
         Auth::user()->conferences()->attach($conferenceId);
     }
 
@@ -62,6 +66,25 @@ class UserController extends Controller
     public function unfavorite(int $reportId)
     {
         Auth::user()->favorite_reports()->detach($reportId);
+    }
+
+    private function sendMessage(int $id)
+    {
+        $users = Conference::with('users')->whereId($id)->get();
+        $usersEmails = [];
+        $message = '';
+        foreach ($users as $user) {
+            $confLink = env('APP_URL') . '#/conferences/' . $id;
+            $message = 'Good afternoon, a new listener ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ')';
+            foreach ($user->users as $user) {
+                if ($user->role == 'announcer') {
+                    array_push($usersEmails, $user->email);
+                }
+            }
+        }
+        foreach ($usersEmails as $email) {
+            dispatch(new SendMailWithQueue($email, $message));
+        }
     }
 
 }

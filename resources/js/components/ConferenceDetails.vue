@@ -143,7 +143,7 @@ export default {
                 this.$router.replace({ name: 'Create' })
             }
             else {
-                this.$router.go()
+                //this.$router.go()
             }
         },
         out() {
