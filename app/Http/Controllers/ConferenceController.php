@@ -21,7 +21,7 @@ class ConferenceController extends Controller
 
     public function conferencesByName(Request $request)
     {
-        return response()->json(Conference::where('title', $request->conf_title)->paginate(5));
+        return response()->json(Conference::where('title', 'LIKE', "%{$request->conf_title}%")->paginate(5));
     }
 
     public function show(int $id)

@@ -27,7 +27,7 @@ class ReportController extends Controller
 
     public function reportsByName(Request $request)
     {
-        return response()->json(Report::where('thema', $request->rep_title)->paginate(5));
+        return response()->json(Report::where('thema', 'LIKE', "%{$request->rep_title}%")->paginate(5));
     }
 
     public function show(int $conferenceId, int $reportId)
