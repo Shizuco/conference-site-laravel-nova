@@ -64,6 +64,10 @@
                     <v-btn v-if="isFavorite.length > 0" @click="out()" x-big block color="error" class="white--text">
                         Delete from favorite</v-btn>
                 </v-col>
+                <v-col>
+                    <v-btn v-if="getUser.role == 'admin'" @click="deleteReport()" x-big block color="error" class="white--text">
+                        Delete report</v-btn>
+                </v-col>
             </v-col>
         </v-row>
     </v-app>
@@ -163,6 +167,12 @@ export default {
                 link.click();
             });
         },
+        deleteReport(){
+            let report_id = this.$store.getters.getReport.id
+            this.$store.dispatch('ajaxReportDelete', [this.getReport.conference_id, report_id]).then(() => {
+                this.$router.replace('/conferences')
+            })
+        },
         join() {
             let report_id = this.$store.getters.getReport.id
             this.$store.dispatch('ajaxAddToFavorites', report_id).then(() => {
@@ -180,7 +190,7 @@ export default {
                 'comment': this.comment
             }
             this.$store.dispatch('ajaxSendComment', [this.getReport.conference_id, this.getReport.id, data]).then(() => {
-                //this.$router.go()
+                this.$router.go()
             })
 
         },

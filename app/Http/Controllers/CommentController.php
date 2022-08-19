@@ -60,7 +60,7 @@ class CommentController extends Controller
     private function sendMessage(int $id)
     {
         $reports = Report::with('users')->whereId($id)->get();
-        $usersEmail = '';
+        $user = '';
         $message = '';
         foreach ($reports as $report) {
             $conference = Conference::whereId($report->conference_id)->first();

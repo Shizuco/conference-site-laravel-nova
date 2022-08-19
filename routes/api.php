@@ -49,10 +49,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/conferences/report/{id}/comment', [CommentController::class, 'index']);
     Route::post('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'store']);
+    Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
 
     Route::group(['middleware' => ['isRigthAnnouncer']], function () {
         Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
-        Route::delete('/conferences/{conference_id}/reports', [ReportController::class, 'destroy']);
         Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
     });
 

@@ -159,7 +159,7 @@ class ReportController extends Controller
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             Report::create($data);
-            $this->sendMessage($request, $id);
+            $this->sendMessage($request, $id, 0);
         } else {
             $this->NearestTime($id);
         }
@@ -190,10 +190,11 @@ class ReportController extends Controller
         }
     }
 
-    public function destroy(int $conferenceId)
+    public function destroy(int $conferenceId, int $report_id)
     {
-        $rep = Report::where('user_id', Auth::user()->id)->where('conference_id', $conferenceId)->get();
-        $rep[0]->delete();
+        $rep = Report::whereId($report_id)->first();
+        $this->sendMessage(0, $conferenceId, $rep);
+        $rep->delete();
     }
 
     public function getFile(int $conferenceId, int $reportId)
@@ -202,7 +203,7 @@ class ReportController extends Controller
         return response()->download(storage_path() . "/app/" . $rep->presentation);
     }
 
-    private function sendMessage(CreateReportRequest $request, int $id)
+    private function sendMessage($request, int $id, $report)
     {
         if (Auth::user()->role == 'announcer') {
             $startTimeExist = new Datetime($request->start_time);
@@ -216,7 +217,7 @@ class ReportController extends Controller
             foreach ($users as $user) {
                 $confLink = env('APP_URL') . '#/conferences/' . $id;
                 $repLink = env('APP_URL') . '#/conferences/' . $id . '/reports/' . $report->id;
-                $message = 'Good afternoon, a new participant ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' ('. '<a href=' . $confLink . '>conference</a>'. ') with a report on the topic ' . $request->thema . ' ('. '<a href=' . $repLink . '>report</a>)</br>
+                $message = 'Good afternoon, a new participant ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ') with a report on the topic ' . $request->thema . ' (' . '<a href=' . $repLink . '>report</a>)</br>
                 Presentation time: ' . $startTimeExist;
                 foreach ($user->users as $user) {
                     if ($user->role == 'listener') {
@@ -227,6 +228,18 @@ class ReportController extends Controller
             foreach ($usersEmails as $email) {
                 dispatch(new SendMailWithQueue($email, $message));
             }
+        }
+
+        if (Auth::user()->role == 'admin') {
+            $conferences = Conference::with('reports')->whereId($id)->get();
+            $user = '';
+            $message = '';
+            foreach ($conferences as $conference) {
+                $user = User::whereId($report->user_id)->first();
+                $confLink = env('APP_URL') . '#/conferences/' . $id;
+                $message = 'Good afternoon, at the conference ' . $conference->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ') your report was deleted by the administration.';
+            }
+            dispatch(new SendMailWithQueue($user->email, $message));
         }
     }
 }
