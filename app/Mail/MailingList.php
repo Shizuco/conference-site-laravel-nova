@@ -34,9 +34,9 @@ class MailingList extends Mailable
      */
     public function build()
     {
-        return $this->from('test@gmail.com', 'me')
+        return $this->from( 'suvorova_ma@groupbwt.com', 'Laravel Conferences')
             ->to($this->email, 'you')
-            ->subject('Test: Testing')
+            ->subject('Alert: '. 'Laravel')
             ->view('mail')
             ->with([
                 'text' => $this->emailText
