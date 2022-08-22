@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
         "predis/predis": "~1.0",
+        "pusher/pusher-php-server": "^7.0",
         "symfony/http-client": "^6.0",
         "symfony/mailgun-mailer": "^6.0"
     },
