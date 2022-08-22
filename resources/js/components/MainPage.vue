@@ -10,7 +10,7 @@
                 </v-text-field>
             </v-col>
             <v-col align="right" style=" z-index: 100; height: 94px; width: 30px; top: -20px; position: relative;">
-                <Slide right width="550" v-if="isAuth()">
+                <Slide right width="550" v-if="isAuth()" v-on:lazy="true">
                     <div v-for="name in categories" :value="name" :key="name.id">
                         <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
                             @change="count++; getConferences()">
