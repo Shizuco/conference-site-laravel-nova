@@ -15,7 +15,7 @@
                         <h4>About</h4>
                         <p>{{ formData.description }}</p>
                         <a :href="getFile">{{ formData.presentation }}</a>
-                        <button @click="onClick">erthejh</button>
+                        <button @click="onClick">download</button>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>

@@ -88,6 +88,24 @@ export default new Vuex.Store({
                 })
                 .catch((error) => {console.log(error.response)});
         },
+        ajaxConferencesCsv({ commit }) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url:
+                    "api/conferencesCsv",
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }) .then((response) => {
+                commit("setFile", response.config.url);
+                console.log(response.headers['content-disposition'].split('filename=')[1].split(';')[0]);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });
+        },
         ajaxGetConferenceByName({commit}, data){
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({

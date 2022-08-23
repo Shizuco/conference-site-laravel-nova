@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
 
+        Route::get('/conferencesDownloadCsv', [ConferenceController::class, 'downloadCsv']);
         Route::get('/conferencesCsv', [ConferenceController::class, 'exportCsv']);
     });
 });

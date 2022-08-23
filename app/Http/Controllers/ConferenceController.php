@@ -4,11 +4,14 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
 use App\Jobs\SendMailWithQueue;
+use App\Jobs\SvcFile;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Services\MakeConferenceSvcFile;
 use Datetime;
 use Illuminate\Http\Request;
 
@@ -52,38 +55,15 @@ class ConferenceController extends Controller
 
     public function exportCsv(Request $request)
     {
-        $fileName = 'conferences.csv';
-        $conferences = Conference::with('users', 'reports')->get();
-        $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0",
-        );
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile());
+        event(new DownloadExportCsvFile('done'));
+    }
 
-        $columns = array('Title', 'Date', 'Address', 'Country', 'Number of reports', 'Number of listeners');
-
-        $callback = function () use ($conferences, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($conferences as $conference) {
-
-                $row['Title'] = $conference->title;
-                $row['Date'] = $conference->date;
-                $row['Address'] = $this->getAddress($conference->address_lat, $conference->address_lon);
-                $row['Country'] = $conference->country;
-                $row['Number of reports'] = count($conference->reports);
-                $row['Number of listeners'] = count($conference->users);
-
-                fputcsv($file, array($row['Title'], $row['Date'], $row['Address'], $row['Country'], $row['Number of reports'], $row['Number of listeners']));
-            }
-
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+    public function downloadCsv()
+    {
+        return MakeConferenceSvcFile::sendFile();
     }
 
     private function hasTime(int $id)
@@ -132,21 +112,5 @@ class ConferenceController extends Controller
         foreach ($usersEmails as $email) {
             dispatch(new SendMailWithQueue($email, $message));
         }
-    }
-
-    private function getAddress($latitude, $longitude)
-    {
-        //google map api url
-        $url = "https://maps.google.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyAWYpOvTuAYKad3lZf-c_RIvRz9wcEA1Ws";
-        
-        // send http request
-        $geocode = file_get_contents($url);
-        $json = json_decode($geocode);
-        if(count($json->results) === 0){
-            return 'no where';
-        }
-        $address = $json->results[0]->formatted_address;
-        
-        return $address;
     }
 }
