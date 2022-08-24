@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Events\DownloadExportCsvFile;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/event', function () {
+    event(new DownloadExportCsvFile('this is a broadcast message'));
 });

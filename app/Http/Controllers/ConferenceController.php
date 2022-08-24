@@ -4,10 +4,14 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
+use App\Jobs\SendMailWithQueue;
+use App\Jobs\SvcFile;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Services\MakeConferenceSvcFile;
 use Datetime;
 use Illuminate\Http\Request;
 
@@ -17,6 +21,7 @@ class ConferenceController extends Controller
     {
         return response()->json(Conference::Filters($request));
     }
+
     public function conferencesByName(Request $request)
     {
         return response()->json(Conference::where('title', 'LIKE', "%{$request->conf_title}%")->paginate(5));
@@ -44,7 +49,21 @@ class ConferenceController extends Controller
 
     public function destroy(int $id)
     {
+        $this->sendMessage($id);
         Conference::findOrFail($id)->delete();
+    }
+
+    public function exportCsv(Request $request)
+    {
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile('conference', 0));
+        event(new DownloadExportCsvFile('done'));
+    }
+
+    public function downloadCsv()
+    {
+        return MakeConferenceSvcFile::sendFile();
     }
 
     private function hasTime(int $id)
@@ -77,5 +96,21 @@ class ConferenceController extends Controller
         }
 
         return ($hasTime !== 0) ? true : false;
+    }
+
+    private function sendMessage(int $id)
+    {
+        $users = Conference::with('users')->whereId($id)->get();
+        $usersEmails = [];
+        $message = '';
+        foreach ($users as $user) {
+            $message = 'Good afternoon, unfortunately the conference ' . $user->title . ' has been deleted by the administration.';
+            foreach ($user->users as $userEmail) {
+                array_push($usersEmails, $userEmail->email);
+            }
+        }
+        foreach ($usersEmails as $email) {
+            dispatch(new SendMailWithQueue($email, $message));
+        }
     }
 }

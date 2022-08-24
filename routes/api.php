@@ -49,10 +49,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/conferences/report/{id}/comment', [CommentController::class, 'index']);
     Route::post('/conferences/{conference_id}/report/{report_id}/comment', [CommentController::class, 'store']);
+    Route::delete('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'destroy']);
 
     Route::group(['middleware' => ['isRigthAnnouncer']], function () {
         Route::post('/conferences/{id}/reports', [ReportController::class, 'store']);
-        Route::delete('/conferences/{conference_id}/reports', [ReportController::class, 'destroy']);
         Route::put('/conferences/{conference_id}/reports/{report_id}', [ReportController::class, 'update']);
     });
 
@@ -64,6 +64,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
+
+        Route::get('/conferencesDownloadCsv', [ConferenceController::class, 'downloadCsv']);
+        Route::get('/conferencesCsv', [ConferenceController::class, 'exportCsv']);
+        Route::get('/conferences/{id}/reportsDownloadCsv', [ReportController::class, 'downloadCsv']);
+        Route::get('/conferences/{id}/reportsCsv', [ReportController::class, 'exportCsv']);
+        Route::get('/conferences/reports/{id}/commentDownloadCsv', [CommentController::class, 'downloadCsv']);
+        Route::get('/conferences/reports/{id}/commentCsv', [CommentController::class, 'exportCsv']);
+        Route::get('/conferences/{id}/listenersDownloadCsv', [UserController::class, 'downloadCsv']);
+        Route::get('/conferences/{id}/listenersCsv', [UserController::class, 'exportCsv']);
     });
 });
 

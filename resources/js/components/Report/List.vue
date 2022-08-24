@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <auth style="height: 80px"></auth>
-        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550"  v-if="isAuth()">
+        <Slide right style=" z-index: 100; position: relative; top: -100px;" width="550" v-if="isAuth()">
             <div v-for="name in categories" :value="name" :key="name.id">
                 <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
                     @change="count++; getReports()">
@@ -71,6 +71,9 @@
                     </v-card-text>
                 </v-card>
             </div>
+            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <spinner v-if="CsvButtonType == 1"></spinner>
+            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-btn x-big block color="primary"
                 :to="{ name: 'ConferenceDetails', params: { id: this.$route.params.id } }" class="white--text">Back
             </v-btn>
@@ -96,7 +99,8 @@ export default {
         menu2: false,
         duration: 0,
         count: 0,
-        countForDuretion: 0
+        countForDuretion: 0,
+        CsvButtonType: 0
     }),
     mounted() {
         this.getReports()
@@ -105,6 +109,16 @@ export default {
                 this.categories.push(element.name)
             });
         })
+        Echo.channel('downloadCsvFile')
+            .listen('DownloadExportCsvFile', (e) => {
+                console.log(e)
+                if (e.message == 'start') {
+                    this.CsvButtonType = 1
+                }
+                if (e.message == 'done') {
+                    this.CsvButtonType = 2
+                }
+            })
     },
     methods: {
         isAuth() {
@@ -113,7 +127,7 @@ export default {
         getReports(page = 1) {
             if (this.count == 0) {
                 this.sortedProducts = []
-                if(this.countForDuretion == 0){
+                if (this.countForDuretion == 0) {
                     this.duration = ""
                 }
                 this.getAllReports([page, this.$route.params.id, this.duration, this.cats, this.date, this.date2])
@@ -126,7 +140,7 @@ export default {
                     })
                 })
                 this.cats = [...new Set(this.cats)]
-                if(this.countForDuretion == 0){
+                if (this.countForDuretion == 0) {
                     this.duration = ""
                 }
                 this.$store.dispatch("ajaxReports", [page, this.$route.params.id, this.duration, this.cats, this.date, this.date2]).then(() => {
@@ -153,7 +167,40 @@ export default {
         },
         resetFilters() {
             this.$router.go()
-        }
+        },
+        getCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/' + this.$route.params.id + '/reportsCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+            })
+        },
+        downloadCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/' + this.$route.params.id + '/reportsDownloadCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                responseType: 'blob', // important
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch((err) => {
+                console.log(err.response)
+            })
+        },
     }
 }
 

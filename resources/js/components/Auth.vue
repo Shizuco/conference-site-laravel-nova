@@ -47,12 +47,6 @@
                </v-btn>
             </span>
             <span>
-               <v-btn depressed small v-if="isAuth()">
-                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Search' }">Search
-                  </router-link>
-               </v-btn>
-            </span>
-            <span>
                <v-btn depressed small>
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
                   </router-link>

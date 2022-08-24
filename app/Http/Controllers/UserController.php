@@ -1,20 +1,27 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Services\MakeListenerSvcFile;
+use App\Jobs\SvcFile;
+use App\Events\DownloadExportCsvFile;
+use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\UpdateUserRequest;
-use Illuminate\Http\Request;
-use App\Models\Conference;
 use App\Models\User;
+use App\Models\Conference;
 use Auth;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    
+
     public function conferenceJoin(int $conferenceId)
     {
+        if (Auth::user()->role === 'listener') {
+            $this->sendMessage($conferenceId);
+        }
         Auth::user()->conferences()->attach($conferenceId);
     }
 
@@ -22,7 +29,7 @@ class UserController extends Controller
     {
         Auth::user()->conferences()->detach($conferenceId);
     }
-    
+
     public function getConference(int $conferenceId)
     {
         return json_encode(Auth::user()->conferences()->find($conferenceId));
@@ -31,10 +38,9 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $fields = $request->validated();
-        if($request->password !== null){
-            $fields['password'] = bcrypt($request->password);  
-        }
-        else{
+        if ($request->password !== null) {
+            $fields['password'] = bcrypt($request->password);
+        } else {
             unset($fields['password']);
         }
         User::whereId(Auth::user()->id)->update($fields);
@@ -47,19 +53,56 @@ class UserController extends Controller
         return response()->json($response, 201);
     }
 
-    public function isFavorite(int $id){
+    public function isFavorite(int $id)
+    {
         return response()->json(Auth::user()->favorite_reports()->where('report_id', $id)->get());
-     }
-
-    public function getFavorite(){
-       return response()->json(Auth::user()->favorite_reports()->get());
     }
 
-    public function favorite(int $reportId){
+    public function getFavorite()
+    {
+        return response()->json(Auth::user()->favorite_reports()->get());
+    }
+
+    public function favorite(int $reportId)
+    {
         Auth::user()->favorite_reports()->attach($reportId);
     }
 
-    public function unfavorite(int $reportId){
+    public function unfavorite(int $reportId)
+    {
         Auth::user()->favorite_reports()->detach($reportId);
     }
+
+    public function exportCsv(Request $request, int $id)
+    {
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile('listeners', $id));
+        event(new DownloadExportCsvFile('done'));
+    }
+
+    public function downloadCsv(int $id)
+    {
+        return MakeListenerSvcFile::sendFile($id);
+    }
+
+    private function sendMessage(int $id)
+    {
+        $users = Conference::with('users')->whereId($id)->get();
+        $usersEmails = [];
+        $message = '';
+        foreach ($users as $user) {
+            $confLink = env('APP_URL') . '#/conferences/' . $id;
+            $message = 'Good afternoon, a new listener ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ')';
+            foreach ($user->users as $user) {
+                if ($user->role == 'announcer') {
+                    array_push($usersEmails, $user->email);
+                }
+            }
+        }
+        foreach ($usersEmails as $email) {
+            dispatch(new SendMailWithQueue($email, $message));
+        }
+    }
+
 }

@@ -74,6 +74,7 @@ export default new Vuex.Store({
     },
     actions: {
         ajaxConferences({ commit }, data) {
+            console.log(data)
             return axios
                 .get("api/conferences?page=" +
                 data[0] +
@@ -86,6 +87,24 @@ export default new Vuex.Store({
                     commit("setConferences", response.data);
                 })
                 .catch((error) => {console.log(error.response)});
+        },
+        ajaxConferencesCsv({ commit }) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url:
+                    "api/conferencesCsv",
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }) .then((response) => {
+                commit("setFile", response.config.url);
+                console.log(response.headers['content-disposition'].split('filename=')[1].split(';')[0]);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+            });
         },
         ajaxGetConferenceByName({commit}, data){
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -304,7 +323,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            });
+            })
         },
         userConferenceOut({ commit }, conference_id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -446,14 +465,14 @@ export default new Vuex.Store({
             let token = "Bearer " + localStorage.getItem("Authorized");
             axios({
                 method: "delete",
-                url: "api/conferences/" + data + "/reports",
+                url: "api/conferences/" + data[0] + "/reports/" + data[1],
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
                 .then((response) => {})
-                .catch((error) => {});
+                .catch((error) => { console.log(error.response)});
         },
         ajaxGetReportFile({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");

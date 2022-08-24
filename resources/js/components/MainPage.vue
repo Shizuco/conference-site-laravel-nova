@@ -6,11 +6,12 @@
             </v-col>
             <v-col align="right" style=" z-index: 100; position: relative; height: fit-content; top: -3px;">
                 <v-text-field @click="toggleMarker" @click:append="toggleMarker" clickable solo color="white"
-                    placeholder="Search..." v-model="title" :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'">
+                    placeholder="Search..." v-model="title"
+                    :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'">
                 </v-text-field>
             </v-col>
             <v-col align="right" style=" z-index: 100; height: 94px; width: 30px; top: -20px; position: relative;">
-                <Slide right width="550" v-if="isAuth()">
+                <Slide right width="550" v-if="isAuth()" v-on:lazy="true">
                     <div v-for="name in categories" :value="name" :key="name.id">
                         <v-checkbox v-model="formData.parentCategory" :label="name" :value="name"
                             @change="count++; getConferences()">
@@ -123,7 +124,7 @@
             </v-card-text>
         </v-card>
         <div class="row justify-content-center">
-            <skeleton v-if="sortedProducts.length == 0 && search == 0 "></skeleton>
+            <skeleton v-if="sortedProducts.length == 0 && search == 0"></skeleton>
             <div class="col-md-12" v-for="conference in sortedProducts" :value="conference.id" :key="conference.id">
                 <v-card elevation="3">
                     <v-card-title>{{ conference.title }}</v-card-title>
@@ -152,6 +153,9 @@
                 </v-card>
             </div>
             <Pagination :data="data" @pagination-change-page="getConferences" />
+            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <spinner v-if="CsvButtonType == 1"></spinner>
+            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
         </div>
     </v-app>
 
@@ -183,10 +187,10 @@ export default {
         conferences: [],
         reports: [],
         title: '',
-        search: 0
+        search: 0,
+        CsvButtonType: 0
     }),
     mounted() {
-        console.log(this.sortedProducts)
         this.getConferences()
         this.$store.dispatch('ajaxGetCategories').then(() => {
             this.$store.getters.getCategories.forEach(element => {
@@ -196,6 +200,16 @@ export default {
         if (this.isAuth()) {
             this.$store.dispatch("ajaxUser");
         }
+        Echo.channel('downloadCsvFile')
+            .listen('DownloadExportCsvFile', (e) => {
+                console.log(e.message)
+                if(e.message == 'start'){
+                    this.CsvButtonType = 1
+                }
+                if(e.message == 'done'){
+                    this.CsvButtonType = 2
+                }
+            })
     },
     methods: {
         isAuth() {
@@ -266,7 +280,7 @@ export default {
             this.marker = !this.marker
         },
         getSearch() {
-            this.search ++
+            this.search++
             if (this.title != '') {
                 this.sortedProducts = []
                 if (this.category == 'Conference') {
@@ -280,10 +294,10 @@ export default {
                     this.getRepByName()
                 }
             }
-        else{
-            this.conferences = []
-            this.reports = []
-        }
+            else {
+                this.conferences = []
+                this.reports = []
+            }
         },
         getConfByName(page = 1) {
             this.conferences = []
@@ -302,7 +316,40 @@ export default {
                     this.reports.push(element);
                 })
             })
-        }
+        },
+        getCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferencesCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+            })
+        },
+        downloadCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferencesDownloadCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                responseType: 'blob', // important
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch((err)=>{
+                console.log(err.response)
+            })
+        },
     }
 }
 </script>

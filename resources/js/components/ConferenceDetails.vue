@@ -62,8 +62,8 @@
                                         @click="join()" x-big block color="success" class="white--text">Join</v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth()" depressed color="warning" x-big
-                                        @click="toReports">Reports</v-btn>
+                                    <v-btn v-if="isAuth()" depressed color="warning" x-big @click="toReports">Reports
+                                    </v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()"
@@ -85,6 +85,9 @@
                                         </ShareNetwork>
                                     </v-btn>
                                 </v-col>
+                                <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+                                <spinner v-if="CsvButtonType == 1"></spinner>
+                                <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
                             </v-row>
                         </v-form>
                     </v-card-text>
@@ -106,6 +109,7 @@ export default {
                 replace: true
             }
         ],
+        CsvButtonType: 0
     }),
     mounted() {
         let id = this.$route.params.id
@@ -119,7 +123,18 @@ export default {
                 })
                 this.$store.dispatch('isUserOnConference', id)
                 this.$store.dispatch('ajaxUser')
-            })}
+            })
+            Echo.channel('downloadCsvFile')
+                .listen('DownloadExportCsvFile', (e) => {
+                    console.log(e)
+                    if (e.message == 'start') {
+                        this.CsvButtonType = 1
+                    }
+                    if (e.message == 'done') {
+                        this.CsvButtonType = 2
+                    }
+                })
+        }
         else {
             this.$router.replace('/conferences')
         }
@@ -165,9 +180,43 @@ export default {
         url() {
             return document.location.origin
         },
-        toReports(){
+        toReports() {
             this.$router.replace('/conferences/' + this.$store.getters.getConference.id + '/reports')
-    }
+        },
+        getCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/' + this.$store.getters.getConference.id + '/listenersCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+            })
+        },
+        downloadCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/' + this.$store.getters.getConference.id + '/listenersDownloadCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                //responseType: 'blob', // important
+            }).then((response) => {
+                console.log(response.data)
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch((err)=>{
+                console.log(err.response)
+            })
+        },
     },
 }
 </script>

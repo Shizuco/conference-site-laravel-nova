@@ -15,7 +15,7 @@
                         <h4>About</h4>
                         <p>{{ formData.description }}</p>
                         <a :href="getFile">{{ formData.presentation }}</a>
-                        <button @click="onClick">erthejh</button>
+                        <button @click="onClick">download</button>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
@@ -55,6 +55,9 @@
                     </v-btn>
                 </v-card>
             </v-col>
+            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <spinner v-if="CsvButtonType == 1"></spinner>
+            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-col>
                 <v-col>
                     <v-btn v-if="isFavorite.length == 0" @click="join()" x-big block color="success"
@@ -63,6 +66,10 @@
                 <v-col>
                     <v-btn v-if="isFavorite.length > 0" @click="out()" x-big block color="error" class="white--text">
                         Delete from favorite</v-btn>
+                </v-col>
+                <v-col>
+                    <v-btn v-if="getUser.role == 'admin'" @click="deleteReport()" x-big block color="error" class="white--text">
+                        Delete report</v-btn>
                 </v-col>
             </v-col>
         </v-row>
@@ -94,6 +101,7 @@ export default {
         commentNum: 0,
         newComment: [],
         edit: 0,
+        CsvButtonType: 0
     }),
     mounted() {
         if ("Authorized" in localStorage) {
@@ -126,6 +134,16 @@ export default {
                     this.$data.formData.presentation = this.getReport.presentation
                     console.log(this.isFavorite.length)
                 })
+            })
+            Echo.channel('downloadCsvFile')
+            .listen('DownloadExportCsvFile', (e) => {
+                console.log(e)
+                if (e.message == 'start') {
+                    this.CsvButtonType = 1
+                }
+                if (e.message == 'done') {
+                    this.CsvButtonType = 2
+                }
             })
         }
     },
@@ -162,6 +180,12 @@ export default {
                 document.body.appendChild(link);
                 link.click();
             });
+        },
+        deleteReport(){
+            let report_id = this.$store.getters.getReport.id
+            this.$store.dispatch('ajaxReportDelete', [this.getReport.conference_id, report_id]).then(() => {
+                this.$router.replace('/conferences')
+            })
         },
         join() {
             let report_id = this.$store.getters.getReport.id
@@ -206,7 +230,42 @@ export default {
         },
         commentN() {
             this.commentNum++;
-        }
+        },
+        getCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/reports/' + this.getReport.id + '/commentCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+            }).catch((err)=>{
+                console.log(err.response)
+            })
+        },
+        downloadCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/reports/' + this.getReport.id + '/commentDownloadCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                responseType: 'blob', // important
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch((err) => {
+                console.log(err.response)
+            })
+        },
     }
 }
 </script>
