@@ -4,12 +4,16 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Services\MakeCommentSvcFile;
+use App\Jobs\SvcFile;
+use App\Events\DownloadExportCsvFile;
 use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\CreateCommentRequest;
 use App\Models\Comment;
 use App\Models\User;
 use App\Models\Report;
 use App\Models\Conference;
+use Illuminate\Http\Request;
 use Auth;
 use DateTime;
 use DateTimeInterface;
@@ -55,6 +59,19 @@ class CommentController extends Controller
             $data['user_id'] = Auth::user()->id;
             Comment::whereId($commentId)->update($data);
         }
+    }
+
+    public function exportCsv(Request $request, int $id)
+    {
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile('comment', $id));
+        event(new DownloadExportCsvFile('done'));
+    }
+
+    public function downloadCsv(int $id)
+    {
+        return MakeCommentSvcFile::sendFile($id);
     }
 
     private function sendMessage(int $id)

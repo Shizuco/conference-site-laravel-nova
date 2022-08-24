@@ -55,6 +55,9 @@
                     </v-btn>
                 </v-card>
             </v-col>
+            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <spinner v-if="CsvButtonType == 1"></spinner>
+            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-col>
                 <v-col>
                     <v-btn v-if="isFavorite.length == 0" @click="join()" x-big block color="success"
@@ -98,6 +101,7 @@ export default {
         commentNum: 0,
         newComment: [],
         edit: 0,
+        CsvButtonType: 0
     }),
     mounted() {
         if ("Authorized" in localStorage) {
@@ -130,6 +134,16 @@ export default {
                     this.$data.formData.presentation = this.getReport.presentation
                     console.log(this.isFavorite.length)
                 })
+            })
+            Echo.channel('downloadCsvFile')
+            .listen('DownloadExportCsvFile', (e) => {
+                console.log(e)
+                if (e.message == 'start') {
+                    this.CsvButtonType = 1
+                }
+                if (e.message == 'done') {
+                    this.CsvButtonType = 2
+                }
             })
         }
     },
@@ -216,7 +230,42 @@ export default {
         },
         commentN() {
             this.commentNum++;
-        }
+        },
+        getCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/reports/' + this.getReport.id + '/commentCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+            }).catch((err)=>{
+                console.log(err.response)
+            })
+        },
+        downloadCsv() {
+            let token = 'Bearer ' + localStorage.getItem('Authorized')
+            axios({
+                url: 'api/conferences/reports/' + this.getReport.id + '/commentDownloadCsv', //your url
+                method: 'GET',
+                headers: {
+                    "Authorization": token,
+                    "Content-type": "application/json"
+                },
+                responseType: 'blob', // important
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+            }).catch((err) => {
+                console.log(err.response)
+            })
+        },
     }
 }
 </script>

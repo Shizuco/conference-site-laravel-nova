@@ -6,6 +6,7 @@ namespace App\Jobs;
 use App\Events\DownloadExportCsvFile;
 use App\Services\MakeConferenceSvcFile;
 use App\Services\MakeReportSvcFile;
+use App\Services\MakeCommentSvcFile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,6 +36,9 @@ class SvcFile implements ShouldQueue
                 break;
             case 'report':
                 MakeReportSvcFile::getFile($this->id);
+                break;
+            case 'comment':
+                MakeCommentSvcFile::getFile($this->id);
                 break;
         }
     }
