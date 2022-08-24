@@ -4,6 +4,9 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Services\MakeReportSvcFile;
+use App\Jobs\SvcFile;
+use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateReportRequest;
 use App\Jobs\SendMailWithQueue;
 use App\Models\Conference;
@@ -107,6 +110,19 @@ class ReportController extends Controller
     {
         $rep = Report::findOrFail($reportId);
         return response()->download(storage_path() . "/app/" . $rep->presentation);
+    }
+
+    public function exportCsv(Request $request, int $id)
+    {
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile('report', $id));
+        event(new DownloadExportCsvFile('done'));
+    }
+
+    public function downloadCsv(int $id)
+    {
+        return MakeReportSvcFile::sendFile($id);
     }
 
     private function sendMessage($request, int $id, $report, string $whichMessage)

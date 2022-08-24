@@ -57,7 +57,7 @@ class ConferenceController extends Controller
     {
         event(new DownloadExportCsvFile('start'));
         sleep(5);
-        dispatch(new SvcFile());
+        dispatch(new SvcFile('conference', 0));
         event(new DownloadExportCsvFile('done'));
     }
 

@@ -153,7 +153,6 @@
                 </v-card>
             </div>
             <Pagination :data="data" @pagination-change-page="getConferences" />
-            <a href="api/conferenceCsv"></a>
             <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
             <spinner v-if="CsvButtonType == 1"></spinner>
             <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
