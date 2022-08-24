@@ -7,6 +7,7 @@ use App\Events\DownloadExportCsvFile;
 use App\Services\MakeConferenceSvcFile;
 use App\Services\MakeReportSvcFile;
 use App\Services\MakeCommentSvcFile;
+use App\Services\MakeListenerSvcFile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,6 +40,9 @@ class SvcFile implements ShouldQueue
                 break;
             case 'comment':
                 MakeCommentSvcFile::getFile($this->id);
+                break;
+            case 'listeners':
+                MakeListenerSvcFile::getFile($this->id);
                 break;
         }
     }

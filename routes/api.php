@@ -71,6 +71,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/conferences/{id}/reportsCsv', [ReportController::class, 'exportCsv']);
         Route::get('/conferences/reports/{id}/commentDownloadCsv', [CommentController::class, 'downloadCsv']);
         Route::get('/conferences/reports/{id}/commentCsv', [CommentController::class, 'exportCsv']);
+        Route::get('/conferences/{id}/listenersDownloadCsv', [UserController::class, 'downloadCsv']);
+        Route::get('/conferences/{id}/listenersCsv', [UserController::class, 'exportCsv']);
     });
 });
 

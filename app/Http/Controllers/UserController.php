@@ -3,11 +3,16 @@
 declare (strict_types = 1);
 
 namespace App\Http\Controllers;
+
+use App\Services\MakeListenerSvcFile;
+use App\Jobs\SvcFile;
+use App\Events\DownloadExportCsvFile;
 use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Conference;
 use Auth;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -66,6 +71,19 @@ class UserController extends Controller
     public function unfavorite(int $reportId)
     {
         Auth::user()->favorite_reports()->detach($reportId);
+    }
+
+    public function exportCsv(Request $request, int $id)
+    {
+        event(new DownloadExportCsvFile('start'));
+        sleep(5);
+        dispatch(new SvcFile('listeners', $id));
+        event(new DownloadExportCsvFile('done'));
+    }
+
+    public function downloadCsv(int $id)
+    {
+        return MakeListenerSvcFile::sendFile($id);
     }
 
     private function sendMessage(int $id)
