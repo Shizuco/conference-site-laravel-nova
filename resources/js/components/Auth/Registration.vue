@@ -20,7 +20,7 @@
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="name">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -34,7 +34,7 @@
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="surname">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -49,7 +49,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -66,7 +66,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -80,7 +80,7 @@
                                     <ValidationProvider rules="required|confirmed:password" v-slot="{ errors }"
                                        name="password_confirmation">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -98,7 +98,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="role">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -115,7 +115,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="phone">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -134,7 +134,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="date">
                                        <v-col style="height: 10px">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>
@@ -146,7 +146,7 @@
                                  <v-col class="pa-0">
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="country">
                                        <v-col style="min-height: 10px; height: fit-content;">
-                                          <span>{{ errors[0] }}</span>
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
                                        </v-col>
                                        <br>
                                        <v-col>

@@ -55,7 +55,7 @@
                     </v-btn>
                 </v-card>
             </v-col>
-            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
             <spinner v-if="CsvButtonType == 1"></spinner>
             <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-col>
@@ -180,6 +180,9 @@ export default {
                 document.body.appendChild(link);
                 link.click();
             });
+        },
+        isAdmin() {
+            return (this.$store.getters.getUser.role == "admin") ? true : false;
         },
         deleteReport(){
             let report_id = this.$store.getters.getReport.id
