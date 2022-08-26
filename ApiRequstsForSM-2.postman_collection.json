@@ -759,6 +759,746 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/isFavorite/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/isFavorite/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"isFavorite",
+						"1"
+					]
+				},
+				"description": "is report added to favorites"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/favorite",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/favorite",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"favorite"
+					]
+				},
+				"description": "return a list of reports that was added to favorites"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/favorite/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/favorite/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"favorite",
+						"1"
+					]
+				},
+				"description": "add report to favorites"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/unfavorite/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/unfavorite/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"unfavorite",
+						"1"
+					]
+				},
+				"description": "delete report from favorites"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/currentCategory/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/currentCategory/1",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"currentCategory",
+						"1"
+					]
+				},
+				"description": "return a choosen category"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/rootCategories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/rootCategories",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"rootCategories"
+					]
+				},
+				"description": "return a list of root categories"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/subCategories/{id}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/subCategories/{id}",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"subCategories",
+						"{id}"
+					]
+				},
+				"description": "return a list of sub categories"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferencesByName",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferencesByName",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferencesByName"
+					]
+				},
+				"description": "return a list of conferences with choosen name"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/reportsByName",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/reportsByName",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"reportsByName"
+					]
+				},
+				"description": "return a list pf reports with choosen name"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/categories",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"categories"
+					]
+				},
+				"description": "return a list of all categories"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/report/{id}/comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/report/1/comment",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"report",
+						"1",
+						"comment"
+					]
+				},
+				"description": "return list of all commnet that was pisted below the choosen report"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/report/1/comment",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"report",
+						"1",
+						"comment"
+					]
+				},
+				"description": "post a commnet below choosen report"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/categories",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"categories"
+					]
+				},
+				"description": "add a new category"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/category/destroy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/category/destroy",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"category",
+						"destroy"
+					]
+				},
+				"description": "delete choosen category"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferencesDownloadCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferencesDownloadCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferencesDownloadCsv"
+					]
+				},
+				"description": "download a file eith conferences in svc format"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferencesCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferencesCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferencesCsv"
+					]
+				},
+				"description": "make a file of conferences"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reportsDownloadCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reportsDownloadCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reportsDownloadCsv"
+					]
+				},
+				"description": "download a file with reports in svc format"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/reportsCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/reportsCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"reportsCsv"
+					]
+				},
+				"description": "make file with reports"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/reports/1/commentDownloadCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/reports/1/commentDownloadCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"reports",
+						"1",
+						"commentDownloadCsv"
+					]
+				},
+				"description": "download a file with comments on choosen report in formay svc "
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/reports/1/commentCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/reports/1/commentCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"reports",
+						"1",
+						"commentCsv"
+					]
+				},
+				"description": "make a file with commnets "
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/listenersDownloadCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/listenersDownloadCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"listenersDownloadCsv"
+					]
+				},
+				"description": "download a file with listeners on choosen conference in format svc"
+			},
+			"response": []
+		},
+		{
+			"name": "http://suvorova-ma.groupbwt.com/api/conferences/1/listenersCsv",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "96|mErJMDitjQGsTt9kPrWcw9CkDCqqWjiXaHtfuwxh",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://suvorova-ma.groupbwt.com/api/conferences/1/listenersCsv",
+					"protocol": "http",
+					"host": [
+						"suvorova-ma",
+						"groupbwt",
+						"com"
+					],
+					"path": [
+						"api",
+						"conferences",
+						"1",
+						"listenersCsv"
+					]
+				},
+				"description": "make file with listeners"
+			},
+			"response": []
 		}
 	]
 }
