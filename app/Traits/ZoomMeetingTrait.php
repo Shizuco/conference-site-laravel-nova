@@ -131,6 +131,24 @@ trait ZoomMeetingTrait
         ];
     }
 
+    public function getAll()
+    {
+        $path = 'users/me/meetings';
+        $url = $this->retrieveZoomUrl();
+        $this->jwt = $this->generateZoomToken();
+        $body = [
+            'headers' => $this->headers,
+            'body'    => json_encode([]),
+        ];
+
+        $response =  $this->client->get($url.$path, $body);
+
+        return [
+            'success' => $response->getStatusCode() === 200,
+            'data'    => json_decode($response->getBody(), true),
+        ];
+    }
+
     /**
      * @param string $id
      * 

@@ -16,7 +16,7 @@ class MeetingController extends Controller
     const MEETING_TYPE_FIXED_RECURRING_FIXED = 8;
 
     public function index(){
-        $meetings = $this->get();
+        $meetings = $this->getAll();
 
         return response()->json($meetings);
     }
