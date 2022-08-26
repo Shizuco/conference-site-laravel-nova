@@ -71,7 +71,7 @@
                     </v-card-text>
                 </v-card>
             </div>
-            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
             <spinner v-if="CsvButtonType == 1"></spinner>
             <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-btn x-big block color="primary"
@@ -105,6 +105,7 @@ export default {
     mounted() {
         this.getReports()
         this.$store.dispatch('ajaxGetSubCategories', this.$route.params.id).then(() => {
+            this.$store.dispatch('ajaxUser')
             this.$store.getters.getSubCategories.forEach(element => {
                 this.categories.push(element.name)
             });
@@ -123,6 +124,9 @@ export default {
     methods: {
         isAuth() {
             return ("Authorized" in localStorage) ? true : false
+        },
+        isAdmin() {
+            return (this.$store.getters.getUser.role == "admin") ? true : false;
         },
         getReports(page = 1) {
             if (this.count == 0) {

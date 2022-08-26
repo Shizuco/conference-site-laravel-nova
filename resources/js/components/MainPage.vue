@@ -153,7 +153,7 @@
                 </v-card>
             </div>
             <Pagination :data="data" @pagination-change-page="getConferences" />
-            <v-btn v-if="CsvButtonType == 0" @click="getCsv()">export</v-btn>
+            <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
             <spinner v-if="CsvButtonType == 1"></spinner>
             <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
         </div>
@@ -193,6 +193,7 @@ export default {
     mounted() {
         this.getConferences()
         this.$store.dispatch('ajaxGetCategories').then(() => {
+            console.log(this.$store.getters.getCategories)
             this.$store.getters.getCategories.forEach(element => {
                 this.categories.push(element.name)
             });

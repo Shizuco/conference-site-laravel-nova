@@ -83,10 +83,8 @@ export default new Vuex.Store({
                 "&categories=" + 
                 data[2] + '&dateFrom=' + data[3] + '&dateTo=' + data[4],)
                 .then((response) => {
-                    console.log(response.data)
                     commit("setConferences", response.data);
                 })
-                .catch((error) => {console.log(error.response)});
         },
         ajaxConferencesCsv({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -100,11 +98,7 @@ export default new Vuex.Store({
                 },
             }) .then((response) => {
                 commit("setFile", response.config.url);
-                console.log(response.headers['content-disposition'].split('filename=')[1].split(';')[0]);
             })
-            .catch((error) => {
-                console.log(error.response.data.message);
-            });
         },
         ajaxGetConferenceByName({commit}, data){
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -120,12 +114,8 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             }) .then((response) => {
-                console.log(response.data);
                 commit("setConferences", response.data);
             })
-            .catch((error) => {
-                console.log(error.response.data.message);
-            });
         },
         ajaxGetReportsByName({commit}, data){
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -141,12 +131,8 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             }) .then((response) => {
-                console.log(response.data);
                 commit("setReports", response.data);
             })
-            .catch((error) => {
-                console.log(error.response.data.message);
-            });
         },
         ajaxGetConference({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -159,12 +145,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setConference", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxConferenceDelete({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -179,7 +161,6 @@ export default new Vuex.Store({
                 .then((response) => {
                     commit("setConference", response.data);
                 })
-                .catch((error) => {});
         },
         ajaxConferenceCreate({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -195,7 +176,6 @@ export default new Vuex.Store({
                 .then(function (response) {
                     commit("setConferences", response.data);
                 })
-                .catch(function (error) {});
         },
         ajaxConferenceEdit({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -211,7 +191,6 @@ export default new Vuex.Store({
                 .then(function (response) {
                     commit("setConferences", response.data);
                 })
-                .catch(function (error) {});
         },
         register({ commit }, data) {
             return axios({
@@ -268,9 +247,6 @@ export default new Vuex.Store({
                 .then((response) => {
                     commit("setFavorites", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxAddToFavorites({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -282,10 +258,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxDeleteFromFavorites({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -297,10 +269,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         logout({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -349,9 +317,6 @@ export default new Vuex.Store({
                 .then((response) => {
                     commit("setUser", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         isReportInFavorite({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -411,9 +376,6 @@ export default new Vuex.Store({
                 .then((response) => {
                     commit("setReport", response.data[0]);
                 })
-                .catch((error) => {
-                    console.log(error.response.data);
-                });
         },
         ajaxCreateReport({ commit }, data) {
             let datas = new FormData();
@@ -434,7 +396,6 @@ export default new Vuex.Store({
                         "application/vnd.openxmlformats-officedocument.presentationml.presentation;",
                 },
             }).then(function (response) {
-                console.log(response.data);
                 commit("setReport", response.data);
             });
         },
@@ -457,7 +418,6 @@ export default new Vuex.Store({
                         "multipart/form-data; boundary=<calculated when request is sent>",
                 },
             }).then((response) => {
-                console.log(response.data);
                 commit("setReport", response.data);
             });
         },
@@ -471,8 +431,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then((response) => {})
-                .catch((error) => { console.log(error.response)});
         },
         ajaxGetReportFile({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -490,12 +448,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response);
                     commit("setFile", response.config.url);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetComments({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -508,12 +462,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setComments", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxSendComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -531,10 +481,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxSetComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -553,10 +499,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetCategories({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -569,12 +511,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setCategories", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxCreateCategory({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -587,12 +525,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error.response);
-                });
         },
         ajaxDeleteCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -605,12 +537,6 @@ export default new Vuex.Store({
                     "Content-type": "application/json; charset=UTF-8",
                 },
             })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error.response);
-                });
         },
         ajaxGetCategoryConferenceNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -623,12 +549,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setConferences", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetCategoryReportNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -641,12 +563,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setReports", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetRootCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -659,12 +577,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setRootCategories", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetSubCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -677,12 +591,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setSubCategories", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
         ajaxGetCurrentCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -695,12 +605,8 @@ export default new Vuex.Store({
                 },
             })
                 .then((response) => {
-                    console.log(response.data);
                     commit("setCurrentCategory", response.data);
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                });
         },
     },
     mutations: {

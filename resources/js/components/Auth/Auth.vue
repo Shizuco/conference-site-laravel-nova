@@ -14,19 +14,37 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
-                           <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }" name="email">
-                              <span>{{ errors[0] }}</span>
-                              <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-mail"
-                                 type="email" class="rounded-0" outlined required v-model="formData.email">
-                              </v-text-field>
-                           </ValidationProvider>
-                           <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
-                              <span>{{ errors[0] }}</span>
-                              <v-text-field label="Password" name="password" id="password" prepend-inner-icon="mdi-lock"
-                                 type="password" min="8" class="rounded-0" outlined required
-                                 v-model="formData.password">
-                              </v-text-field>
-                           </ValidationProvider>
+                           <v-row class="pa-0" style="margin-top: 0px !important">
+                              <v-col class="pa-0">
+                                 <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }"
+                                    name="email">
+                                    <v-col style="height: 10px">
+                                       <span style="font-size:smaller"> {{ errors[0] }}</span>
+                                    </v-col>
+                                    <v-col>
+                                       <v-text-field label="Email" name="email" id="email" prepend-inner-icon="mdi-mail"
+                                          type="email" class="rounded-0" outlined required v-model="formData.email">
+                                       </v-text-field>
+                                    </v-col>
+
+                                 </ValidationProvider>
+                              </v-col>
+                           </v-row>
+                           <v-row class="pa-0" style="margin-top: 0px !important">
+                              <v-col class="pa-0">
+                                 <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
+                                    <v-col style="height: 10px">
+                                       <span style="font-size:smaller">{{ errors[0] }}</span>
+                                    </v-col>
+                                    <v-col>
+                                       <v-text-field label="Password" name="password" id="password"
+                                          prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0"
+                                          outlined required v-model="formData.password">
+                                       </v-text-field>
+                                    </v-col>
+                                 </ValidationProvider>
+                              </v-col>
+                           </v-row>
                            <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Log in</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
@@ -58,6 +76,11 @@ export default {
          }
          this.$store.dispatch('auth', data).then(() => {
             this.$router.go()
+         }).catch(error => {
+            this.$refs.form.setErrors({
+               email: error.response.data.errors.email,
+               password: error.response.data.errors.password,
+            });
          })
       },
    }

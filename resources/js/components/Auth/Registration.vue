@@ -15,80 +15,146 @@
                      <v-card-text>
                         <v-form>
                            <ValidationObserver tag="form" ref="form" @submit.prevent="register">
-                              <v-row>
-                                 <v-col>
+                              <v-row class="pa-0" style="margin-top: 0px !important">
+                                 <v-col class="pa-0">
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="name">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-text-field label="Name" name="name" id="name" prepend-inner-icon="mdi-mail"
-                                          type="name" class="rounded-0" outlined v-model="formData.name">
-                                       </v-text-field>
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Name" name="name" id="name" prepend-inner-icon="mdi-mail"
+                                             type="name" class="rounded-0" outlined v-model="formData.name">
+                                          </v-text-field>
+                                       </v-col>
                                     </ValidationProvider>
                                  </v-col>
-                                 <v-col>
+                                 <v-col class="pa-0">
                                     <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                        name="surname">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-text-field label="Surname" name="surname" id="surname"
-                                          prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined
-                                          v-model="formData.surname"></v-text-field>
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Surname" name="surname" id="surname"
+                                             prepend-inner-icon="mdi-mail" type="text" class="rounded-0" outlined
+                                             v-model="formData.surname"></v-text-field>
+                                       </v-col>
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
-                              <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
-                                 <span>{{ errors[0] }}</span>
-                                 <v-text-field label="Email" name="email" id="email" vid="email"
-                                    prepend-inner-icon="mdi-email" type="email" class="rounded-0" outlined
-                                    v-model="formData.email">
-                                 </v-text-field>
-                              </ValidationProvider>
-                              <v-row>
-                                 <v-col>
-                                    <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-text-field label="Password" name="password" id="password"
-                                          prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0"
-                                          outlined v-model="formData.password"></v-text-field>
+                              <v-row class="pa-0" style="margin-top: 0px !important;">
+                                 <v-col class="pa-0">
+                                    <ValidationProvider rules="required|email" v-slot="{ errors }" name="email">
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Email" name="email" id="email" vid="email"
+                                             prepend-inner-icon="mdi-email" type="email" class="rounded-0" outlined
+                                             v-model="formData.email">
+                                          </v-text-field>
+                                       </v-col>
                                     </ValidationProvider>
                                  </v-col>
-                                 <v-col>
+
+                              </v-row>
+                              <v-row class="pa-0" style="margin-top: 0px !important;">
+                                 <v-col class="pa-0">
+                                    <ValidationProvider rules="required|min:8" v-slot="{ errors }" name="password">
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Password" name="password" id="password"
+                                             prepend-inner-icon="mdi-lock" type="password" min="8" class="rounded-0"
+                                             outlined v-model="formData.password"></v-text-field>
+                                       </v-col>
+                                    </ValidationProvider>
+                                 </v-col>
+                                 <v-col class="pa-0">
                                     <ValidationProvider rules="required|confirmed:password" v-slot="{ errors }"
                                        name="password_confirmation">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-text-field label="Password again" name="password_confirmation"
-                                          id="password_confirmation" prepend-inner-icon="mdi-lock" type="password"
-                                          min="8" class="rounded-0" outlined v-model="formData.password_confirmation">
-                                       </v-text-field>
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Password again" name="password_confirmation"
+                                             id="password_confirmation" prepend-inner-icon="mdi-lock" type="password"
+                                             min="8" class="rounded-0" outlined
+                                             v-model="formData.password_confirmation">
+                                          </v-text-field>
+                                       </v-col>
+
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
-                              <ValidationProvider rules="required" v-slot="{ errors }" name="role">
-                                 <span>{{ errors[0] }}</span>
-                                 <v-select label="Role" name="role" id="role" prepend-inner-icon="mdi-lock"
-                                    class="rounded-0" outlined :items="role" item-text="roleName"
-                                    v-model="selectedRole">
-                                 </v-select>
-                              </ValidationProvider>
-                              <ValidationProvider rules="required" v-slot="{ errors }" name="phone">
-                                 <span>{{ errors[0] }}</span>
-                                 <v-text-field label="Phone" v-model="form.telephone" v-mask="'+38(###)-##-###-##'"
-                                    name="phone" id="phone" prepend-inner-icon="mdi-phone" type="text" class="rounded-0"
-                                    outlined></v-text-field>
-                              </ValidationProvider>
-                              <v-row>
-                                 <v-col>
-                                    <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-text-field type="date" id="date" class="rounded-0" outlined
-                                          v-model="formData.date" name="date"></v-text-field>
+                              <v-row class="pa-0" style="margin-top: 0px !important;">
+                                 <v-col class="pa-0">
+                                    <ValidationProvider rules="required" v-slot="{ errors }" name="role">
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-select label="Role" name="role" id="role" prepend-inner-icon="mdi-lock"
+                                             class="rounded-0" outlined :items="role" item-text="roleName"
+                                             v-model="selectedRole">
+                                          </v-select>
+                                       </v-col>
                                     </ValidationProvider>
                                  </v-col>
-                                 <v-col>
+
+                              </v-row>
+                              <v-row class="pa-0" style="margin-top: 0px !important;">
+                                 <v-col class="pa-0">
+                                    <ValidationProvider rules="required" v-slot="{ errors }" name="phone">
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field label="Phone" v-model="form.telephone"
+                                             v-mask="'+38(###)-##-###-##'" name="phone" id="phone"
+                                             prepend-inner-icon="mdi-phone" type="text" class="rounded-0" outlined>
+                                          </v-text-field>
+                                       </v-col>
+
+                                    </ValidationProvider>
+                                 </v-col>
+
+                              </v-row>
+
+                              <v-row class="pa-0" style="margin-top: 0px !important;">
+                                 <v-col class="pa-0">
+                                    <ValidationProvider rules="required" v-slot="{ errors }" name="date">
+                                       <v-col style="height: 10px">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-text-field type="date" id="date" class="rounded-0" outlined
+                                             v-model="formData.date" name="date"></v-text-field>
+                                       </v-col>
+                                    </ValidationProvider>
+                                 </v-col>
+                                 <v-col class="pa-0">
                                     <ValidationProvider rules="required" v-slot="{ errors }" name="country">
-                                       <span>{{ errors[0] }}</span>
-                                       <v-select name="country" id="country" class="rounded-0" outlined
-                                          v-model="formData.country" :items="countries">
-                                       </v-select>
+                                       <v-col style="min-height: 10px; height: fit-content;">
+                                          <span style="font-size:smaller">{{ errors[0] }}</span>
+                                       </v-col>
+                                       <br>
+                                       <v-col>
+                                          <v-select name="country" id="country" class="rounded-0" outlined
+                                             v-model="formData.country" :items="countries">
+                                          </v-select>
+                                       </v-col>
+
                                     </ValidationProvider>
                                  </v-col>
                               </v-row>
@@ -172,4 +238,10 @@ export default {
 }
 </script>
 
- 
+<style>
+.v-text-field.v-text-field--enclosed .v-text-field__details,
+.v-messages {
+   min-height: 0px !important;
+   max-height: 0px !important;
+}
+</style>
