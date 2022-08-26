@@ -260,8 +260,8 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let user = new Api(url, 0, headers);
-            user.post(url, 0, headers);
             localStorage.clear();
+            return user.post(url, 0, headers);
         },
         userConferenceJoin({ commit }, conference_id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -271,7 +271,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let join = new Api(url, 0, headers);
-            join.post(url, 0, headers);
+            return join.post(url, 0, headers);
         },
         userConferenceOut({ commit }, conference_id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -281,7 +281,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let out = new Api(url, 0, headers);
-            out.post(url, 0, headers);
+            return out.post(url, 0, headers);
         },
         ajaxUser({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -291,7 +291,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let user = new Api(url, 0, headers);
-            user.get(url, 0, headers).then((response) => {
+            return user.get(url, 0, headers).then((response) => {
                 commit("setUser", response.data);
             });
         },
@@ -303,7 +303,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let report = new Api(url, 0, headers);
-            report.get(url, 0, headers).then((response) => {
+            return report.get(url, 0, headers).then((response) => {
                 commit("setOnFavorite", response.data);
             });
         },
@@ -315,7 +315,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let user = new Api(url, 0, headers);
-            user.post(url, 0, headers).then((response) => {
+            return user.post(url, 0, headers).then((response) => {
                 commit("setUserOnConferenceStatus", response.data);
             });
         },
@@ -342,7 +342,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let report = new Api(url, 0, headers);
-            report.get(url, 0, headers).then((response) => {
+            return report.get(url, 0, headers).then((response) => {
                 commit("setReports", response.data);
             });
         },
@@ -354,7 +354,7 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let report = new Api(url, 0, headers);
-            report.get(url, 0, headers).then((response) => {
+            return report.get(url, 0, headers).then((response) => {
                 commit("setReport", response.data[0]);
             });
         },
@@ -374,7 +374,7 @@ export default new Vuex.Store({
                     "application/vnd.openxmlformats-officedocument.presentationml.presentation;",
             };
             let report = new Api(url, dataF, headers);
-            report.post(url, dataF, headers).then(function (response) {
+            return report.post(url, dataF, headers).then(function (response) {
                 commit("setReport", response.data);
             });
         },
@@ -391,10 +391,10 @@ export default new Vuex.Store({
             let headers = {
                 Authorization: token,
                 "Content-type":
-                        "multipart/form-data; boundary=<calculated when request is sent>",
+                    "multipart/form-data; boundary=<calculated when request is sent>",
             };
             let report = new Api(url, dataF, headers);
-            report.post(url, dataF, headers).then(function (response) {
+            return report.post(url, dataF, headers).then(function (response) {
                 commit("setReport", response.data);
             });
         },
@@ -406,235 +406,155 @@ export default new Vuex.Store({
                 "Content-type": "application/json; charset=UTF-8",
             };
             let report = new Api(url, 0, headers);
-            report.delete(url, 0, headers)
+            return report.delete(url, 0, headers);
         },
         ajaxGetReportFile({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url:
-                    "api/conferences/" +
-                    data[0] +
-                    "/reports/" +
-                    data[1] +
-                    "/file",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json",
-                },
-            })
-                .then((response) => {
-                    console.log(response);
-                    commit("setFile", response.config.url);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url =
+                "api/conferences/" + data[0] + "/reports/" + data[1] + "/file";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let file = new Api(url, 0, headers);
+            return file.get(url, 0, headers).then((response) => {
+                commit("setFile", response.config.url);
+            });
         },
         ajaxGetComments({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/conferences/report/" + data[0] + "/comment",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setComments", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/conferences/report/" + data[0] + "/comment";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let comments = new Api(url, 0, headers);
+            return comments.get(url, 0, headers).then((response) => {
+                commit("setComments", response.data);
+            });
         },
         ajaxSendComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "post",
-                url:
-                    "api/conferences/" +
-                    data[0] +
-                    "/report/" +
-                    data[1] +
-                    "/comment",
-                data: data[2],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url =
+                "api/conferences/" +
+                data[0] +
+                "/report/" +
+                data[1] +
+                "/comment";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let comment = new Api(url, data[2], headers);
+            return comment.post(url, data[2], headers);
         },
         ajaxSetComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "put",
-                url:
-                    "api/conferences/" +
-                    data[0] +
-                    "/report/" +
-                    data[1] +
-                    "/comment/" +
-                    data[2],
-                data: data[3],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {})
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url =
+                "api/conferences/" +
+                data[0] +
+                "/report/" +
+                data[1] +
+                "/comment/" +
+                data[2];
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let comment = new Api(url, data[3], headers);
+            return comment.put(url, data[3], headers);
         },
         ajaxGetCategories({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/categories",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setCategories", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/categories";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setCategories", response.data);
+            });
         },
         ajaxCreateCategory({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "post",
-                url: "api/categories",
-                data: data,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error.response);
-                });
+            let url = "api/categories";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, data, headers);
+            return category.post(url, data, headers);
         },
         ajaxDeleteCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "delete",
-                url: "api/category/destroy",
-                data: id,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error.response);
-                });
+            let url = "api/category/destroy";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, id, headers);
+            return category.delete(url, id, headers);
         },
         ajaxGetCategoryConferenceNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/category/" + id + "/getConferences",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setConferences", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/category/" + id + "/getConferences";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setConferences", response.data);
+            });
         },
         ajaxGetCategoryReportNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/category/" + id + "/getReports",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setReports", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/category/" + id + "/getReports";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setReports", response.data);
+            });
         },
         ajaxGetRootCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/rootCategories",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setRootCategories", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/rootCategories";
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setRootCategories", response.data);
+            });
         },
         ajaxGetSubCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/subCategories/" + id,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setSubCategories", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/subCategories/" + id;
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setSubCategories", response.data);
+            });
         },
         ajaxGetCurrentCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/currentCategory/" + id,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            })
-                .then((response) => {
-                    console.log(response.data);
-                    commit("setCurrentCategory", response.data);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
+            let url = "api/currentCategory/" + id;
+            let headers = {
+                Authorization: token,
+                "Content-type": "application/json; charset=UTF-8",
+            };
+            let category = new Api(url, 0, headers);
+            return category.get(url, 0, headers).then((response) => {
+                commit("setCurrentCategory", response.data);
+            });
         },
     },
     mutations: {
