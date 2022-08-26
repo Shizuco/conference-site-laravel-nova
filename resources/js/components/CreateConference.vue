@@ -7,45 +7,62 @@
                     <v-card-text>
                         <v-form>
                             <ValidationObserver tag="form" @submit.prevent="createConference">
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                             name="title">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field label="Title" name="title" id="title" type="text"
-                                                class="rounded-0" min="2" max="255" outlined required
-                                                v-model="formData.title"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field label="Title" name="title" id="title" type="text"
+                                                    class="rounded-0" min="2" max="255" outlined required
+                                                    v-model="formData.title"></v-text-field>
+                                            </v-col>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field type="date" id="date" class="rounded-0" outlined required
-                                                name="date" v-model="formData.date"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field type="date" id="date" class="rounded-0" outlined required
+                                                    name="date" v-model="formData.date"></v-text-field>
+                                            </v-col>
                                         </ValidationProvider>
                                     </v-col>
-                                    <v-col>
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="time">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field type="time" id="time" class="rounded-0" outlined required
-                                                name="time" v-model="formData.time"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field type="time" id="time" class="rounded-0" outlined required
+                                                    name="time" v-model="formData.time"></v-text-field>
+                                            </v-col>
+
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="country">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-select name="country" id="country" class="rounded-0" outlined
-                                                v-model="formData.country" :items="countries">
-                                            </v-select>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-select name="country" id="country" class="rounded-0" outlined
+                                                    v-model="formData.country" :items="countries">
+                                                </v-select>
+                                            </v-col>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <v-select name="category" id="category" class="rounded-0" outlined
                                             v-model="formData.category" :items="categories">
                                         </v-select>

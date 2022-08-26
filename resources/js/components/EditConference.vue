@@ -7,45 +7,65 @@
                     <v-card-text>
                         <v-form>
                             <ValidationObserver tag="form" @submit.prevent="editConference">
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                             name="title">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field name="title" id="title" prepend-inner-icon="mdi-mail"
-                                                type="text" class="rounded-0" outlined required
-                                                v-model="formData.title"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field name="title" id="title" prepend-inner-icon="mdi-mail"
+                                                    type="text" class="rounded-0" outlined required
+                                                    v-model="formData.title"></v-text-field>
+                                            </v-col>
+
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="date">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field type="date" id="date" class="rounded-0" outlined required
-                                                v-model="formData.date" name="date"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field type="date" id="date" class="rounded-0" outlined required
+                                                    v-model="formData.date" name="date"></v-text-field>
+                                            </v-col>
+
                                         </ValidationProvider>
                                     </v-col>
-                                    <v-col>
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="time">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-text-field type="time" id="time" class="rounded-0" outlined required
-                                                v-model="formData.time" name="time"></v-text-field>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-text-field type="time" id="time" class="rounded-0" outlined required
+                                                    v-model="formData.time" name="time"></v-text-field>
+                                            </v-col>
+
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="country">
-                                            <span>{{ errors[0] }}</span>
-                                            <v-select name="country" id="country" class="rounded-0" outlined required
-                                                v-model="formData.country" :items="countries">
-                                            </v-select>
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-select name="country" id="country" class="rounded-0" outlined
+                                                    required v-model="formData.country" :items="countries">
+                                                </v-select>
+                                            </v-col>
+
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
+                                <v-row class="pa-0" style="margin-top: 0px !important">
+                                    <v-col class="pa-0">
                                         <gmap-map :zoom="15" :center="{
                                             lat: Number(getConference.address_lat),
                                             lng: Number(getConference.address_lon)
