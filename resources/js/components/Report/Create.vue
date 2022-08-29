@@ -74,6 +74,16 @@
                                     </v-col>
                                 </v-row>
                                 <v-row>
+                                        <v-col>
+                                            <v-radio-group v-model="formData.isOnline" row>
+                                                <v-radio :value="true" label="online">
+                                                </v-radio>
+                                                <v-radio :value="false" label="offline">
+                                                </v-radio>
+                                            </v-radio-group>
+                                        </v-col>
+                                </v-row>
+                                <v-row>
                                     <v-col>
                                         <v-btn x-big block color="primary" class="white--text"
                                             :to="{ name: 'MainPage' }">Back
@@ -103,7 +113,8 @@ export default {
             end_time: '',
             category: '',
             description: '',
-            presentation: ''
+            presentation: '',
+            isOnline: false
         },
         categories: []
     }),
@@ -130,13 +141,12 @@ export default {
                 'end_time': new Date(this.formData.end_time).toUTCString(),
                 'category_id': this.formData.category,
                 'description': this.formData.description,
-                'presentation': this.formData.presentation
+                'presentation': this.formData.presentation,
+                'isOnline': this.formData.isOnline
             }
             this.$store.dispatch('ajaxCreateReport', [data, this.$route.params.id]).then(() => {
                 this.$router.replace('/conferences')
             }).catch(error => {
-                console.log(error.response)
-
                 this.$refs.form.setErrors({
                     title: error.response.data.errors.thema,
                     start_time: error.response.data.errors.start_time,

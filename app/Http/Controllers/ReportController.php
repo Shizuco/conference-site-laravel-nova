@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Services\MakeReportSvcFile;
 use App\Jobs\SvcFile;
 use App\Events\DownloadExportCsvFile;
+use App\Http\Controllers\MeetingController;
 use App\Http\Requests\CreateReportRequest;
 use App\Jobs\SendMailWithQueue;
 use App\Models\Conference;
@@ -60,6 +61,10 @@ class ReportController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
+            if($request->isOnline === true){
+                $zoom_id = MeetingController::store($request->thema, $duration, $startTimeExist);
+                $data['zoom_meeting_id'] = 'true';
+            }
             Report::create($data);
             $this->sendMessage($request, $id, 0, 'new participant');
         } else {
