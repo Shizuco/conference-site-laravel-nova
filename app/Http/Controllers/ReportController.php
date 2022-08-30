@@ -4,14 +4,16 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Services\MakeReportSvcFile;
-use App\Jobs\SvcFile;
 use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateReportRequest;
-use App\Jobs\SendMailWithQueue;
+use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
+use App\Services\MakeReportCsvFile;
+use App\Services\Messages\SendMessageAboutChangeReportTime;
+use App\Services\Messages\SendMessageAboutReportDeletedByAdmin;
+use App\Services\Messages\SendMessageAboutNewParticipant;
 use Auth;
 use DateInterval;
 use DateTime;
@@ -20,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use App\Services\ExportCsvFile;
 
 class ReportController extends Controller
 {
@@ -114,80 +117,25 @@ class ReportController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('report', $id));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('report', $id);
     }
 
     public function downloadCsv(int $id)
     {
-        return MakeReportSvcFile::sendFile($id);
+        return MakeReportCsvFile::sendFile($id);
     }
 
     private function sendMessage($request, int $id, $report, string $whichMessage)
     {
         switch ($whichMessage) {
             case ('new participant'):
-                if (Auth::user()->role === 'announcer') {
-                    $startTimeExist = new Datetime($request->start_time);
-                    $startTimeExist->setTimezone(new DateTimeZone('GMT'));
-                    $startTimeExist->add(new DateInterval('PT3H'));
-                    $startTimeExist = $startTimeExist->format('Y-m-d H:i:s');
-                    $users = Conference::with('users')->whereId($id)->get();
-                    $report = Report::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
-                    $usersEmails = [];
-                    $message = '';
-                    foreach ($users as $user) {
-                        $confLink = env('APP_URL') . '#/conferences/' . $id;
-                        $repLink = env('APP_URL') . '#/conferences/' . $id . '/reports/' . $report->id;
-                        $message = 'Good afternoon, a new participant ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ') with a report on the topic ' . $request->thema . ' (' . '<a href=' . $repLink . '>report</a>)</br>
-                Presentation time: ' . $startTimeExist;
-                        foreach ($user->users as $user) {
-                            if ($user->role == 'listener') {
-                                array_push($usersEmails, $user->email);
-                            }
-                        }
-                    }
-                    foreach ($usersEmails as $email) {
-                        dispatch(new SendMailWithQueue($email, $message));
-                    }
-                }
+                SendMessageAboutNewParticipant::sendMessage($request, $id, $report);
                 break;
-
             case ('deleted by admin'):
-                if (Auth::user()->role === 'admin') {
-                    $conferences = Conference::with('reports')->whereId($id)->get();
-                    $user = '';
-                    $message = '';
-                    foreach ($conferences as $conference) {
-                        $user = User::whereId($report->user_id)->first();
-                        $confLink = env('APP_URL') . '#/conferences/' . $id;
-                        $message = 'Good afternoon, at the conference ' . $conference->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ') your report was deleted by the administration.';
-                    }
-                    dispatch(new SendMailWithQueue($user->email, $message));
-                }
+                SendMessageAboutReportDeletedByAdmin::sendMessage($request, $id, $report);
                 break;
-
             case ('change report time'):
-                if (Auth::user()->role === 'announcer') {
-                    $conferences = Conference::with('users')->whereId($id)->get();
-                    $message = '';
-                    $usersEmails = [];
-                    foreach ($conferences as $conference) {
-                        $confLink = env('APP_URL') . '#/conferences/' . $id;
-                        $repLink = env('APP_URL') . '#/conferences/' . $id . '/reports/' . $report->id;
-                        $message = 'Good afternoon, at the conference ' . $conference->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ') participant ' . Auth::user()->name . ' with a report on the topic ' . $report->thema . ' (' . '<a href=' . $repLink . '>report</a>' . ') rescheduled the report.<br>New report time: ' . $request->start_time;
-                        foreach ($conference->users as $user) {
-                            if ($user->role == 'listener') {
-                                array_push($usersEmails, $user->email);
-                            }
-                        }
-                    }
-                    foreach ($usersEmails as $email) {
-                        dispatch(new SendMailWithQueue($email, $message));
-                    }
-                }
+                SendMessageAboutChangeReportTime::sendMessage($request, $id, $report);
                 break;
         }
 

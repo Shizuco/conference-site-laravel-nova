@@ -1,21 +1,19 @@
 <?php
+declare (strict_types = 1);
 
 namespace App\Jobs;
 
-
-use App\Events\DownloadExportCsvFile;
-use App\Services\MakeConferenceSvcFile;
-use App\Services\MakeReportSvcFile;
-use App\Services\MakeCommentSvcFile;
-use App\Services\MakeListenerSvcFile;
+use App\Services\MakeCommentCsvFile;
+use App\Services\MakeConferenceCsvFile;
+use App\Services\MakeListenerCsvFile;
+use App\Services\MakeReportCsvFile;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SvcFile implements ShouldQueue
+class CsvFile implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -25,24 +23,24 @@ class SvcFile implements ShouldQueue
 
     public function __construct($method, $id)
     {
-       $this->method = $method;
-       $this->$id = $id;
+        $this->method = $method;
+        $this->$id = $id;
     }
 
     public function handle()
     {
-        switch($this->method){
+        switch ($this->method) {
             case 'conference':
-                MakeConferenceSvcFile::getFile();
+                MakeConferenceCsvFile::getFile();
                 break;
             case 'report':
-                MakeReportSvcFile::getFile($this->id);
+                MakeReportCsvFile::getFile($this->id);
                 break;
             case 'comment':
-                MakeCommentSvcFile::getFile($this->id);
+                MakeCommentCsvFile::getFile($this->id);
                 break;
             case 'listeners':
-                MakeListenerSvcFile::getFile($this->id);
+                MakeListenerCsvFile::getFile($this->id);
                 break;
         }
     }

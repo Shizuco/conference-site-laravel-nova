@@ -8,12 +8,14 @@ use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
 use App\Jobs\SendMailWithQueue;
-use App\Jobs\SvcFile;
+use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
-use App\Services\MakeConferenceSvcFile;
+use App\Services\MakeConferenceCsvFile;
 use Datetime;
 use Illuminate\Http\Request;
+use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
+use App\Services\ExportCsvFile;
 
 class ConferenceController extends Controller
 {
@@ -55,15 +57,12 @@ class ConferenceController extends Controller
 
     public function exportCsv(Request $request)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('conference', 0));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('conference', 0);
     }
 
     public function downloadCsv()
     {
-        return MakeConferenceSvcFile::sendFile();
+        return MakeConferenceCsvFile::sendFile();
     }
 
     private function hasTime(int $id)
@@ -100,17 +99,6 @@ class ConferenceController extends Controller
 
     private function sendMessage(int $id)
     {
-        $users = Conference::with('users')->whereId($id)->get();
-        $usersEmails = [];
-        $message = '';
-        foreach ($users as $user) {
-            $message = 'Good afternoon, unfortunately the conference ' . $user->title . ' has been deleted by the administration.';
-            foreach ($user->users as $userEmail) {
-                array_push($usersEmails, $userEmail->email);
-            }
-        }
-        foreach ($usersEmails as $email) {
-            dispatch(new SendMailWithQueue($email, $message));
-        }
+        SendMessageAboutConferenceDeletedByAdmin::sendMessage(0, $id, 0);
     }
 }

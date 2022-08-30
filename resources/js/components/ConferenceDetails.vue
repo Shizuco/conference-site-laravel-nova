@@ -126,7 +126,6 @@ export default {
             })
             Echo.channel('downloadCsvFile')
                 .listen('DownloadExportCsvFile', (e) => {
-                    console.log(e)
                     if (e.message == 'start') {
                         this.CsvButtonType = 1
                     }
@@ -203,9 +202,8 @@ export default {
                     "Authorization": token,
                     "Content-type": "application/json"
                 },
-                //responseType: 'blob', // important
+                responseType: 'blob', // important
             }).then((response) => {
-                console.log(response.data)
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
@@ -213,8 +211,6 @@ export default {
                 link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
-            }).catch((err)=>{
-                console.log(err.response)
             })
         },
     },

@@ -132,12 +132,10 @@ export default {
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
-                    console.log(this.isFavorite.length)
                 })
             })
             Echo.channel('downloadCsvFile')
             .listen('DownloadExportCsvFile', (e) => {
-                console.log(e)
                 if (e.message == 'start') {
                     this.CsvButtonType = 1
                 }
@@ -243,8 +241,6 @@ export default {
                     "Authorization": token,
                     "Content-type": "application/json"
                 },
-            }).catch((err)=>{
-                console.log(err.response)
             })
         },
         downloadCsv() {
@@ -265,8 +261,6 @@ export default {
                 link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
-            }).catch((err) => {
-                console.log(err.response)
             })
         },
     }
