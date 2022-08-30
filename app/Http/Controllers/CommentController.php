@@ -18,6 +18,7 @@ use Auth;
 use DateTime;
 use DateTimeInterface;
 use App\Services\Messages\SendMessageAboutNewComment;
+use App\Services\ExportCsvFile;
 
 class CommentController extends Controller
 {
@@ -64,10 +65,7 @@ class CommentController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('comment', $id));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('comment', $id);
     }
 
     public function downloadCsv(int $id)

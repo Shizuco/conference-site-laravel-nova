@@ -15,6 +15,7 @@ use App\Services\MakeConferenceSvcFile;
 use Datetime;
 use Illuminate\Http\Request;
 use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
+use App\Services\ExportCsvFile;
 
 class ConferenceController extends Controller
 {
@@ -56,10 +57,7 @@ class ConferenceController extends Controller
 
     public function exportCsv(Request $request)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('conference', 0));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('conference', 0);
     }
 
     public function downloadCsv()

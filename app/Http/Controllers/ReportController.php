@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
+use App\Services\ExportCsvFile;
 
 class ReportController extends Controller
 {
@@ -116,10 +117,7 @@ class ReportController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('report', $id));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('report', $id);
     }
 
     public function downloadCsv(int $id)

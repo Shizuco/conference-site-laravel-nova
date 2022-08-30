@@ -13,6 +13,7 @@ use App\Models\Conference;
 use Auth;
 use App\Services\Messages\SendMessageAboutNewListener;
 use Illuminate\Http\Request;
+use App\Services\ExportCsvFile;
 
 class UserController extends Controller
 {
@@ -75,10 +76,7 @@ class UserController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        event(new DownloadExportCsvFile('start'));
-        sleep(5);
-        dispatch(new SvcFile('listeners', $id));
-        event(new DownloadExportCsvFile('done'));
+        ExportCsvFile::export('listeners', $id);
     }
 
     public function downloadCsv(int $id)
