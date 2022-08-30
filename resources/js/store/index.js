@@ -21,10 +21,14 @@ export default new Vuex.Store({
         rootCategories: [],
         subCategories: [],
         currentCategory: [],
+        meeting: []
     },
     getters: {
         getConferences(state) {
             return state.conferences;
+        },
+        getMeeting(state) {
+            return state.meeting;
         },
         getConference(state) {
             return state.conference;
@@ -73,34 +77,51 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        ajaxGetMeeting({ commit }, id) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/meeting/" + id,
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }).then((response) => {
+                commit("setMeeting", response.data);
+            });
+        },
         ajaxConferences({ commit }, data) {
-            console.log(data)
             return axios
-                .get("api/conferences?page=" +
-                data[0] +
-                "&numberOfReports=" +
-                data[1] + 
-                "&categories=" + 
-                data[2] + '&dateFrom=' + data[3] + '&dateTo=' + data[4],)
+                .get(
+                    "api/conferences?page=" +
+                        data[0] +
+                        "&numberOfReports=" +
+                        data[1] +
+                        "&categories=" +
+                        data[2] +
+                        "&dateFrom=" +
+                        data[3] +
+                        "&dateTo=" +
+                        data[4]
+                )
                 .then((response) => {
                     commit("setConferences", response.data);
-                })
+                });
         },
         ajaxConferencesCsv({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
-                url:
-                    "api/conferencesCsv",
+                url: "api/conferencesCsv",
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            }) .then((response) => {
+            }).then((response) => {
                 commit("setFile", response.config.url);
-            })
+            });
         },
-        ajaxGetConferenceByName({commit}, data){
+        ajaxGetConferenceByName({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
@@ -113,11 +134,11 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            }) .then((response) => {
+            }).then((response) => {
                 commit("setConferences", response.data);
-            })
+            });
         },
-        ajaxGetReportsByName({commit}, data){
+        ajaxGetReportsByName({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
@@ -130,9 +151,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            }) .then((response) => {
+            }).then((response) => {
                 commit("setReports", response.data);
-            })
+            });
         },
         ajaxGetConference({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -143,10 +164,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setConference", response.data);
-                })
+            }).then((response) => {
+                commit("setConference", response.data);
+            });
         },
         ajaxConferenceDelete({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -157,10 +177,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setConference", response.data);
-                })
+            }).then((response) => {
+                commit("setConference", response.data);
+            });
         },
         ajaxConferenceCreate({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -172,10 +191,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then(function (response) {
-                    commit("setConferences", response.data);
-                })
+            }).then(function (response) {
+                commit("setConferences", response.data);
+            });
         },
         ajaxConferenceEdit({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -187,10 +205,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then(function (response) {
-                    commit("setConferences", response.data);
-                })
+            }).then(function (response) {
+                commit("setConferences", response.data);
+            });
         },
         register({ commit }, data) {
             return axios({
@@ -228,11 +245,10 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then(function (response) {
-                    commit("setUser", response.data);
-                    localStorage.setItem("Authorized", response.data.token);
-                })
+            }).then(function (response) {
+                commit("setUser", response.data);
+                localStorage.setItem("Authorized", response.data.token);
+            });
         },
         ajaxGetFavorites({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -243,10 +259,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setFavorites", response.data);
-                })
+            }).then((response) => {
+                commit("setFavorites", response.data);
+            });
         },
         ajaxAddToFavorites({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -257,7 +272,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxDeleteFromFavorites({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -268,7 +283,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         logout({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -291,7 +306,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         userConferenceOut({ commit }, conference_id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -313,10 +328,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setUser", response.data);
-                })
+            }).then((response) => {
+                commit("setUser", response.data);
+            });
         },
         isReportInFavorite({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -351,10 +365,19 @@ export default new Vuex.Store({
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
-                url: "api/conferences/" + data[1] + "/reports?page=" + data[0] + "&duration=" +
-                data[2] + 
-                "&categories=" + 
-                data[3] + '&start_time=' + data[4] + '&end_time=' + data[5],
+                url:
+                    "api/conferences/" +
+                    data[1] +
+                    "/reports?page=" +
+                    data[0] +
+                    "&duration=" +
+                    data[2] +
+                    "&categories=" +
+                    data[3] +
+                    "&start_time=" +
+                    data[4] +
+                    "&end_time=" +
+                    data[5],
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
@@ -372,10 +395,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setReport", response.data[0]);
-                })
+            }).then((response) => {
+                commit("setReport", response.data[0]);
+            });
         },
         ajaxCreateReport({ commit }, data) {
             let datas = new FormData();
@@ -430,7 +452,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxGetReportFile({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -446,10 +468,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json",
                 },
-            })
-                .then((response) => {
-                    commit("setFile", response.config.url);
-                })
+            }).then((response) => {
+                commit("setFile", response.config.url);
+            });
         },
         ajaxGetComments({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -460,10 +481,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setComments", response.data);
-                })
+            }).then((response) => {
+                commit("setComments", response.data);
+            });
         },
         ajaxSendComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -480,7 +500,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxSetComment({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -498,7 +518,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxGetCategories({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -509,10 +529,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setCategories", response.data);
-                })
+            }).then((response) => {
+                commit("setCategories", response.data);
+            });
         },
         ajaxCreateCategory({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -524,7 +543,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxDeleteCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -536,7 +555,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
+            });
         },
         ajaxGetCategoryConferenceNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -547,10 +566,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setConferences", response.data);
-                })
+            }).then((response) => {
+                commit("setConferences", response.data);
+            });
         },
         ajaxGetCategoryReportNumber({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -561,10 +579,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setReports", response.data);
-                })
+            }).then((response) => {
+                commit("setReports", response.data);
+            });
         },
         ajaxGetRootCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -575,10 +592,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setRootCategories", response.data);
-                })
+            }).then((response) => {
+                commit("setRootCategories", response.data);
+            });
         },
         ajaxGetSubCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -589,10 +605,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setSubCategories", response.data);
-                })
+            }).then((response) => {
+                commit("setSubCategories", response.data);
+            });
         },
         ajaxGetCurrentCategory({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
@@ -603,10 +618,9 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            })
-                .then((response) => {
-                    commit("setCurrentCategory", response.data);
-                })
+            }).then((response) => {
+                commit("setCurrentCategory", response.data);
+            });
         },
     },
     mutations: {
@@ -662,5 +676,8 @@ export default new Vuex.Store({
         setCurrentCategory(state, data) {
             return (state.currentCategory = data);
         },
+        setMeeting(state, data){
+            return (state.meeting = data);
+        }
     },
 });

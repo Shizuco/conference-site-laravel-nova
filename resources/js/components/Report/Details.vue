@@ -115,13 +115,14 @@ export default {
         currentTime(time) {
             if (time === 0) {
                 this.stopTimer()
+                this.time = 'out';
             }
         }
     },
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
-                this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
+                //this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
                     this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(() => {
@@ -148,6 +149,11 @@ export default {
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
+                    this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(()=>{
+                        console.log(this.$store.getters.getMeeting.data.join_url)
+                    })
+                    
+                    console.log(this.getReport.zoom_meeting_id)
                     this.startTimer()
                 })
             })
@@ -185,15 +191,15 @@ export default {
             let unix_timestamp = timestamps
             let date = new Date(unix_timestamp * 1000);
             let days = parseInt(timestamps / 86400);
-            let hours = date.getHours();
+            let hours = "0" + (date.getHours() - 3);
             let minutes = "0" + date.getMinutes();
             let seconds = "0" + date.getSeconds();
-            return days + ':' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return days + ':' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
         },
         startTimer() {
             this.timer = setInterval(() => {
                 this.currentTime--
-                this.time = this.toDate(this.currentTime);
+                //this.time = this.toDate(this.currentTime);
             }, 1000)
         },
         stopTimer() {
