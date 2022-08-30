@@ -8,10 +8,10 @@ use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
 use App\Jobs\SendMailWithQueue;
-use App\Jobs\SvcFile;
+use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
-use App\Services\MakeConferenceSvcFile;
+use App\Services\MakeConferenceCsvFile;
 use Datetime;
 use Illuminate\Http\Request;
 use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
@@ -62,7 +62,7 @@ class ConferenceController extends Controller
 
     public function downloadCsv()
     {
-        return MakeConferenceSvcFile::sendFile();
+        return MakeConferenceCsvFile::sendFile();
     }
 
     private function hasTime(int $id)

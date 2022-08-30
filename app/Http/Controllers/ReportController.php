@@ -6,11 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateReportRequest;
-use App\Jobs\SvcFile;
+use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
-use App\Services\MakeReportSvcFile;
+use App\Services\MakeReportCsvFile;
 use App\Services\Messages\SendMessageAboutChangeReportTime;
 use App\Services\Messages\SendMessageAboutReportDeletedByAdmin;
 use App\Services\Messages\SendMessageAboutNewParticipant;
@@ -122,7 +122,7 @@ class ReportController extends Controller
 
     public function downloadCsv(int $id)
     {
-        return MakeReportSvcFile::sendFile($id);
+        return MakeReportCsvFile::sendFile($id);
     }
 
     private function sendMessage($request, int $id, $report, string $whichMessage)

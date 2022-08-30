@@ -7,7 +7,7 @@ use App\Models\Conference;
 use App\Services\MakeCsvFileInterface;
 use App\Services\CsvFileAttributes;
 
-class MakeConferenceSvcFile implements MakeCsvFileInterface
+class MakeConferenceCsvFile implements MakeCsvFileInterface
 {
     public static function getFile(int $id = 0)
     {
@@ -23,7 +23,7 @@ class MakeConferenceSvcFile implements MakeCsvFileInterface
 
     public static function sendFile(int $id = 0)
     {
-        $file = MakeConferenceSvcFile::getFile();
+        $file = MakeConferenceCsvFile::getFile();
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Services\MakeCsvFileInterface;
 use App\Services\CsvFileAttributes;
 
-class MakeListenerSvcFile implements MakeCsvFileInterface
+class MakeListenerCsvFile implements MakeCsvFileInterface
 {
 
     public static function getFile(int $id)
@@ -24,7 +24,7 @@ class MakeListenerSvcFile implements MakeCsvFileInterface
 
     public static function sendFile(int $id)
     {
-        $file = MakeListenerSvcFile::getFile($id);
+        $file = MakeListenerCsvFile::getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

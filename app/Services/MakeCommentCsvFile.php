@@ -3,19 +3,18 @@ declare (strict_types = 1);
 
 namespace App\Services;
 
-use App\Models\Report;
+use App\Models\Comment;
 use App\Services\MakeCsvFileInterface;
 use App\Services\CsvFileAttributes;
 
-class MakeReportSvcFile implements MakeCsvFileInterface
+class MakeCommentCsvFile implements MakeCsvFileInterface
 {
-    public static function getFile(int $id)
-    {
-        $fileName = 'reports.csv';
+    public static function getFile (int $id){
+        $fileName = 'comments.csv';
         $headers = CsvFileAttributes::getHeaders($fileName);
 
         $callback = function () use ($id){
-            CsvFileAttributes::makeContent('report', $id);
+            CsvFileAttributes::makeContent('comment', $id);
         };
         $response = [$callback, 200, $headers];
         return $response;
@@ -23,7 +22,7 @@ class MakeReportSvcFile implements MakeCsvFileInterface
 
     public static function sendFile(int $id)
     {
-        $file = MakeReportSvcFile::getFile($id);
+        $file = MakeCommentCsvFile::getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

@@ -4,8 +4,8 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Services\MakeCommentSvcFile;
-use App\Jobs\SvcFile;
+use App\Services\MakeCommentCsvFile;
+use App\Jobs\CsvFile;
 use App\Events\DownloadExportCsvFile;
 use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\CreateCommentRequest;
@@ -70,7 +70,7 @@ class CommentController extends Controller
 
     public function downloadCsv(int $id)
     {
-        return MakeCommentSvcFile::sendFile($id);
+        return MakeCommentCsvFile::sendFile($id);
     }
 
     private function sendMessage(int $id)

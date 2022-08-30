@@ -4,8 +4,8 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Services\MakeListenerSvcFile;
-use App\Jobs\SvcFile;
+use App\Services\MakeListenerCsvFile;
+use App\Jobs\CsvFile;
 use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
@@ -81,7 +81,7 @@ class UserController extends Controller
 
     public function downloadCsv(int $id)
     {
-        return MakeListenerSvcFile::sendFile($id);
+        return MakeListenerCsvFile::sendFile($id);
     }
 
     private function sendMessage(int $id)
