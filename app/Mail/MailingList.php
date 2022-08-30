@@ -1,12 +1,12 @@
 <?php
+declare (strict_types = 1);
 
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\View;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\View;
 
 class MailingList extends Mailable
 {
@@ -14,7 +14,7 @@ class MailingList extends Mailable
 
     public $email;
 
-    public $emailText; 
+    public $emailText;
 
     /**
      * Create a new message instance.
@@ -34,12 +34,12 @@ class MailingList extends Mailable
      */
     public function build()
     {
-        return $this->from( 'suvorova_ma@groupbwt.com', 'Laravel Conferences')
+        return $this->from('suvorova_ma@groupbwt.com', 'Laravel Conferences')
             ->to($this->email, 'you')
-            ->subject('Alert: '. 'Laravel')
+            ->subject('Alert: ' . 'Laravel')
             ->view('mail')
             ->with([
-                'text' => $this->emailText
-            ]);;
+                'text' => $this->emailText,
+            ]);
     }
 }

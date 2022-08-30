@@ -1,15 +1,15 @@
 <?php
+declare (strict_types = 1);
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\MailingList;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 
 class SendMailWithQueue implements ShouldQueue
 {

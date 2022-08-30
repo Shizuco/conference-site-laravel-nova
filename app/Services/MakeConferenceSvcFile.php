@@ -1,4 +1,5 @@
 <?php
+declare (strict_types = 1);
 
 namespace App\Services;
 
@@ -7,7 +8,8 @@ use App\Services\MakeCsvFileInterface;
 
 class MakeConferenceSvcFile implements MakeCsvFileInterface
 {
-    public static function getFile (int $id = 0){
+    public static function getFile(int $id = 0)
+    {
         $fileName = 'conferences.csv';
         $conferences = Conference::with('users', 'reports')->get();
         $headers = array(

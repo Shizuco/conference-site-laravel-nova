@@ -1,15 +1,13 @@
 <?php
+declare (strict_types = 1);
 
 namespace App\Jobs;
 
-
-use App\Events\DownloadExportCsvFile;
-use App\Services\MakeConferenceSvcFile;
-use App\Services\MakeReportSvcFile;
 use App\Services\MakeCommentSvcFile;
+use App\Services\MakeConferenceSvcFile;
 use App\Services\MakeListenerSvcFile;
+use App\Services\MakeReportSvcFile;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,13 +23,13 @@ class SvcFile implements ShouldQueue
 
     public function __construct($method, $id)
     {
-       $this->method = $method;
-       $this->$id = $id;
+        $this->method = $method;
+        $this->$id = $id;
     }
 
     public function handle()
     {
-        switch($this->method){
+        switch ($this->method) {
             case 'conference':
                 MakeConferenceSvcFile::getFile();
                 break;
