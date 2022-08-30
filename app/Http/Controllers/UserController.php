@@ -7,11 +7,11 @@ namespace App\Http\Controllers;
 use App\Services\MakeListenerSvcFile;
 use App\Jobs\SvcFile;
 use App\Events\DownloadExportCsvFile;
-use App\Jobs\SendMailWithQueue;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Models\Conference;
 use Auth;
+use App\Services\Messages\SendMessageAboutNewListener;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -88,21 +88,7 @@ class UserController extends Controller
 
     private function sendMessage(int $id)
     {
-        $users = Conference::with('users')->whereId($id)->get();
-        $usersEmails = [];
-        $message = '';
-        foreach ($users as $user) {
-            $confLink = env('APP_URL') . '#/conferences/' . $id;
-            $message = 'Good afternoon, a new listener ' . Auth::user()->name . ' has joined the conference ' . $user->title . ' (' . '<a href=' . $confLink . '>conference</a>' . ')';
-            foreach ($user->users as $user) {
-                if ($user->role == 'announcer') {
-                    array_push($usersEmails, $user->email);
-                }
-            }
-        }
-        foreach ($usersEmails as $email) {
-            dispatch(new SendMailWithQueue($email, $message));
-        }
+        SendMessageAboutNewListener::sendMessage($id);
     }
 
 }

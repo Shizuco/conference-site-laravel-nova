@@ -14,6 +14,7 @@ use App\Models\Report;
 use App\Services\MakeConferenceSvcFile;
 use Datetime;
 use Illuminate\Http\Request;
+use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
 
 class ConferenceController extends Controller
 {
@@ -100,17 +101,6 @@ class ConferenceController extends Controller
 
     private function sendMessage(int $id)
     {
-        $users = Conference::with('users')->whereId($id)->get();
-        $usersEmails = [];
-        $message = '';
-        foreach ($users as $user) {
-            $message = 'Good afternoon, unfortunately the conference ' . $user->title . ' has been deleted by the administration.';
-            foreach ($user->users as $userEmail) {
-                array_push($usersEmails, $userEmail->email);
-            }
-        }
-        foreach ($usersEmails as $email) {
-            dispatch(new SendMailWithQueue($email, $message));
-        }
+        SendMessageAboutConferenceDeletedByAdmin::sendMessage(0, $id, 0);
     }
 }

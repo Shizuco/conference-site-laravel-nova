@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Auth;
 use DateTime;
 use DateTimeInterface;
+use App\Services\Messages\SendMessageAboutNewComment;
 
 class CommentController extends Controller
 {
@@ -76,16 +77,6 @@ class CommentController extends Controller
 
     private function sendMessage(int $id)
     {
-        $reports = Report::with('users')->whereId($id)->get();
-        $user = '';
-        $message = '';
-        foreach ($reports as $report) {
-            $conference = Conference::whereId($report->conference_id)->first();
-            $user = User::whereId($report->user_id)->first();
-            $confLink = env('APP_URL') . '#/conferences/' . $report->conference_id;
-            $repLink = env('APP_URL') . '#/conferences/' . $report->conference_id . '/reports/' . $id;
-            $message = 'Good afternoon, at the conference ' . $conference->title . ' (' . '<a href=' . $confLink . '>conference</a>' . '), the user ' . Auth::user()->name .' left a comment on your report ' . $report->thema . '(<a href=' . $repLink . '>report</a>)';
-        }
-        dispatch(new SendMailWithQueue($user->email, $message));
+        SendMessageAboutNewComment::sendMessage(0, $id, 0);
     }
 }
