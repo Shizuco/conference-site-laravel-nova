@@ -203,7 +203,6 @@ export default {
         }
         Echo.channel('downloadCsvFile')
             .listen('DownloadExportCsvFile', (e) => {
-                console.log(e.message)
                 if(e.message == 'start'){
                     this.CsvButtonType = 1
                 }
@@ -347,8 +346,6 @@ export default {
                 link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
-            }).catch((err)=>{
-                console.log(err.response)
             })
         },
     }

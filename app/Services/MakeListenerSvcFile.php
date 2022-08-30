@@ -47,7 +47,7 @@ class MakeListenerSvcFile
 
     public static function sendFile(int $id)
     {
-        $file = MakeListenerSvcFile::getFile();
+        $file = MakeListenerSvcFile::getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }
