@@ -241,8 +241,6 @@ export default {
                     "Authorization": token,
                     "Content-type": "application/json"
                 },
-            }).catch((err)=>{
-                console.log(err.response)
             })
         },
         downloadCsv() {

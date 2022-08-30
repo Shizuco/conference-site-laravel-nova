@@ -1,10 +1,11 @@
 <?php
-
+declare (strict_types = 1);
 namespace App\Services\Messages;
 
 use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
+use Auth;
 use App\Jobs\SendMailWithQueue;
 use App\Services\Messages\SendMessageInterface;
 

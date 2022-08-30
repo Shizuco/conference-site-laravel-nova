@@ -5,38 +5,17 @@ namespace App\Services;
 
 use App\Models\Report;
 use App\Services\MakeCsvFileInterface;
+use App\Services\CsvFileAttributes;
 
 class MakeReportSvcFile implements MakeCsvFileInterface
 {
     public static function getFile(int $id)
     {
         $fileName = 'reports.csv';
-        $reports = Report::with('comments')->where('conference_id', $id)->get();
-        $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0",
-        );
+        $headers = CsvFileAttributes::getHeaders($fileName);
 
-        $columns = array('Thema', 'Time', 'Description', 'Number of comments');
-
-        $callback = function () use ($reports, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
-
-            foreach ($reports as $report) {
-
-                $row['Thema'] = $report->thema;
-                $row['Date'] = $report->start_time . ' to ' . $report->end_time;
-                $row['Description'] = $report->description;
-                $row['Number of comments'] = count($report->comments);
-
-                fputcsv($file, array($row['Thema'], $row['Date'], $row['Description'], $row['Number of comments']));
-            }
-
-            fclose($file);
+        $callback = function () use ($id){
+            CsvFileAttributes::makeContent('report', $id);
         };
         $response = [$callback, 200, $headers];
         return $response;
