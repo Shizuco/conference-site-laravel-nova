@@ -17,14 +17,14 @@ trait ZoomMeetingTrait
     public function __construct()
     {
         $this->client = new Client();
-        $this->jwt = $this->generateZoomToken();
+        $this->jwt = ZoomMeetingTrait::generateZoomToken();
         $this->headers = [
             'Authorization' => 'Bearer '.$this->jwt,
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
         ];
     }
-    public function generateZoomToken()
+    public static function generateZoomToken()
     {
         $key = env('ZOOM_API_KEY', '');
         $secret = env('ZOOM_API_SECRET', '');
@@ -36,17 +36,15 @@ trait ZoomMeetingTrait
         return \Firebase\JWT\JWT::encode($payload, $secret, 'HS256');
     }
 
-    private function retrieveZoomUrl()
+    private static function retrieveZoomUrl()
     {
         return env('ZOOM_API_URL', '');
     }
 
-    public function toZoomTimeFormat(string $dateTime)
+    public static function toZoomTimeFormat(\DateTime $dateTime)
     {
         try {
-            $date = new \DateTime($dateTime);
-
-            return $date->format('Y-m-d\TH:i:s');
+            return $dateTime->format('Y-m-d\TH:i:s');
         } catch (\Exception $e) {
             Log::error('ZoomJWT->toZoomTimeFormat : '.$e->getMessage());
 
@@ -54,17 +52,21 @@ trait ZoomMeetingTrait
         }
     }
 
-    public function create($data)
+    public static function create($data)
     {
         $path = 'users/me/meetings';
-        $url = $this->retrieveZoomUrl();
+        $url = ZoomMeetingTrait::retrieveZoomUrl();
 
         $body = [
-            'headers' => $this->headers,
+            'headers' => [
+                'Authorization' => 'Bearer '.ZoomMeetingTrait::generateZoomToken(),
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+            ],
             'body'    => json_encode([
                 'topic'      => $data['topic'],
-                'type'       => self::MEETING_TYPE_SCHEDULE,
-                'start_time' => $this->toZoomTimeFormat($data['start_time']),
+                'type'       => "2",
+                'start_time' => ZoomMeetingTrait::toZoomTimeFormat($data['start_time']),
                 'duration'   => $data['duration'],
                 'agenda'     => (! empty($data['agenda'])) ? $data['agenda'] : null,
                 'timezone'     => 'Asia/Kolkata',
@@ -75,8 +77,8 @@ trait ZoomMeetingTrait
                 ],
             ]),
         ];
-
-        $response =  $this->client->post($url.$path, $body);
+        $client = new Client();
+        $response =  $client->post($url.$path, $body);
 
         return [
             'success' => $response->getStatusCode() === 201,

@@ -24,6 +24,7 @@ class Report extends Model
         'end_time',
         'description',
         'presentation',
+        'zoom_meeting_id'
     ];
 
     public function conferences()

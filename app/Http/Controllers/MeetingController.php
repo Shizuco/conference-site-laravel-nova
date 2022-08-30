@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ZoomMeeting;
 use App\Traits\ZoomMeetingTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class MeetingController extends Controller
 {
@@ -28,9 +29,9 @@ class MeetingController extends Controller
         return response()->json($meeting);
     }
 
-    public function store(Request $request)
+    public static function store(array $request)
     {
-        return response()->json($this->create($request->all()));
+        return response()->json(ZoomMeetingTrait::create($request));
     }
 
     public function update($meeting, Request $request)

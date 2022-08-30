@@ -64,9 +64,15 @@ class ReportController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
-            if($request->isOnline === true){
-                $zoom_id = MeetingController::store($request->thema, $duration, $startTimeExist);
-                $data['zoom_meeting_id'] = 'true';
+            if($request->isOnline === "true"){
+                $zoom_id = MeetingController::store([
+                    "topic" => $request->thema,
+                    "duration" => $duration / 60,
+                    "start_time" => $startTimeExist,
+                    "host_video" => "true",
+                    "participant_video" => "true"
+                ]);
+                $data['zoom_meeting_id'] = $zoom_id->original['data']['id'];
             }
             Report::create($data);
             $this->sendMessage($request, $id, 0, 'new participant');
