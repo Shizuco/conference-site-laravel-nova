@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Report;
+use App\Services\MakeCsvFileInterface;
 
-class MakeReportSvcFile
+class MakeReportSvcFile implements MakeCsvFileInterface
 {
     public static function getFile (int $id){
         $fileName = 'reports.csv';

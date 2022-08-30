@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\MakeCsvFileInterface;
 
-class MakeListenerSvcFile
+class MakeListenerSvcFile implements MakeCsvFileInterface
 {
 
     public static function getFile(int $id)

@@ -337,7 +337,7 @@ export default {
                     "Authorization": token,
                     "Content-type": "application/json"
                 },
-                responseType: 'blob', // important
+                //responseType: 'blob', // important
             }).then((response) => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
@@ -346,6 +346,8 @@ export default {
                 link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
+            }).catch((err)=>{
+                console.log(err.response)
             })
         },
     }

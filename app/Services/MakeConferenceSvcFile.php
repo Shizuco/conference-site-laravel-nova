@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Models\Conference;
+use App\Services\MakeCsvFileInterface;
 
-class MakeConferenceSvcFile
+class MakeConferenceSvcFile implements MakeCsvFileInterface
 {
-    public static function getFile (){
+    public static function getFile (int $id = 0){
         $fileName = 'conferences.csv';
         $conferences = Conference::with('users', 'reports')->get();
         $headers = array(
@@ -57,7 +58,7 @@ class MakeConferenceSvcFile
         return $address;
     }
 
-    public static function sendFile()
+    public static function sendFile(int $id = 0)
     {
         $file = MakeConferenceSvcFile::getFile();
         return response()->stream($file[0], $file[1], $file[2]);

@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Comment;
+use App\Services\MakeCsvFileInterface;
 
-class MakeCommentSvcFile
+class MakeCommentSvcFile implements MakeCsvFileInterface
 {
     public static function getFile (int $id){
         $fileName = 'comments.csv';
