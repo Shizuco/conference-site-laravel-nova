@@ -11,7 +11,7 @@ use App\Services\Messages\SendMessageInterface;
 class SendMessageAboutChangeReportTime implements SendMessageInterface
 {
 
-    public static function sendMessage($request = 0, int $id = 0, $report = 0)
+    public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
         if (Auth::user()->role === 'announcer') {
             $conferences = Conference::with('users')->whereId($id)->get();

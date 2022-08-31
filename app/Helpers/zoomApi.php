@@ -3,7 +3,7 @@ namespace App\Helpers;
 
 class ZoomApiHelper{
 
-	public static function createZoomMeeting($meetingConfig = []){
+	public function createZoomMeeting($meetingConfig = []){
 		$jwtToken = env('ZOOM_API_TOKEN');
 		
 		$requestBody = [

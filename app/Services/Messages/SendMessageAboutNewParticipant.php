@@ -14,7 +14,7 @@ use DateTimeZone;
 class SendMessageAboutNewParticipant implements SendMessageInterface
 {
 
-    public static function sendMessage($request = 0, int $id = 0, $report = 0)
+    public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
         if (Auth::user()->role === 'announcer') {
             $startTimeExist = new Datetime($request->start_time);

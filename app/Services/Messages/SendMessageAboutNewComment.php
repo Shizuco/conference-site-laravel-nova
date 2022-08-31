@@ -12,7 +12,7 @@ use App\Services\Messages\SendMessageInterface;
 class SendMessageAboutNewComment implements SendMessageInterface
 {
 
-    public static function sendMessage($request = 0, int $id = 0, $report = 0)
+    public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
         $reports = Report::with('users')->whereId($id)->get();
         $user = '';

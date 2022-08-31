@@ -10,7 +10,21 @@ use App\Services\CsvFileContent\ReportContent;
 
 class CsvFileAttributes
 {
-    public static function getHeaders(string $filename)
+
+    protected $comment;
+    protected $report;
+    protected $conference;
+    protected $listener;
+
+    public function __constuct(CommentContent $comment, ReportContent $report, ConferenceContent $conference, ListenerContent $listener)
+    {
+        $this->comment = $comment;
+        $this->report = $report;
+        $this->conference = $conference;
+        $this->listener = $listener;
+    }
+
+    public function getHeaders(string $filename)
     {
         $headers = [
             "Content-type" => "text/csv",
@@ -22,20 +36,20 @@ class CsvFileAttributes
         return $headers;
     }
 
-    public static function makeContent(string $type, int $id)
+    public function makeContent(string $type, int $id)
     {
         switch ($type) {
             case 'comment':
-                CommentContent::get($id);
+                $this->comment->get($id);
                 break;
             case 'report':
-                ReportContent::get($id);
+                $this->report->get($id);
                 break;
             case 'conference':
-                ConferenceContent::get();
+                $this->conference->get();
                 break;
             case 'listeners':
-                ListenerContent::get($id);
+                $this->listener->get($id);
                 break;
         }
 

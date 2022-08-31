@@ -35,9 +35,9 @@ class MeetingController extends Controller
         return response()->json($meeting);
     }
 
-    public static function store(array $request)
+    public function store(array $request)
     {
-        return response()->json(ZoomMeetingTrait::create($request));
+        return response()->json($this->create($request));
     }
 
     public function update($meeting, Request $request)

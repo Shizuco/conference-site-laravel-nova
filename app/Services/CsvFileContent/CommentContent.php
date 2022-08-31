@@ -7,7 +7,7 @@ use App\Models\Comment;
 
 class CommentContent
 {
-    public static function get(int $id)
+    public function get(int $id)
     {
         $comments = Comment::with('users')->where('report_id', $id)->get();
         $columns = ['user', 'created_at', 'content'];

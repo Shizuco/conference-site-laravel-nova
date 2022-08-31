@@ -7,7 +7,7 @@ use App\Models\Report;
 
 class ReportContent
 {
-    public static function get(int $id)
+    public function get(int $id)
     {
         $reports = Report::with('comments')->where('conference_id', $id)->get();
         $columns = array('Thema', 'Time', 'Description', 'Number of comments');

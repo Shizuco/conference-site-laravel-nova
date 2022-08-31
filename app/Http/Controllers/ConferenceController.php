@@ -4,21 +4,29 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\CreateConferenceRequest;
 use App\Http\Requests\UpdateConferenceRequest;
-use App\Jobs\SendMailWithQueue;
-use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Services\ExportCsvFile;
 use App\Services\MakeConferenceCsvFile;
+use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
 use Datetime;
 use Illuminate\Http\Request;
-use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
-use App\Services\ExportCsvFile;
 
 class ConferenceController extends Controller
 {
+    protected $exportCsv;
+    protected $makeCsv;
+    protected $message;
+
+    public function __construct(ExportCsvFile $exportCsv, MakeConferenceCsvFile $makeCsv, SendMessageAboutConferenceDeletedByAdmin $message)
+    {
+        $this->exportCsv = $exportCsv;
+        $this->makeCsv = $makeCsv;
+        $this->message = $message;
+    }
+
     public function index(Request $request)
     {
         return response()->json(Conference::Filters($request));
@@ -57,12 +65,12 @@ class ConferenceController extends Controller
 
     public function exportCsv(Request $request)
     {
-        ExportCsvFile::export('conference', 0);
+        $this->exportCsv->export('conference', 0);
     }
 
     public function downloadCsv()
     {
-        return MakeConferenceCsvFile::sendFile();
+        return $this->makeCsv->sendFile();
     }
 
     private function hasTime(int $id)
@@ -99,6 +107,6 @@ class ConferenceController extends Controller
 
     private function sendMessage(int $id)
     {
-        SendMessageAboutConferenceDeletedByAdmin::sendMessage(0, $id, 0);
+        $this->message->sendMessage(0, $id, 0);
     }
 }

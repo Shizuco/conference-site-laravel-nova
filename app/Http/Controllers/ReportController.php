@@ -4,17 +4,16 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Events\DownloadExportCsvFile;
 use App\Http\Controllers\MeetingController;
 use App\Http\Requests\CreateReportRequest;
-use App\Jobs\CsvFile;
 use App\Models\Conference;
 use App\Models\Report;
 use App\Models\User;
+use App\Services\ExportCsvFile;
 use App\Services\MakeReportCsvFile;
 use App\Services\Messages\SendMessageAboutChangeReportTime;
-use App\Services\Messages\SendMessageAboutReportDeletedByAdmin;
 use App\Services\Messages\SendMessageAboutNewParticipant;
+use App\Services\Messages\SendMessageAboutReportDeletedByAdmin;
 use Auth;
 use DateInterval;
 use DateTime;
@@ -23,10 +22,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use App\Services\ExportCsvFile;
 
 class ReportController extends Controller
 {
+
+    protected $exportCsv;
+    protected $reportCsv;
+    protected $participantMessage;
+    protected $reportDeleteMessage;
+    protected $reportTimeMessage;
+
+    public function __construct(ExportCsvFile $exportCsv, MakeReportCsvFile $reportCsv, SendMessageAboutNewParticipant $participantMessage, SendMessageAboutReportDeletedByAdmin $reportDeleteMessage, SendMessageAboutChangeReportTime $reportTimeMessage)
+    {
+        $this->exportCsv = $exportCsv;
+        $this->reportCsv = $reportCsv;
+        $this->participantMessage = $participantMessage;
+        $this->reportDeleteMessage = $reportDeleteMessage;
+        $this->reportTimeMessage = $reportTimeMessage;
+    }
+
     public function index(Request $request, int $id)
     {
         return response()->json(Report::Filters($request, $id));
@@ -64,13 +78,13 @@ class ReportController extends Controller
             $data['user_id'] = Auth::user()->id;
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
-            if($request->isOnline === "true"){
+            if ($request->isOnline === "true") {
                 $zoom_id = MeetingController::store([
                     "topic" => $request->thema,
                     "duration" => $duration / 60,
                     "start_time" => $startTimeExist,
                     "host_video" => "true",
-                    "participant_video" => "true"
+                    "participant_video" => "true",
                 ]);
                 $data['zoom_meeting_id'] = $zoom_id->original['data']['id'];
             }
@@ -128,25 +142,25 @@ class ReportController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        ExportCsvFile::export('report', $id);
+        $this->exportCsv->export('report', $id);
     }
 
     public function downloadCsv(int $id)
     {
-        return MakeReportCsvFile::sendFile($id);
+        return $this->reportCsv->sendFile($id);
     }
 
     private function sendMessage($request, int $id, $report, string $whichMessage)
     {
         switch ($whichMessage) {
             case ('new participant'):
-                SendMessageAboutNewParticipant::sendMessage($request, $id, $report);
+                $this->participantMessage->sendMessage($request, $id, $report);
                 break;
             case ('deleted by admin'):
-                SendMessageAboutReportDeletedByAdmin::sendMessage($request, $id, $report);
+                $this->reportDeleteMessage->sendMessage($request, $id, $report);
                 break;
             case ('change report time'):
-                SendMessageAboutChangeReportTime::sendMessage($request, $id, $report);
+                $this->reportTimeMessage->sendMessage($request, $id, $report);
                 break;
         }
 

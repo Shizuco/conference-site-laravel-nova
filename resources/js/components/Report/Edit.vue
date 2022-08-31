@@ -129,6 +129,7 @@ export default {
                     start_time: error.response.data.errors.start_time,
                     end_time: error.response.data.errors.end_time,
                     description: error.response.data.errors.description,
+                    presentation: error.response.data.errors.presentation
                 });
             })
         }

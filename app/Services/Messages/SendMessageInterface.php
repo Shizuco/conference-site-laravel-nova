@@ -6,6 +6,6 @@ namespace App\Services\Messages;
 interface SendMessageInterface
 {
  
-    public static function sendMessage($request, int $id, $report);
+    public function sendMessage($request, int $id, $report);
  
 }

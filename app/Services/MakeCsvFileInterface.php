@@ -6,8 +6,8 @@ namespace App\Services;
 interface MakeCsvFileInterface 
 {
 
-    public static function getFile(int $id);
+    public function getFile(int $id);
 
-    public static function sendFile(int $id);
+    public function sendFile(int $id);
  
 }

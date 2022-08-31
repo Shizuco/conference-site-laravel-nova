@@ -9,7 +9,7 @@ use App\Services\Messages\SendMessageInterface;
 class SendMessageAboutConferenceDeletedByAdmin implements SendMessageInterface
 {
 
-    public static function sendMessage($request = 0, int $id = 0, $report = 0)
+    public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
         $users = Conference::with('users')->whereId($id)->get();
         $usersEmails = [];

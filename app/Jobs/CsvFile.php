@@ -15,7 +15,6 @@ use Illuminate\Queue\SerializesModels;
 
 class CsvFile implements ShouldQueue
 {
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $method;
