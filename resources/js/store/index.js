@@ -518,7 +518,7 @@ export default new Vuex.Store({
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
-            });
+            })
         },
         ajaxGetCategories({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");

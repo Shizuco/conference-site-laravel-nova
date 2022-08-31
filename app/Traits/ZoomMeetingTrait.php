@@ -32,7 +32,7 @@ trait ZoomMeetingTrait
             'iss' => $key,
             'exp' => strtotime('+1 minute'),
         ];
-
+        return env('ZOOM_API_TOKEN');
         return \Firebase\JWT\JWT::encode($payload, $secret, 'HS256');
     }
 
@@ -142,8 +142,8 @@ trait ZoomMeetingTrait
             'headers' => $this->headers,
             'body'    => json_encode([]),
         ];
-
-        $response =  $this->client->get($url.$path, $body);
+        $client = new Client();
+        $response =  $client->get($url.$path, $body);
 
         return [
             'success' => $response->getStatusCode() === 200,

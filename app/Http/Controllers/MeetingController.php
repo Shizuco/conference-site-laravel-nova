@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ZoomMeeting;
 use App\Traits\ZoomMeetingTrait;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+
 
 class MeetingController extends Controller
 {
@@ -17,8 +19,12 @@ class MeetingController extends Controller
     const MEETING_TYPE_FIXED_RECURRING_FIXED = 8;
 
     public function index(){
+
         $meetings = $this->getAll();
 
+       /* return cache()->remember('meetings', Carbon::now()->addMinutes(5), function() {
+            return $this->getAll();
+        });*/
         return response()->json($meetings);
     }
 

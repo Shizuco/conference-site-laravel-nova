@@ -16,7 +16,7 @@
                         <h4>About</h4>
                         <p>{{  formData.description  }}</p>
                         <a :href="getFile">{{  formData.presentation  }}</a>
-                        <button @click="onClick">download</button>
+                        <v-btn @click="onClick" x-small color="primary">download</v-btn>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
@@ -39,7 +39,7 @@
                         <p>
                         <h3>{{  comment.users.name  }} <h5>{{  new Date(comment.updated_at).toLocaleString()  }} <v-btn
                                     v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
-                                    @click="plusEdit">
+                                    @click="plusEdit" x-small color="warning"> Edit
                                 </v-btn>
                             </h5>
                         </h3>
@@ -52,7 +52,7 @@
                     <v-textarea v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
                         v-model="comment.comment" label="Enter your comment" outlined></v-textarea>
                     <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                        @click="setComment(index)">Edit
+                        @click="setComment(index)" x-small color="warning">Edit
                     </v-btn>
                 </v-card>
             </v-col>
@@ -101,7 +101,7 @@ export default {
         comments: [],
         comment: '',
         commentNum: 0,
-        newComment: [],
+        newComment: '',
         edit: 0,
         CsvButtonType: 0,
         currentTime: 5,
@@ -149,10 +149,10 @@ export default {
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
-                    this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(()=>{
+                    this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(() => {
                         console.log(this.$store.getters.getMeeting.data.join_url)
                     })
-                    
+
                     console.log(this.getReport.zoom_meeting_id)
                     this.startTimer()
                 })
@@ -268,7 +268,7 @@ export default {
                 'comment': this.newComment
             }
             this.$store.dispatch('ajaxSetComment', [this.getReport.conference_id, this.getReport.id, this.getReport.comments[index].id, data]).then(() => {
-                this.$router.go()
+                //this.$router.go()
             })
         },
         plusEdit() {
