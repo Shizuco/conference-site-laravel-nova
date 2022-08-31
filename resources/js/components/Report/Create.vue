@@ -12,7 +12,7 @@
                                         <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
                                             name="title">
                                             <v-col style="height: 10px">
-                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                                <span style="font-size:smaller">{{  errors[0]  }}</span>
                                             </v-col>
                                             <v-col>
                                                 <v-text-field label="Thema" name="title" id="title" type="text"
@@ -27,7 +27,7 @@
                                     <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="start_time">
                                             <v-col style="height: 10px">
-                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                                <span style="font-size:smaller">{{  errors[0]  }}</span>
                                             </v-col>
                                             <v-col>
                                                 <v-datetime-picker label="Date of start" v-model="formData.start_time"
@@ -38,7 +38,7 @@
                                     <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="end_time">
                                             <v-col style="height: 10px">
-                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                                <span style="font-size:smaller">{{  errors[0]  }}</span>
                                             </v-col>
                                             <v-col>
                                                 <v-datetime-picker label="Date of end" v-model="formData.end_time"
@@ -58,7 +58,7 @@
                                     <v-col class="pa-0">
                                         <ValidationProvider rules="required" v-slot="{ errors }" name="description">
                                             <v-col style="height: 10px">
-                                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                                                <span style="font-size:smaller">{{  errors[0]  }}</span>
                                             </v-col>
                                             <v-col>
                                                 <v-textarea label="Enter description" v-model="formData.description"
@@ -69,19 +69,26 @@
                                 </v-row>
                                 <v-row class="pa-0" style="margin-top: 0px !important">
                                     <v-col class="pa-0">
-                                        <v-file-input label="Presentation" v-model="formData.presentation" outlined
-                                            class="rounded-0"></v-file-input>
+                                        <ValidationProvider rules="required" v-slot="{ errors }" name="presentation">
+                                            <v-col style="height: 10px">
+                                                <span style="font-size:smaller">{{  errors[0]  }}</span>
+                                            </v-col>
+                                            <v-col>
+                                                <v-file-input label="Presentation" v-model="formData.presentation"
+                                                    outlined class="rounded-0"></v-file-input>
+                                            </v-col>
+                                        </ValidationProvider>
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                        <v-col>
-                                            <v-radio-group v-model="formData.isOnline" row>
-                                                <v-radio :value="true" label="online">
-                                                </v-radio>
-                                                <v-radio :value="false" label="offline">
-                                                </v-radio>
-                                            </v-radio-group>
-                                        </v-col>
+                                    <v-col>
+                                        <v-radio-group v-model="formData.isOnline" row>
+                                            <v-radio :value="true" label="online">
+                                            </v-radio>
+                                            <v-radio :value="false" label="offline">
+                                            </v-radio>
+                                        </v-radio-group>
+                                    </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
@@ -152,6 +159,7 @@ export default {
                     start_time: error.response.data.errors.start_time,
                     end_time: error.response.data.errors.end_time,
                     description: error.response.data.errors.description,
+                    presentation: error.response.data.errors.presentation
                 });
             })
         },
