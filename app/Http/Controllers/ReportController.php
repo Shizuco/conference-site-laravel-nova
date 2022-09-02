@@ -131,9 +131,21 @@ class ReportController extends Controller
 
     public function destroy(int $conferenceId, int $report_id)
     {
-        $rep = Report::whereId($report_id)->first();
-        $this->sendMessage(0, $conferenceId, $rep, 'deleted by admin');
-        $rep->delete();
+        if ($report_id == 0) {
+            $rep = Report::where('conference_id', $conferenceId)->where('user_id', Auth::user()->id)->first();
+            if($rep->zoom_meeting_id !== null){
+                $this->meeting->destroy($rep->zoom_meeting_id); 
+            }
+            $rep->delete();
+        } else {
+            $rep = Report::whereId($report_id)->first();
+            if($rep->zoom_meeting_id !== null){
+                $this->meeting->destroy($rep->zoom_meeting_id); 
+            }
+            $this->sendMessage(0, $conferenceId, $rep, 'deleted by admin');
+            $rep->delete();
+        }
+
     }
 
     public function getFile(int $conferenceId, int $reportId)

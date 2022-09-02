@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Http\Controllers;
 
 use App\Models\ZoomMeeting;
@@ -41,8 +43,8 @@ class MeetingController extends Controller
         $this->update($meeting->zoom_meeting_id, $request->all());
     }
 
-    public function destroy(ZoomMeeting $meeting)
+    public function destroy(int $id)
     {
-        $this->delete($meeting->id);
+        $this->delete($id);
     }
 }

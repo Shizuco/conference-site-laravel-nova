@@ -163,7 +163,7 @@ export default {
         out() {
             let conference_id = this.$store.getters.getConference.id
             this.$store.dispatch('userConferenceOut', conference_id).then(() => {
-                this.$store.dispatch('ajaxReportDelete', conference_id)
+                this.$store.dispatch('ajaxReportDelete', [conference_id, 0])
             }).then(() => {
                 this.$router.go()
             })
