@@ -18,8 +18,8 @@ class MeetingController extends Controller
     const MEETING_TYPE_RECURRING = 3;
     const MEETING_TYPE_FIXED_RECURRING_FIXED = 8;
 
-    public function index(){
-        return Cache::get("meetings", $this->getAll());
+    public function index(Request $request){
+        return Cache::get("meetings", $this->getAll($request));
     }
 
     public function show($id)

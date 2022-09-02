@@ -13,6 +13,7 @@ import Edit from "../components/Report/Edit.vue";
 import UserPage from "../components/Auth/UserPage.vue";
 import UserFavorites from "../components/Auth/UserFavorites.vue";
 import Category from "../components/Category.vue";
+import Meetings from "../components/other/Meetings.vue";
 
 function isAuth() {
     return "Authorized" in localStorage ? true : false;
@@ -25,6 +26,12 @@ export default new VueRouter({
             alias: "/",
             component: MainPage,
             name: "MainPage",
+        },
+        {
+            path: "/meetings",
+            alias: "/",
+            component: Meetings,
+            name: "Meetings",
         },
         {
             path: "/conferences/:id",

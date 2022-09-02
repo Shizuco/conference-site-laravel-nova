@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Log;
 
@@ -132,9 +133,10 @@ trait ZoomMeetingTrait
         ];
     }
 
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $path = 'users/me/meetings?page_size=5';
+        $page = $request->page;
+        $path = 'users/me/meetings?page_size=5&page_number='.$page;
         $url = $this->retrieveZoomUrl();
         $this->jwt = $this->generateZoomToken();
         $body = [

@@ -21,9 +21,13 @@ export default new Vuex.Store({
         rootCategories: [],
         subCategories: [],
         currentCategory: [],
-        meeting: []
+        meeting: [],
+        meetings: []
     },
     getters: {
+        getMeetings(state){
+            return state.meetings
+        },
         getConferences(state) {
             return state.conferences;
         },
@@ -89,6 +93,19 @@ export default new Vuex.Store({
             }).then((response) => {
                 commit("setMeeting", response.data);
             });
+        },
+        ajaxGetMeetings({ commit }, page) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/meeting?page=" + page,
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }).then((response) => {
+                commit("setMeetings", response.data);
+            })
         },
         ajaxConferences({ commit }, data) {
             return axios
@@ -678,6 +695,9 @@ export default new Vuex.Store({
         },
         setMeeting(state, data){
             return (state.meeting = data);
+        },
+        setMeetings(state, data){
+            return (state.meetings = data)
         }
     },
 });

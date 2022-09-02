@@ -269,7 +269,7 @@ export default {
                 })
             }).then(() => {
                 this.data = this.$store.getters.getConferences
-                return this.$store.getters.getConferences;
+                return this.$store.getters.getConferences
             })
         },
         resetFilters() {

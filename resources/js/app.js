@@ -37,6 +37,7 @@ Vue.component('Pagination', LaravelVuePagination);
 Vue.component('Slide', Slide)
 Vue.component('vue-skeleton-loader', VueSkeletonLoader);
 Vue.component('spinner', require("./components/other/Spinner").default)
+Vue.component('meeting', require("./components/other/Meetings").default)
 
 import VueMask from 'v-mask'
 import store from './store'
