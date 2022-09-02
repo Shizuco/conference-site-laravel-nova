@@ -53,7 +53,8 @@
         </Slide>
         <div class="row justify-content-center">
             <skeleton v-if="sortedProducts.length == 0"></skeleton>
-            <div class="col-md-8" v-for="report in sortedProducts" :value="report.id" :key="report.id">
+            <div class="col-md-8" v-for="(report, index) in sortedProducts" :value="report.id" :key="report.id">
+                <v-badge :content="reportStatuses[index]"></v-badge>
                 <v-card elevation="3">
                     <v-card-title>{{ report.thema }}</v-card-title>
                     <v-card-text>
@@ -100,7 +101,8 @@ export default {
         duration: 0,
         count: 0,
         countForDuretion: 0,
-        CsvButtonType: 0
+        CsvButtonType: 0,
+        reportStatuses: []
     }),
     mounted() {
         this.getReports()
@@ -126,6 +128,9 @@ export default {
         },
         isAdmin() {
             return (this.$store.getters.getUser.role == "admin") ? true : false;
+        },
+        isOnConference() {
+            return this.$store.getters.getUserOnConferenceStatus
         },
         getReports(page = 1) {
             if (this.count == 0) {
@@ -161,7 +166,18 @@ export default {
             this.sortedProducts = []
             this.$store.dispatch('ajaxReports', data).then(() => {
                 this.$store.getters.getReports.data.forEach(element => {
-                    this.sortedProducts.push(element);
+                    if (element.zoom_meeting_id == null) {
+                        this.reportStatuses.push('offline')
+                        this.sortedProducts.push(element);
+                    }
+                    else {
+                        this.$store.dispatch('ajaxGetMeeting', element.zoom_meeting_id).then(() => {
+                            let status = this.$store.getters.getMeeting['data']['status']
+                            this.reportStatuses.push(status)
+                            this.sortedProducts.push(element);
+                        })
+                    }
+
                 })
             }).then(() => {
                 this.data = this.$store.getters.getReports
@@ -202,6 +218,19 @@ export default {
                 link.click();
             })
         },
+        status(id) {
+            if (id == null) {
+                return 'offline'
+            }
+            return this.getMeeting(id)
+        },
+        getMeeting(id) {
+            this.$store.dispatch('ajaxGetMeeting', id).then(() => {
+                console.log(id)
+                let status = this.$store.getters.getMeeting['data']['status']
+                return String(status)
+            })
+        }
     }
 }
 

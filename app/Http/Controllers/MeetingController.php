@@ -33,8 +33,6 @@ class MeetingController extends Controller
     {
         Cache::forget("meetings");
         $meeting = $this->create($request);
-        Cache::put('meetings', $this->getAll()['data']
-        );
         return response()->json($meeting);
     }
 

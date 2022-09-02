@@ -26,10 +26,10 @@
                 <v-col v-if="currentTime <= 600 && getUser.id == getReport.user_id">
                     <v-btn depressed x-small block color="primary"><a :href=start_url class="white--text" style="text-decoration: none; color: inherit;">start meeting</a></v-btn>
                 </v-col>
-                <v-col v-if="currentTime == 0 && getUser.role == 'listener'">
+                <v-col v-if="currentTime == 0 && isOnConference() != null">
                     <v-btn depressed x-small block color="primary"><a :href=join_url_browser class="white--text" style="text-decoration: none; color: inherit;">join through browser</a></v-btn>
                 </v-col>
-                <v-col v-if="currentTime == 0 && getUser.role == 'listener'"> 
+                <v-col v-if="currentTime == 0 && isOnConference() != null"> 
                     <v-btn depressed x-small block color="primary"><a :href=join_url_app class="white--text" style="text-decoration: none; color: inherit;">join through app</a></v-btn>
                 </v-col>
             </v-col>
@@ -138,6 +138,7 @@ export default {
                 this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
+                    this.$store.dispatch('isUserOnConference', this.$route.params.id)
                     this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(() => {
                         this.$store.dispatch('ajaxGetCurrentCategory', this.$store.getters.getConference.category_id).then(() => {
                             this.items.push({
@@ -214,6 +215,9 @@ export default {
                 this.currentTime--
                 this.time = this.toDate(this.currentTime);
             }, 1000)
+        },
+        isOnConference() {
+            return this.$store.getters.getUserOnConferenceStatus
         },
         stopTimer() {
             clearTimeout(this.timer)
