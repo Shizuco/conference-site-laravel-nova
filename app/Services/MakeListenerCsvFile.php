@@ -9,22 +9,28 @@ use App\Services\CsvFileAttributes;
 
 class MakeListenerCsvFile implements MakeCsvFileInterface
 {
+    protected $attr;
 
-    public static function getFile(int $id)
+    public function __construct(CsvFileAttributes $attr)
+    {
+        $this->attr = $attr;
+    }
+
+    public function getFile(int $id)
     {
         $fileName = 'listeners.csv';
-        $headers = CsvFileAttributes::getHeaders($fileName);
+        $headers = $this->attr->getHeaders($fileName);
 
         $callback = function () use ($id) {
-            CsvFileAttributes::makeContent('listeners', $id);
+            $this->attr->makeContent('listeners', $id);
         };
         $response = [$callback, 200, $headers];
         return $response;
     }
 
-    public static function sendFile(int $id)
+    public function sendFile(int $id)
     {
-        $file = MakeListenerCsvFile::getFile($id);
+        $file = $this->getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

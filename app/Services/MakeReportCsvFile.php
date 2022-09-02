@@ -9,21 +9,28 @@ use App\Services\CsvFileAttributes;
 
 class MakeReportCsvFile implements MakeCsvFileInterface
 {
-    public static function getFile(int $id)
+    protected $attr;
+
+    public function __construct(CsvFileAttributes $attr)
+    {
+        $this->attr = $attr;
+    }
+
+    public function getFile(int $id)
     {
         $fileName = 'reports.csv';
-        $headers = CsvFileAttributes::getHeaders($fileName);
+        $headers = $this->attr->getHeaders($fileName);
 
         $callback = function () use ($id){
-            CsvFileAttributes::makeContent('report', $id);
+            $this->attr->makeContent('report', $id);
         };
         $response = [$callback, 200, $headers];
         return $response;
     }
 
-    public static function sendFile(int $id)
+    public function sendFile(int $id)
     {
-        $file = MakeReportCsvFile::getFile($id);
+        $file = $this->getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

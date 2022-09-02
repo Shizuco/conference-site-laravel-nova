@@ -7,7 +7,13 @@ use App\Models\Conference;
 
 class ConferenceContent
 {
-    public static function get()
+    protected $content;
+
+    public function __construct(ConferenceContent $content){
+        $this->content = $content;
+    }
+
+    public function get()
     {
         $conferences = Conference::with('users', 'reports')->get();
         $columns = array('Title', 'Date', 'Address', 'Country', 'Number of reports', 'Number of listeners');
@@ -18,7 +24,7 @@ class ConferenceContent
 
             $row['Title'] = $conference->title;
             $row['Date'] = $conference->date;
-            $row['Address'] = ConferenceContent::getAddress($conference->address_lat, $conference->address_lon);
+            $row['Address'] = $this->content->getAddress($conference->address_lat, $conference->address_lon);
             $row['Country'] = $conference->country;
             $row['Number of reports'] = count($conference->reports);
             $row['Number of listeners'] = count($conference->users);
@@ -29,7 +35,7 @@ class ConferenceContent
         fclose($file);
     }
 
-    private static function getAddress($latitude, $longitude)
+    private function getAddress($latitude, $longitude)
     {
         //google map api url
         $url = "https://maps.google.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyAWYpOvTuAYKad3lZf-c_RIvRz9wcEA1Ws";

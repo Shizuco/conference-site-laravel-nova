@@ -4,19 +4,27 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Services\MakeListenerCsvFile;
-use App\Jobs\CsvFile;
-use App\Events\DownloadExportCsvFile;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use App\Models\Conference;
-use Auth;
-use App\Services\Messages\SendMessageAboutNewListener;
-use Illuminate\Http\Request;
 use App\Services\ExportCsvFile;
+use App\Services\MakeListenerCsvFile;
+use App\Services\Messages\SendMessageAboutNewListener;
+use Auth;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    protected $exportCsv;
+    protected $listenerCsv;
+    protected $newListenerMessage;
+
+    public function __construct(ExportCsvFile $exportCsv, MakeListenerCsvFile $listenerCsv, SendMessageAboutNewListener $newListenerMessage)
+    {
+        $this->exportCsv = $exportCsv;
+        $this->listenerCsv = $listenerCsv;
+        $this->newListenerMessage = $newListenerMessage;
+    }
 
     public function conferenceJoin(int $conferenceId)
     {
@@ -76,17 +84,16 @@ class UserController extends Controller
 
     public function exportCsv(Request $request, int $id)
     {
-        ExportCsvFile::export('listeners', $id);
+        $this->exportCsv->export('listeners', $id);
     }
 
     public function downloadCsv(int $id)
     {
-        return MakeListenerCsvFile::sendFile($id);
+        return $this->listenerCsv->sendFile($id);
     }
 
     private function sendMessage(int $id)
     {
-        SendMessageAboutNewListener::sendMessage($id);
+        $this->newListenerMessage->sendMessage($id);
     }
-
 }

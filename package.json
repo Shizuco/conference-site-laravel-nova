@@ -30,6 +30,7 @@
     "dependencies": {
         "@jeremyhamm/vue-slider": "^0.2.0",
         "@mdi/font": "^7.0.96",
+        "@zoomus/websdk": "^2.6.0",
         "bootstrap-vue": "^2.22.0",
         "install": "^0.13.0",
         "laravel-mix": "^6.0.49",

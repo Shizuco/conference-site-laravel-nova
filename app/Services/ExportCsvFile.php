@@ -8,7 +8,7 @@ use App\Events\DownloadExportCsvFile;
 
 class ExportCsvFile
 {
-    public static function export(string $type, int $id){
+    public function export(string $type, int $id){
         event(new DownloadExportCsvFile('start'));
         sleep(5);
         dispatch(new CsvFile($type, $id));

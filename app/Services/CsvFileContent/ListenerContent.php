@@ -7,7 +7,7 @@ use App\Models\User;
 
 class ListenerContent
 {
-    public static function get(int $id)
+    public function get(int $id)
     {
         $listeners = User::with('conferences')->where('role', 'listener')->get();
         $columns = array('Name', 'Surname', 'Birthday', 'Country', 'Phone', 'Email');

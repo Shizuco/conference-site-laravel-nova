@@ -9,21 +9,28 @@ use App\Services\CsvFileAttributes;
 
 class MakeConferenceCsvFile implements MakeCsvFileInterface
 {
-    public static function getFile(int $id = 0)
+
+    protected $attr;
+
+    public function __construct(CsvFileAttributes $attr){
+        $this->attr = $attr;
+    }
+
+    public function getFile(int $id = 0)
     {
         $fileName = 'conferences.csv';
-        $headers = CsvFileAttributes::getHeaders($fileName);
+        $headers = $this->attr->getHeaders($fileName);
 
         $callback = function () {
-            CsvFileAttributes::makeContent('conference', 0);
+            $this->attr->makeContent('conference', 0);
         };
         $response = [$callback, 200, $headers];
         return $response;
     }
 
-    public static function sendFile(int $id = 0)
+    public function sendFile(int $id = 0)
     {
-        $file = MakeConferenceCsvFile::getFile();
+        $file = $this->getFile();
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

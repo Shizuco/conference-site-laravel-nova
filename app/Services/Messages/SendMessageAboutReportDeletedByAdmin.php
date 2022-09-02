@@ -11,7 +11,7 @@ use App\Services\Messages\SendMessageInterface;
 class SendMessageAboutReportDeletedByAdmin implements SendMessageInterface
 {
 
-    public static function sendMessage($request = 0, int $id = 0, $report = 0)
+    public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
         if (Auth::user()->role === 'admin') {
             $conferences = Conference::with('reports')->whereId($id)->get();

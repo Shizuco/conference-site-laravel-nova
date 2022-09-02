@@ -29,7 +29,8 @@ class CreateReportRequest extends FormRequest
             'thema' => 'required|max:255|min:2',
             'start_time' => 'required',
             'end_time' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'presentation' => 'required'
         ];
     }
 

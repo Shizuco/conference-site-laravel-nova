@@ -7,19 +7,31 @@
         <v-row align="center" justify="center" dense>
             <v-col cols="12" sm="8" md="4" lg="10">
                 <v-card elevation="10">
+                    {{  time  }}
                     <v-card-title>
-                        <h3>{{ formData.thema }}</h3>
+                        <h3>{{  formData.thema  }}</h3>
                     </v-card-title>
                     <v-card-text>
-                        <p>Duration: {{ formData.start_time }} to {{ formData.end_time }}</p>
+                        <p>Duration: {{  formData.start_time  }} to {{  formData.end_time  }}</p>
                         <h4>About</h4>
-                        <p>{{ formData.description }}</p>
-                        <a :href="getFile">{{ formData.presentation }}</a>
-                        <button @click="onClick">download</button>
+                        <p>{{  formData.description  }}</p>
+                        <a :href="getFile">{{  formData.presentation  }}</a>
+                        <v-btn @click="onClick" x-small color="primary">download</v-btn>
                     </v-card-text>
                     <v-btn v-if="getReport.user_id == getUser.id" depressed color="warning" big
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
                 </v-card>
+            </v-col>
+            <v-col cols="12" sm="8" md="4" lg="10">
+                <v-col v-if="currentTime <= 600 && getUser.id == getReport.user_id">
+                    <v-btn depressed x-small block color="primary"><a :href=start_url class="white--text" style="text-decoration: none; color: inherit;">start meeting</a></v-btn>
+                </v-col>
+                <v-col v-if="currentTime == 0 && isOnConference() != null">
+                    <v-btn depressed x-small block color="primary"><a :href=join_url_browser class="white--text" style="text-decoration: none; color: inherit;">join through browser</a></v-btn>
+                </v-col>
+                <v-col v-if="currentTime == 0 && isOnConference() != null"> 
+                    <v-btn depressed x-small block color="primary"><a :href=join_url_app class="white--text" style="text-decoration: none; color: inherit;">join through app</a></v-btn>
+                </v-col>
             </v-col>
             <br>
             <v-col cols="12" sm="8" md="4" lg="10">
@@ -36,9 +48,9 @@
                 <v-card elevation="3">
                     <v-card-title>
                         <p>
-                        <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
+                        <h3>{{  comment.users.name  }} <h5>{{  new Date(comment.updated_at).toLocaleString()  }} <v-btn
                                     v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
-                                    @click="plusEdit">
+                                    @click="plusEdit" x-small color="warning"> Edit
                                 </v-btn>
                             </h5>
                         </h3>
@@ -46,12 +58,12 @@
                     </v-card-title>
                     <v-card-text
                         v-if="(!isDateOk(index)) || (edit == 0 && isDateOk(index) && comment.users.id == getUser.id) || comment.users.id != getUser.id">
-                        <p>{{ comment.comment }}</p>
+                        <p>{{  comment.comment  }}</p>
                     </v-card-text>
                     <v-textarea v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
                         v-model="comment.comment" label="Enter your comment" outlined></v-textarea>
                     <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                        @click="setComment(index)">Edit
+                        @click="setComment(index)" x-small color="warning">Edit
                     </v-btn>
                 </v-card>
             </v-col>
@@ -68,7 +80,8 @@
                         Delete from favorite</v-btn>
                 </v-col>
                 <v-col>
-                    <v-btn v-if="getUser.role == 'admin'" @click="deleteReport()" x-big block color="error" class="white--text">
+                    <v-btn v-if="getUser.role == 'admin'" @click="deleteReport()" x-big block color="error"
+                        class="white--text">
                         Delete report</v-btn>
                 </v-col>
             </v-col>
@@ -99,31 +112,49 @@ export default {
         comments: [],
         comment: '',
         commentNum: 0,
-        newComment: [],
+        newComment: '',
         edit: 0,
-        CsvButtonType: 0
+        CsvButtonType: 0,
+        currentTime: 5,
+        timer: null,
+        time: 0,
+        join_url_app : '',
+        join_url_browser: '',
+        start_url: ''
     }),
+    destroyed() {
+        this.stopTimer()
+    },
+    watch: {
+        currentTime(time) {
+            if (time === 0) {
+                this.stopTimer()
+            }
+        }
+    },
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
+                this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
-                    this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(()=>{
-                      this.$store.dispatch('ajaxGetCurrentCategory', this.$store.getters.getConference.category_id).then(() => {
-                        this.items.push({
-                            text: this.$store.getters.getCurrentCategory[0].name,
-                            disabled: false,
-                            exact: true,
-                            to: '/conferences/' + this.$route.params.id,
-                            replace: true
-                        })
-                    }).then(()=>{
-                        this.$store.dispatch('ajaxGetCurrentCategory', this.getReport.category_id).then(()=>{
+                    this.$store.dispatch('isUserOnConference', this.$route.params.id)
+                    this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(() => {
+                        this.$store.dispatch('ajaxGetCurrentCategory', this.$store.getters.getConference.category_id).then(() => {
                             this.items.push({
-                                text: this.$store.getters.getCurrentCategory[0].name
+                                text: this.$store.getters.getCurrentCategory[0].name,
+                                disabled: false,
+                                exact: true,
+                                to: '/conferences/' + this.$route.params.id,
+                                replace: true
+                            })
+                        }).then(() => {
+                            this.$store.dispatch('ajaxGetCurrentCategory', this.getReport.category_id).then(() => {
+                                this.items.push({
+                                    text: this.$store.getters.getCurrentCategory[0].name
+                                })
                             })
                         })
-                    })  
                     })
                     this.link = this.$route.params.id
                     this.$store.dispatch('isReportInFavorite', this.getReport.id)
@@ -132,17 +163,23 @@ export default {
                     this.$data.formData.end_time = this.getReport.end_time
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
+                    this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(() => {
+                        this.join_url_app = this.$store.getters.getMeeting.data.join_url
+                        this.join_url_browser = this.joinInBrowser(this.$store.getters.getMeeting.data.join_url)
+                        this.start_url = this.$store.getters.getMeeting.data.start_url
+                    })
+                    this.startTimer()
                 })
             })
             Echo.channel('downloadCsvFile')
-            .listen('DownloadExportCsvFile', (e) => {
-                if (e.message == 'start') {
-                    this.CsvButtonType = 1
-                }
-                if (e.message == 'done') {
-                    this.CsvButtonType = 2
-                }
-            })
+                .listen('DownloadExportCsvFile', (e) => {
+                    if (e.message == 'start') {
+                        this.CsvButtonType = 1
+                    }
+                    if (e.message == 'done') {
+                        this.CsvButtonType = 2
+                    }
+                })
         }
     },
     computed: {
@@ -160,6 +197,31 @@ export default {
         },
     },
     methods: {
+        toTimestamp(strDate) {
+            var datum = Date.parse(strDate);
+            return datum / 1000;
+        },
+        toDate(timestamps) {
+            let unix_timestamp = timestamps
+            let date = new Date(unix_timestamp * 1000);
+            let days = parseInt(timestamps / 86400);
+            let hours = "0" + (date.getHours() - 3);
+            let minutes = "0" + date.getMinutes();
+            let seconds = "0" + date.getSeconds();
+            return days + ':' + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        },
+        startTimer() {
+            this.timer = setInterval(() => {
+                this.currentTime--
+                this.time = this.toDate(this.currentTime);
+            }, 1000)
+        },
+        isOnConference() {
+            return this.$store.getters.getUserOnConferenceStatus
+        },
+        stopTimer() {
+            clearTimeout(this.timer)
+        },
         onClick() {
             let token = 'Bearer ' + localStorage.getItem('Authorized')
             axios({
@@ -182,7 +244,7 @@ export default {
         isAdmin() {
             return (this.$store.getters.getUser.role == "admin") ? true : false;
         },
-        deleteReport(){
+        deleteReport() {
             let report_id = this.$store.getters.getReport.id
             this.$store.dispatch('ajaxReportDelete', [this.getReport.conference_id, report_id]).then(() => {
                 this.$router.replace('/conferences')
@@ -263,6 +325,12 @@ export default {
                 link.click();
             })
         },
+        joinInBrowser(link){    
+            link = link.replace("/j/", "/wc/")
+            link = link.slice(0, link.lastIndexOf('?'))
+            link = link + '/join'
+            return link
+        }
     }
 }
 </script>

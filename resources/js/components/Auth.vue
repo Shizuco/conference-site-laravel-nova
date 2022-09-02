@@ -47,6 +47,12 @@
                </v-btn>
             </span>
             <span>
+               <v-btn depressed small v-if="isAdmin()">
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Meetings' }">Zoom meetings
+                  </router-link>
+               </v-btn>
+            </span>
+            <span>
                <v-btn depressed small>
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
                   </router-link>
@@ -64,6 +70,7 @@ export default {
    }),
    mounted() {
       this.$store.dispatch('ajaxGetFavorites')
+      this.$store.dispatch('ajaxUser')
    },
    methods: {
       isAuth() {
