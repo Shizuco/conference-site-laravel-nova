@@ -19,13 +19,7 @@ class MeetingController extends Controller
     const MEETING_TYPE_FIXED_RECURRING_FIXED = 8;
 
     public function index(){
-
-        //$meetings = $this->getAll();
-
-        return cache()->remember('meetings', Carbon::now()->addMinutes(5), function() {
-            return $this->getAll();
-        });
-        //return response()->json($meetings);
+        return Cache::get("meetings", $this->getAll());
     }
 
     public function show($id)
@@ -37,7 +31,11 @@ class MeetingController extends Controller
 
     public function store(array $request)
     {
-        return response()->json($this->create($request));
+        Cache::forget("meetings");
+        $meeting = $this->create($request);
+        Cache::put('meetings', $this->getAll()['data']
+        );
+        return response()->json($meeting);
     }
 
     public function update($meeting, Request $request)

@@ -21,7 +21,7 @@ trait ZoomMeetingTrait
         $this->headers = [
             'Authorization' => 'Bearer '.$this->jwt,
             'Content-Type'  => 'application/json',
-            'Accept'        => 'application/json',
+            'Accept'        => 'application/json'
         ];
     }
     public function generateZoomToken()
@@ -65,7 +65,7 @@ trait ZoomMeetingTrait
             ],
             'body'    => json_encode([
                 'topic'      => $data['topic'],
-                'type'       => "2",
+                'type'       => self::MEETING_TYPE_SCHEDULE,
                 'start_time' => $this->toZoomTimeFormat($data['start_time']),
                 'duration'   => $data['duration'],
                 'agenda'     => (! empty($data['agenda'])) ? $data['agenda'] : null,
@@ -134,7 +134,7 @@ trait ZoomMeetingTrait
 
     public function getAll()
     {
-        $path = 'users/me/meetings';
+        $path = 'users/me/meetings?page_size=5';
         $url = $this->retrieveZoomUrl();
         $this->jwt = $this->generateZoomToken();
         $body = [
@@ -143,10 +143,7 @@ trait ZoomMeetingTrait
         ];
         $response =  $this->client->get($url.$path, $body);
 
-        return [
-            'success' => $response->getStatusCode() === 200,
-            'data'    => json_decode($response->getBody(), true),
-        ];
+        return json_decode($response->getBody(), true);
     }
 
     /**
