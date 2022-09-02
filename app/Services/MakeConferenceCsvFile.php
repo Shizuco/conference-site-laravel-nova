@@ -11,11 +11,9 @@ class MakeConferenceCsvFile implements MakeCsvFileInterface
 {
 
     protected $attr;
-    protected $csvFile;
 
-    public function __construct(CsvFileAttributes $attr, MakeConferenceCsvFile $csvFile){
+    public function __construct(CsvFileAttributes $attr){
         $this->attr = $attr;
-        $this->csvFile = $csvFile;
     }
 
     public function getFile(int $id = 0)
@@ -32,7 +30,7 @@ class MakeConferenceCsvFile implements MakeCsvFileInterface
 
     public function sendFile(int $id = 0)
     {
-        $file = $this->csvFile->getFile();
+        $file = $this->getFile();
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

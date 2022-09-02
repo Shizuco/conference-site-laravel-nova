@@ -20,12 +20,12 @@ class MeetingController extends Controller
 
     public function index(){
 
-        $meetings = $this->getAll();
+        //$meetings = $this->getAll();
 
-       /* return cache()->remember('meetings', Carbon::now()->addMinutes(5), function() {
+        return cache()->remember('meetings', Carbon::now()->addMinutes(5), function() {
             return $this->getAll();
-        });*/
-        return response()->json($meetings);
+        });
+        //return response()->json($meetings);
     }
 
     public function show($id)

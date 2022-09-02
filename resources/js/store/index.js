@@ -419,7 +419,7 @@ export default new Vuex.Store({
                 },
             }).then(function (response) {
                 commit("setReport", response.data);
-            });
+            })
         },
         ajaxEditReport({ commit }, data) {
             let datas = new FormData();

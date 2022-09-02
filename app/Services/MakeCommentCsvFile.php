@@ -9,12 +9,10 @@ use App\Services\MakeCsvFileInterface;
 class MakeCommentCsvFile implements MakeCsvFileInterface
 {
     protected $attr;
-    protected $csvFile;
 
-    public function __construct(CsvFileAttributes $attr, MakeCommentCsvFile $csvFile)
+    public function __construct(CsvFileAttributes $attr)
     {
         $this->attr = $attr;
-        $this->csvFile = $csvFile;
     }
 
     public function getFile(int $id)
@@ -31,7 +29,7 @@ class MakeCommentCsvFile implements MakeCsvFileInterface
 
     public function sendFile(int $id)
     {
-        $file = $this->csvFile->getFile($id);
+        $file = $this->getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

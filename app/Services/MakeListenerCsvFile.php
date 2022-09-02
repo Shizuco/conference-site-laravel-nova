@@ -10,12 +10,10 @@ use App\Services\CsvFileAttributes;
 class MakeListenerCsvFile implements MakeCsvFileInterface
 {
     protected $attr;
-    protected $csvFile;
 
-    public function __construct(CsvFileAttributes $attr, MakeListenerCsvFile $csvFile)
+    public function __construct(CsvFileAttributes $attr)
     {
         $this->attr = $attr;
-        $this->csvFile = $csvFile;
     }
 
     public function getFile(int $id)
@@ -32,7 +30,7 @@ class MakeListenerCsvFile implements MakeCsvFileInterface
 
     public function sendFile(int $id)
     {
-        $file = $this->csvFile->getFile($id);
+        $file = $this->getFile($id);
         return response()->stream($file[0], $file[1], $file[2]);
     }
 }

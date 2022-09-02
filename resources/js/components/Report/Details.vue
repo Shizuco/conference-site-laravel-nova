@@ -22,6 +22,17 @@
                         :to="{ name: 'Edit', params: { id: getReport.conference_id, r_id: getReport.id } }">Edit</v-btn>
                 </v-card>
             </v-col>
+            <v-col cols="12" sm="8" md="4" lg="10">
+                <v-col v-if="currentTime <= 600 && getUser.id == getReport.user_id">
+                    <v-btn depressed x-small block color="primary"><a :href=start_url class="white--text" style="text-decoration: none; color: inherit;">start meeting</a></v-btn>
+                </v-col>
+                <v-col v-if="currentTime == 0 && getUser.role == 'listener'">
+                    <v-btn depressed x-small block color="primary"><a :href=join_url_browser class="white--text" style="text-decoration: none; color: inherit;">join through browser</a></v-btn>
+                </v-col>
+                <v-col v-if="currentTime == 0 && getUser.role == 'listener'"> 
+                    <v-btn depressed x-small block color="primary"><a :href=join_url_app class="white--text" style="text-decoration: none; color: inherit;">join through app</a></v-btn>
+                </v-col>
+            </v-col>
             <br>
             <v-col cols="12" sm="8" md="4" lg="10">
                 <br>
@@ -106,7 +117,10 @@ export default {
         CsvButtonType: 0,
         currentTime: 5,
         timer: null,
-        time: 0
+        time: 0,
+        join_url_app : '',
+        join_url_browser: '',
+        start_url: ''
     }),
     destroyed() {
         this.stopTimer()
@@ -115,14 +129,13 @@ export default {
         currentTime(time) {
             if (time === 0) {
                 this.stopTimer()
-                this.time = 'out';
             }
         }
     },
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
-                //this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
+                this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
                     this.$store.dispatch('ajaxGetConference', this.$route.params.id).then(() => {
@@ -150,10 +163,10 @@ export default {
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
                     this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(() => {
-                        console.log(this.$store.getters.getMeeting.data.join_url)
+                        this.join_url_app = this.$store.getters.getMeeting.data.join_url
+                        this.join_url_browser = this.joinInBrowser(this.$store.getters.getMeeting.data.join_url)
+                        this.start_url = this.$store.getters.getMeeting.data.start_url
                     })
-
-                    console.log(this.getReport.zoom_meeting_id)
                     this.startTimer()
                 })
             })
@@ -199,7 +212,7 @@ export default {
         startTimer() {
             this.timer = setInterval(() => {
                 this.currentTime--
-                //this.time = this.toDate(this.currentTime);
+                this.time = this.toDate(this.currentTime);
             }, 1000)
         },
         stopTimer() {
@@ -268,7 +281,7 @@ export default {
                 'comment': this.newComment
             }
             this.$store.dispatch('ajaxSetComment', [this.getReport.conference_id, this.getReport.id, this.getReport.comments[index].id, data]).then(() => {
-                //this.$router.go()
+                this.$router.go()
             })
         },
         plusEdit() {
@@ -308,6 +321,12 @@ export default {
                 link.click();
             })
         },
+        joinInBrowser(link){    
+            link = link.replace("/j/", "/wc/")
+            link = link.slice(0, link.lastIndexOf('?'))
+            link = link + '/join'
+            return link
+        }
     }
 }
 </script>

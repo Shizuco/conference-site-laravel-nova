@@ -31,14 +31,16 @@ class ReportController extends Controller
     protected $participantMessage;
     protected $reportDeleteMessage;
     protected $reportTimeMessage;
+    protected $meeting;
 
-    public function __construct(ExportCsvFile $exportCsv, MakeReportCsvFile $reportCsv, SendMessageAboutNewParticipant $participantMessage, SendMessageAboutReportDeletedByAdmin $reportDeleteMessage, SendMessageAboutChangeReportTime $reportTimeMessage)
+    public function __construct(ExportCsvFile $exportCsv, MakeReportCsvFile $reportCsv, SendMessageAboutNewParticipant $participantMessage, SendMessageAboutReportDeletedByAdmin $reportDeleteMessage, SendMessageAboutChangeReportTime $reportTimeMessage, MeetingController $meeting)
     {
         $this->exportCsv = $exportCsv;
         $this->reportCsv = $reportCsv;
         $this->participantMessage = $participantMessage;
         $this->reportDeleteMessage = $reportDeleteMessage;
         $this->reportTimeMessage = $reportTimeMessage;
+        $this->meeting = $meeting;
     }
 
     public function index(Request $request, int $id)
@@ -79,7 +81,7 @@ class ReportController extends Controller
             $data['duration'] = $duration;
             $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             if ($request->isOnline === "true") {
-                $zoom_id = MeetingController::store([
+                $zoom_id = $this->meeting->store([
                     "topic" => $request->thema,
                     "duration" => $duration / 60,
                     "start_time" => $startTimeExist,
