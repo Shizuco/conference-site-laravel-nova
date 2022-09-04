@@ -52,7 +52,7 @@
                             <p>
                             <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
                                         v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
-                                        @click="plusEdit" x-small color="warning"> Edit
+                                        @click="plusEdit(); commentIndex = index" x-small color="warning"> Edit
                                     </v-btn>
                                 </h5>
                             </h3>
@@ -62,13 +62,15 @@
                             v-if="(!isDateOk(index)) || (edit == 0 && isDateOk(index) && comment.users.id == getUser.id) || comment.users.id != getUser.id">
                             <p v-html="comment.comment"></p>
                         </v-card-text>
-                        <vue-editor v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                            v-model="comment.comment" label="Enter your comment" outlined></vue-editor>
-                        <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                            @click="setComment(index)" x-small color="warning">Edit
-                        </v-btn>
-                        <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id" @click="edit--" x-small color="error">Cancel
-                        </v-btn>
+                        <v-card-text
+                            v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id && commentIndex == index">
+                            <vue-editor v-model="comment.comment" label="Enter your comment" outlined></vue-editor>
+                            <v-btn @click="setComment(index)" x-small color="warning">Edit
+                            </v-btn>
+                            <v-btn @click="edit--" x-small color="error">Cancel
+                            </v-btn>
+                        </v-card-text>
+
                     </v-card>
                 </v-col>
             </v-row>
@@ -120,6 +122,7 @@ export default {
         comment: '',
         commentNum: 0,
         newComment: '',
+        commentIndex: '',
         edit: 0,
         CsvButtonType: 0,
         currentTime: 5,
