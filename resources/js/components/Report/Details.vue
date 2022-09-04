@@ -6,8 +6,8 @@
             </template></v-breadcrumbs>
         <v-row align="center" justify="center" dense>
             <v-row cols="12" sm="8" md="4" lg="10">
-                <v-card elevation="10">
-                    {{ time }}
+                <v-card elevation="2">
+                    <p v-if="currentTime > 0"> {{ time }} </p>
                     <v-card-title>
                         <h3>{{ formData.thema }}</h3>
                     </v-card-title>
@@ -40,35 +40,35 @@
             <v-row cols="12" sm="8" md="4" lg="10">
                 <br>
                 <v-card elevation="5">
-                    <v-textarea v-model="comment" label="Enter your comment" outlined></v-textarea>
-                    <v-btn depressed color="primary" x-big @click="sendComment">Comment</v-btn>
+                    <vue-editor v-model="comment" outlined></vue-editor>
+                    <v-btn x-small depressed color="primary" @click="sendComment">Comment</v-btn>
                 </v-card>
             </v-row>
-            <br>
             <v-row cols="12" sm="8" md="4" lg="10" v-for="(comment, index) in getReport.comments" :value="comment.id"
                 :key="comment.id">
-                <br>
-                <v-card elevation="3">
-                    <v-card-title>
-                        <p>
-                        <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
-                                    v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
-                                    @click="plusEdit" x-small color="warning"> Edit
-                                </v-btn>
-                            </h5>
-                        </h3>
-                        </p>
-                    </v-card-title>
-                    <v-card-text
-                        v-if="(!isDateOk(index)) || (edit == 0 && isDateOk(index) && comment.users.id == getUser.id) || comment.users.id != getUser.id">
-                        <p>{{ comment.comment }}</p>
-                    </v-card-text>
-                    <v-textarea v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                        v-model="comment.comment" label="Enter your comment" outlined></v-textarea>
-                    <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
-                        @click="setComment(index)" x-small color="warning">Edit
-                    </v-btn>
-                </v-card>
+                <v-col>
+                    <v-card elevation="3">
+                        <v-card-title>
+                            <p>
+                            <h3>{{ comment.users.name }} <h5>{{ new Date(comment.updated_at).toLocaleString() }} <v-btn
+                                        v-if="isDateOk(index) && edit == 0 && comment.users.id == getUser.id"
+                                        @click="plusEdit" x-small color="warning"> Edit
+                                    </v-btn>
+                                </h5>
+                            </h3>
+                            </p>
+                        </v-card-title>
+                        <v-card-text
+                            v-if="(!isDateOk(index)) || (edit == 0 && isDateOk(index) && comment.users.id == getUser.id) || comment.users.id != getUser.id">
+                            <p v-html="comment.comment"></p>
+                        </v-card-text>
+                        <vue-editor v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
+                            v-model="comment.comment" label="Enter your comment" outlined></vue-editor>
+                        <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
+                            @click="setComment(index)" x-small color="warning">Edit
+                        </v-btn>
+                    </v-card>
+                </v-col>
             </v-row>
             <v-row>
                 <v-col>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-
+import { VueEditor } from "vue2-editor";
 export default {
     data: () => ({
         formData: {
@@ -130,6 +130,9 @@ export default {
     destroyed() {
         this.stopTimer()
     },
+    components: {
+        VueEditor
+    },
     watch: {
         currentTime(time) {
             if (time === 0) {
@@ -140,7 +143,8 @@ export default {
     mounted() {
         if ("Authorized" in localStorage) {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
-                this.currentTime = parseInt(this.toTimestamp(this.getReport.start_time) - (Date.now() / 1000));
+                let date = new Date(this.getReport.start_time).toLocaleString()
+                this.currentTime = parseInt(this.toTimestamp(date) - (Date.now() / 1000));
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.rep_id]).then(() => {
                     this.$store.dispatch('ajaxUser')
                     this.$store.dispatch('isUserOnConference', this.$route.params.id)
@@ -343,5 +347,10 @@ export default {
 <style>
 a {
     z-index: 0;
+}
+
+v-row {
+    padding-bottom: 25px;
+    padding-top: 10px;
 }
 </style>
