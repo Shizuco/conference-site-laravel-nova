@@ -75,12 +75,12 @@ class ConferenceController extends Controller
 
     private function hasTime(int $id)
     {
-        $conference = Conference::findOrFail($id);
+        $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
         if (count($results) === 0) {
             return true;
         }
-        $startTime = new Datetime($conference->date . 'T' . $conference->time . 'Z');
+        $startTime = new Datetime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
         $endTime = 0;
         $hasTime = 0;
         for ($a = 0; $a < count($results); $a++) {
@@ -88,7 +88,7 @@ class ConferenceController extends Controller
                 $startTime = new Datetime($results[$a + 1]->start_time);
             }
             if ($a === count($results) - 1) {
-                $endTime = new DateTime($conference->date . ' 23:59:59.000');
+                $endTime = new DateTime($conference[0]->date . ' 23:59:59.000');
                 $startTime = new Datetime($results[$a]->end_time);
             } else if ($a === 0) {
                 $endTime = new Datetime($results[$a]->start_time);
@@ -96,7 +96,7 @@ class ConferenceController extends Controller
                 $endTime = new Datetime($results[$a]->end_time);
             }
             $interval = $endTime->diff($startTime);
-            $err = (($interval->format('%i') >= 10));
+            $err = (($interval->format('%i') >= 10)||$interval->format('%h') > 0);
             if ($err) {
                 $hasTime++;
             }

@@ -9,7 +9,7 @@
                             <ValidationObserver tag="form" ref="form" @submit.prevent="onSubmit">
                                 <v-row class="pa-0" style="margin-top: 0px !important">
                                     <v-col class="pa-0">
-                                        <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
+                                        <ValidationProvider rules="required|min:2|max:255" v-slot="{ errors }"
                                             name="title">
                                             <v-col style="height: 10px">
                                                 <span style="font-size:smaller">{{  errors[0]  }}</span>

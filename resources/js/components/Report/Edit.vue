@@ -9,7 +9,7 @@
                             <ValidationObserver tag="form" ref="form" @submit.prevent="setReport">
                                 <v-row class="pa-0" style="margin-top: 0px !important">
                                     <v-col class="pa-0">
-                                        <ValidationProvider rules="required|alpha|min:2|max:255" v-slot="{ errors }"
+                                        <ValidationProvider rules="required|min:2|max:255" v-slot="{ errors }"
                                             name="title">
                                             <v-col style="height: 10px">
                                                 <span style="font-size:smaller">{{ errors[0] }}</span>
@@ -100,8 +100,8 @@ export default {
             this.$store.dispatch('ajaxGetReport', [this.$route.params.id, this.$route.params.r_id]).then(() => {
                 this.$store.dispatch('ajaxGetReportFile', [this.$route.params.id, this.$route.params.r_id]).then(() => {
                     this.$data.formData.thema = this.getReport.thema
-                    this.$data.formData.start_time = new Date(this.getReport.start_time)
-                    this.$data.formData.end_time = new Date(this.getReport.end_time)
+                    this.$data.formData.start_time = new Date(new Date(this.getReport.start_time).toLocaleString())
+                    this.$data.formData.end_time = new Date(new Date(this.getReport.end_time).toLocaleString())
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.$store.getters.getFile
                 })

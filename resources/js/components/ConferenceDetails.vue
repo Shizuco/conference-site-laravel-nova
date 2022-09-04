@@ -121,6 +121,7 @@ export default {
                         disabled: true
                     })
                 })
+                console.log(this.getConference)
                 this.$store.dispatch('isUserOnConference', id)
                 this.$store.dispatch('ajaxUser')
             })
