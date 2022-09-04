@@ -37,13 +37,24 @@
                 </v-col>
             </v-row>
             <br>
-            <v-row cols="12" sm="8" md="4" lg="10">
-                <br>
-                <v-card elevation="5">
-                    <vue-editor v-model="comment" outlined></vue-editor>
-                    <v-btn x-small depressed color="primary" @click="sendComment">Comment</v-btn>
-                </v-card>
-            </v-row>
+            <ValidationObserver tag="form" ref="form" @submit.prevent="sendComment">
+                <v-row cols="12" sm="8" md="4" lg="10">
+                    <br>
+                    <v-card elevation="5">
+                        <ValidationProvider rules="required" v-slot="{ errors }" name="comment">
+                            <v-col style="height: 10px">
+                                <span style="font-size:smaller">{{ errors[0] }}</span>
+                            </v-col>
+                            <v-col>
+                                <vue-editor v-model="comment" outlined></vue-editor>
+                            </v-col>
+                        </ValidationProvider>
+
+                        <v-btn x-small depressed color="primary" @click="sendComment">Comment</v-btn>
+                    </v-card>
+                </v-row>
+            </ValidationObserver>
+
             <v-row cols="12" sm="8" md="4" lg="10" v-for="(comment, index) in getReport.comments" :value="comment.id"
                 :key="comment.id">
                 <v-col>
@@ -282,8 +293,11 @@ export default {
             }
             this.$store.dispatch('ajaxSendComment', [this.getReport.conference_id, this.getReport.id, data]).then(() => {
                 this.$router.go()
+            }).catch(error => {
+                this.$refs.form.setErrors({
+                    comment: error.response.data.errors.comment
+                });
             })
-
         },
         isDateOk(index) {
             if (this.getReport.comments.length == 0) {
