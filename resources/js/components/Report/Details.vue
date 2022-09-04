@@ -67,6 +67,8 @@
                         <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id"
                             @click="setComment(index)" x-small color="warning">Edit
                         </v-btn>
+                        <v-btn v-if="isDateOk(index) && edit == 1 && comment.users.id == getUser.id" @click="edit--" x-small color="error">Cancel
+                        </v-btn>
                     </v-card>
                 </v-col>
             </v-row>
