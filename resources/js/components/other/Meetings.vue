@@ -5,39 +5,88 @@
             <div class="col-md-8" v-for="meeting in meetings" :value="meeting.id" :key="meeting.id">
                 <v-card elevation="3">
                     <v-card-title>
-                        {{ meeting.topic }}
+                        <h3>{{ meeting.topic }}</h3>
                     </v-card-title>
                     <v-card-text>
-                        uuid => {{ meeting.uuid }}
+                        <table>
+                            <tr>
+                                <th>
+                                    UUID
+                                </th>
+                                <th>
+                                    {{ meeting.uuid }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    {{ meeting.id }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    HOST_ID
+                                </th>
+                                <th>
+                                    {{ meeting.host_id }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    TYPE
+                                </th>
+                                <th>
+                                    {{ meeting.type }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    START_TIME
+                                </th>
+                                <th>
+                                    {{ meeting.start_time }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    TIMEZONE
+                                </th>
+                                <th>
+                                    {{ meeting.timezone }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    CREATED_AT
+                                </th>
+                                <th>
+                                    {{ meeting.created_at }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    JOIN_URL
+                                </th>
+                                <th>
+                                    {{ meeting.join_url }}
+                                </th>
+                            </tr>
+                        </table>
                         <br>
-                        id => {{ meeting.id }}
-                        <br>
-                        host_id => {{ meeting.host_id }}
-                        <br>
-                        type => {{ meeting.type }}
-                        <br>
-                        start_time => {{ meeting.start_time }}
-                        <br>
-                        timezone => {{ meeting.timezone }}
-                        <br>
-                        created_at => {{ meeting.created_at }}
-                        <br>
-                        join_url => {{ meeting.join_url }}
-                        <br>
-                        <v-col>
-                            <v-btn depressed x-small block color="primary"><a :href=meeting.join_url class="white--text"
-                                    style="text-decoration: none; color: inherit;">join through app</a></v-btn>
-                        </v-col>
+                        <v-btn depressed x-small block color="primary"><a :href=meeting.join_url class="white--text"
+                                style="text-decoration: none; color: inherit;">join through app</a></v-btn>
                     </v-card-text>
                 </v-card>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-2" v-for="meeting in meetings" :value="meeting.id" :key="meeting.id">
+            <div class="col-md-2">
                 <v-btn @click="changePageDown()" v-if="currentPage > 1">
                     <= </v-btn>
             </div>
-            <div class="col-md-2" v-for="meeting in meetings" :value="meeting.id" :key="meeting.id">
+            <div class="col-md-2">
                 <v-btn @click="changePageUp()" v-if="currentPage < totalPage">=></v-btn>
             </div>
         </div>
@@ -80,3 +129,22 @@ export default {
     }
 }
 </script>
+
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
