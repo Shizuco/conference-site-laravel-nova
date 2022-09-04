@@ -83,11 +83,11 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-md-2">
-                <v-btn @click="changePageDown()" v-if="currentPage > 1">
-                    <= </v-btn>
+                <v-btn @click="changePageDown()" v-if="currentPage > 1" depressed x-big color="primary">
+                    <v-icon class="mdi mdi-arrow-left-bold"></v-icon></v-btn>
             </div>
             <div class="col-md-2">
-                <v-btn @click="changePageUp()" v-if="currentPage < totalPage">=></v-btn>
+                <v-btn @click="changePageUp()" v-if="currentPage < totalPage" depressed x-big color="primary"><v-icon class="mdi mdi-arrow-right-bold"></v-icon></v-btn>
             </div>
         </div>
     </v-app>
