@@ -99,7 +99,7 @@ class ReportController extends Controller
 
     public function update(CreateReportRequest $request, int $conferenceId, int $reportId)
     {
-        $rep = Report::findOrFail($reportId);
+        $rep = Report::whereId($reportId)->get();
         $startTimeExist = new Datetime($request->start_time);
         $startTimeExist->setTimezone(new DateTimeZone('GMT'));
         $startTimeExist->add(new DateInterval('PT3H'));
@@ -110,17 +110,17 @@ class ReportController extends Controller
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $conferenceId);
         $data = $request->validated();
         $duration = ($endTimeExist->getTimestamp() - $startTimeExist->getTimestamp());
-        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
+        if ($rep[0]->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
             $data['conference_id'] = $conferenceId;
             $data['user_id'] = Auth::user()->id;
             if (gettype($request->file('presentation')) == 'object') {
                 $request->file('presentation')->storeAs('', $request->file('presentation')->getClientOriginalName());
                 $data['presentation'] = $request->file('presentation')->getClientOriginalName();
             } else {
-                $data['presentation'] = $rep->presentation;
+                $data['presentation'] = $rep[0]->presentation;
             }
             $data['duration'] = $duration;
-            if ($request->start_time !== $rep->start_time) {
+            if ($request->start_time !== $rep[0]->start_time) {
                 $this->sendMessage($request, $conferenceId, $rep, 'change report time');
             }
             Report::whereId($reportId)->update($data);
@@ -133,14 +133,14 @@ class ReportController extends Controller
     {
         if ($report_id == 0) {
             $rep = Report::where('conference_id', $conferenceId)->where('user_id', Auth::user()->id)->first();
-            if($rep->zoom_meeting_id !== null){
-                $this->meeting->destroy($rep->zoom_meeting_id); 
+            if ($rep->zoom_meeting_id !== null) {
+                $this->meeting->destroy($rep->zoom_meeting_id);
             }
             $rep->delete();
         } else {
             $rep = Report::whereId($report_id)->first();
-            if($rep->zoom_meeting_id !== null){
-                $this->meeting->destroy($rep->zoom_meeting_id); 
+            if ($rep->zoom_meeting_id !== null) {
+                $this->meeting->destroy($rep->zoom_meeting_id);
             }
             $this->sendMessage(0, $conferenceId, $rep, 'deleted by admin');
             $rep->delete();
@@ -224,16 +224,16 @@ class ReportController extends Controller
 
     private function NearestTime(int $id)
     {
-        $conference = Conference::Find($id)->first();
+        $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
-        $start_time = new Datetime($conference->date . 'T' . $conference->time . 'Z');
+        $start_time = new Datetime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
         $end_time = 0;
         for ($a = 0; $a < count($results); $a++) {
             if ($a !== 0 && $a !== count($results) - 1) {
                 $start_time = new Datetime($results[$a + 1]->start_time);
             }
             if ($a === count($results) - 1) {
-                $end_time = new DateTime($conference->date . ' 23:59:59.000');
+                $end_time = new DateTime($conference[0]->date . ' 23:59:59.000');
                 $start_time = new Datetime($results[$a]->end_time);
             } else if ($a === 0) {
                 $end_time = new Datetime($results[$a]->start_time);
@@ -259,10 +259,10 @@ class ReportController extends Controller
 
     private function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
     {
-        $conference = Conference::Find($id)->first();
-        $conStartTime = new DateTime($conference->date . ' ' . $conference->time);
+        $conference = Conference::whereId($id)->get();
+        $conStartTime = new DateTime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
         $conStartTime->setTimezone(new DateTimeZone('GMT'));
-        $conEndTime = new DateTime($conference->date . 'T23:59:59.000000Z');
+        $conEndTime = new DateTime($conference[0]->date . 'T23:59:59.000000Z');
         $conEndTime->setTimezone(new DateTimeZone('GMT'));
         if ($startTimeExist < $conStartTime) {
             $error = ValidationException::withMessages([
@@ -270,7 +270,6 @@ class ReportController extends Controller
             ]);
             throw $error;
         }
-
         if (($endTimeExist->diff($conEndTime)->d >= 1) || ($startTimeExist->diff($conStartTime)->d >= 1)) {
             $error = ValidationException::withMessages([
                 'start_time' => ['Date must be in range of conference'],

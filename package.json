@@ -49,6 +49,8 @@
         "vue-lazyload": "^3.0.0-rc.2",
         "vue-router": "^3.5.4",
         "vue-social-sharing": "^3.0.9",
+        "vue-wysiwyg": "^1.7.2",
+        "vue2-editor": "^2.10.3",
         "vuetify": "^2.6.9",
         "vuetify-datetime-picker": "^2.1.1",
         "vuex": "^3.6.2"

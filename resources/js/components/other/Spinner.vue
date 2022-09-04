@@ -11,9 +11,9 @@
 </template>
 
 <script>
-const CENTER_X = 50;
-const CENTER_Y = 50;
-const RADIUS = 20;
+const CENTER_X = 25;
+const CENTER_Y = 25;
+const RADIUS = 10;
 
 function positionOnCircle(radius, angle, center) {
   return {
@@ -65,7 +65,7 @@ export default {
       this.counter++;
       this.circles = this.circles.map((item, index) => ({
         ...item,
-        radius: (this.counter + index) % 8
+        radius: (this.counter + index) % 6
       }));
     }, 70);
   },
@@ -77,7 +77,7 @@ export default {
 
 <style scoped>
 .loading-spinner {
-  width: 100px;
-  height: 100px;
+  width: 40px;
+  height: 40px;
 }
 </style>

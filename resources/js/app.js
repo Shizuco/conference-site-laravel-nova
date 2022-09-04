@@ -60,7 +60,7 @@ import VueBreadcrumbs from 'vue-breadcrumbs'
 import { Slide } from 'vue-burger-menu'
 import LaravelVuePagination from 'laravel-vue-pagination';
 import VueSkeletonLoader from 'skeleton-loader-vue';
-
+import { VueEditor } from "vue2-editor";
 
 Vue.use(VueBreadcrumbs)
 Vue.use(DatetimePicker)
