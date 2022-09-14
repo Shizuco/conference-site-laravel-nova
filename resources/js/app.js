@@ -18,8 +18,6 @@ window.Vue = require('vue').default;
 
 Vue.component('mainpage', require('./components/MainPage.vue').default);
 Vue.component('details', require('./components/ConferenceDetails.vue').default);
-Vue.component('create', require('./components/CreateConference.vue').default);
-Vue.component('edit', require('./components/EditConference.vue').default);
 Vue.component('auth', require('./components/Auth.vue').default);
 Vue.component('register', require('./components/Auth/Registration.vue').default);
 Vue.component('authenticate', require('./components/Auth/Auth.vue').default);
@@ -29,15 +27,12 @@ Vue.component('create', require('./components/Report/Create.vue').default);
 Vue.component('edition', require('./components/Report/Edit.vue').default);
 Vue.component('userpage', require('./components/Auth/UserPage.vue').default);
 Vue.component('userfavorites', require('./components/Auth/UserFavorites.vue').default);
-Vue.component('category', require('./components/Category.vue').default);
 Vue.component('skeleton', require('./components/Skeleton.vue').default);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('Pagination', LaravelVuePagination);
 Vue.component('Slide', Slide)
 Vue.component('vue-skeleton-loader', VueSkeletonLoader);
-Vue.component('spinner', require("./components/other/Spinner").default)
-Vue.component('meeting', require("./components/other/Meetings").default)
 
 import VueMask from 'v-mask'
 import store from './store'

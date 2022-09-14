@@ -2,11 +2,14 @@
 
 namespace App\Nova;
 
+use Dniccum\PhoneNumber\PhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -32,7 +35,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'surname', 'email', 'password', 'country', 'birthday', 'created_at', 'updated_at'
+        'id', 'name', 'surname', 'role', 'email', 'phone', 'password', 'country', 'birthday', 'created_at', 'updated_at',
     ];
 
     /**
@@ -56,22 +59,37 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            Text::make('role')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
             Text::make('Email')
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
+            PhoneNumber::make('Phone')->disableValidation()->rules('required'),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
 
-            Text::make('country')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            Select::make('Country')->options([
+                'Japan' => 'Japan',
+                'Russia' => 'Russia',
+                'Ukraine' => 'Ukraine',
+                'Belarus' => 'Belarus',
+                'Canada' => 'Canada',
+                'France' => 'France',
+                'England' => 'England',
+                'USA' => 'USA',
+                'China' => 'China',
+                'Korea' => 'Korea',
+            ])->rules('required'),
 
-            Text::make('birthday')
+            Date::make('birthday')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
@@ -106,7 +124,9 @@ class User extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new Filters\Role('role'),
+        ];
     }
 
     /**

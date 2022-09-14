@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52b5679eea4d3246832a1f5123767e5e",
+    "content-hash": "02de47f986d041b6916f7f9b3a625688",
     "packages": [
         {
             "name": "brick/math",
@@ -193,6 +193,69 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
+        },
+        {
+            "name": "dniccum/phone-number",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dniccum/nova-phone-number.git",
+                "reference": "b41450450bd14a6f845bcb11feeb0875ff8bf4ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dniccum/nova-phone-number/zipball/b41450450bd14a6f845bcb11feeb0875ff8bf4ac",
+                "reference": "b41450450bd14a6f845bcb11feeb0875ff8bf4ac",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": "^8.0",
+                "propaganistas/laravel-phone": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Dniccum\\PhoneNumber\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dniccum\\PhoneNumber\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Doug Niccum",
+                    "email": "dniccumdesign@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel Nova phone number field with input masking and validation support.",
+            "keywords": [
+                "field",
+                "laravel",
+                "nova",
+                "number",
+                "phone"
+            ],
+            "support": {
+                "issues": "https://github.com/dniccum/nova-phone-number/issues",
+                "source": "https://github.com/dniccum/nova-phone-number/tree/v2.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/dniccum",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-08T02:02:49+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -962,6 +1025,179 @@
             "time": "2022-02-20T15:07:15+00:00"
         },
         {
+            "name": "gekich/nested-tree-filter",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gekich/nova-nested-tree-filter.git",
+                "reference": "d8b9dadc1b92a5ac5d22c50c977d07b489726d6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gekich/nova-nested-tree-filter/zipball/d8b9dadc1b92a5ac5d22c50c977d07b489726d6c",
+                "reference": "d8b9dadc1b92a5ac5d22c50c977d07b489726d6c",
+                "shasum": ""
+            },
+            "require": {
+                "kalnoy/nestedset": "^6.0",
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Gekich\\NestedTreeFilter\\FilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gekich\\NestedTreeFilter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova nested tree filter.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/gekich/nova-nested-tree-filter/issues",
+                "source": "https://github.com/gekich/nova-nested-tree-filter/tree/1.0.0"
+            },
+            "time": "2021-11-18T15:05:34+00:00"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php",
+            "version": "8.12.55",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+                "reference": "a4f21baace2038d4d47206aec15209365b629e86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/a4f21baace2038d4d47206aec15209365b629e86",
+                "reference": "a4f21baace2038d4d47206aec15209365b629e86",
+                "shasum": ""
+            },
+            "require": {
+                "giggsey/locale": "^1.7|^2.0",
+                "php": ">=5.3.2",
+                "symfony/polyfill-mbstring": "^1.17"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "^0.5",
+                "phing/phing": "^2.7",
+                "php-coveralls/php-coveralls": "^1.0|^2.0",
+                "symfony/console": "^2.8|^3.0|^v4.4|^v5.2",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "libphonenumber\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "/src/data/",
+                    "/src/carrier/data/",
+                    "/src/geocoding/data/",
+                    "/src/timezone/data/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "https://giggsey.com/"
+                }
+            ],
+            "description": "PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "support": {
+                "irc": "irc://irc.appliedirc.com/lobby",
+                "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
+                "source": "https://github.com/giggsey/libphonenumber-for-php"
+            },
+            "time": "2022-09-09T12:56:05+00:00"
+        },
+        {
+            "name": "giggsey/locale",
+            "version": "2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/Locale.git",
+                "reference": "9c1dca769253f6a3e81f9a5c167f53b6a54ab635"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/Locale/zipball/9c1dca769253f6a3e81f9a5c167f53b6a54ab635",
+                "reference": "9c1dca769253f6a3e81f9a5c167f53b6a54ab635",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "^0.5",
+                "phing/phing": "^2.7",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8.5|^9.5",
+                "symfony/console": "^5.0",
+                "symfony/filesystem": "^5.0",
+                "symfony/finder": "^5.0",
+                "symfony/process": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Giggsey\\Locale\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "https://giggsey.com/"
+                }
+            ],
+            "description": "Locale functions required by libphonenumber-for-php",
+            "support": {
+                "issues": "https://github.com/giggsey/Locale/issues",
+                "source": "https://github.com/giggsey/Locale/tree/2.2"
+            },
+            "time": "2022-04-06T07:33:59+00:00"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.0",
             "source": {
@@ -1355,6 +1591,51 @@
             "time": "2022-08-28T14:45:39+00:00"
         },
         {
+            "name": "imumz/leaflet-map",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iMuMz/NovaLeafletMap.git",
+                "reference": "1dbbc4c4fbe02d40e3286697810a93365c00ae4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iMuMz/NovaLeafletMap/zipball/1dbbc4c4fbe02d40e3286697810a93365c00ae4a",
+                "reference": "1dbbc4c4fbe02d40e3286697810a93365c00ae4a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Imumz\\LeafletMap\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Imumz\\LeafletMap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/iMuMz/NovaLeafletMap/issues",
+                "source": "https://github.com/iMuMz/NovaLeafletMap/tree/1.1"
+            },
+            "time": "2021-01-20T09:05:58+00:00"
+        },
+        {
             "name": "inertiajs/inertia-laravel",
             "version": "v0.6.3",
             "source": {
@@ -1485,6 +1766,51 @@
                 "source": "https://github.com/lazychaser/laravel-nestedset/tree/v6.0.1"
             },
             "time": "2022-02-11T06:17:57+00:00"
+        },
+        {
+            "name": "laraning/nova-time-field",
+            "version": "v1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laraning/nova-time-field.git",
+                "reference": "f12fd7ebf172279f0838b05f965161e75e42f823"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laraning/nova-time-field/zipball/f12fd7ebf172279f0838b05f965161e75e42f823",
+                "reference": "f12fd7ebf172279f0838b05f965161e75e42f823",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laraning\\NovaTimeField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laraning\\NovaTimeField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/laraning/nova-time-field/issues",
+                "source": "https://github.com/laraning/nova-time-field/tree/v1.2"
+            },
+            "time": "2020-11-29T17:27:34+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2315,6 +2641,63 @@
             "time": "2022-09-09T11:11:42+00:00"
         },
         {
+            "name": "league/iso3166",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/iso3166.git",
+                "reference": "a0dd2a1d956f85811f9c667a1744d822fb2c63d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/iso3166/zipball/a0dd2a1d956f85811f9c667a1744d822fb2c63d8",
+                "reference": "a0dd2a1d956f85811f9c667a1744d822fb2c63d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\ISO3166\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com"
+                }
+            ],
+            "description": "ISO 3166-1 PHP Library",
+            "homepage": "https://github.com/thephpleague/iso3166",
+            "keywords": [
+                "3166",
+                "3166-1",
+                "ISO 3166",
+                "countries",
+                "iso",
+                "library"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/iso3166/issues",
+                "source": "https://github.com/thephpleague/iso3166"
+            },
+            "time": "2022-09-07T09:14:19+00:00"
+        },
+        {
             "name": "league/mime-type-detection",
             "version": "1.11.0",
             "source": {
@@ -2369,6 +2752,58 @@
                 }
             ],
             "time": "2022-04-17T13:12:02+00:00"
+        },
+        {
+            "name": "matanyadaev/laravel-eloquent-spatial",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MatanYadaev/laravel-eloquent-spatial.git",
+                "reference": "88ffd7917bdfffae765b4e37d4688bfdf4a5a351"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MatanYadaev/laravel-eloquent-spatial/zipball/88ffd7917bdfffae765b4e37d4688bfdf4a5a351",
+                "reference": "88ffd7917bdfffae765b4e37d4688bfdf4a5a351",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/framework": "^8.0|^9.0",
+                "phayes/geophp": "^1.2",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "jubeki/laravel-code-style": "^1.0",
+                "nunomaduro/larastan": "^1.0|^2.0",
+                "orchestra/testbench": "^6.23|^7.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MatanYadaev\\EloquentSpatial\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matan Yadaev",
+                    "email": "matan.yed@gmail.com"
+                }
+            ],
+            "description": "Spatial library for Laravel",
+            "homepage": "https://github.com/matanyadaev/laravel-eloquent-spatial",
+            "support": {
+                "issues": "https://github.com/MatanYadaev/laravel-eloquent-spatial/issues",
+                "source": "https://github.com/MatanYadaev/laravel-eloquent-spatial/tree/2.3.0"
+            },
+            "time": "2022-09-06T21:02:39+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2471,6 +2906,61 @@
                 }
             ],
             "time": "2022-07-24T11:55:47+00:00"
+        },
+        {
+            "name": "mostafaznv/nova-map-field",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mostafaznv/nova-map-field.git",
+                "reference": "61b6ac1497ee03331e07b6cedff5535cf88a2e3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mostafaznv/nova-map-field/zipball/61b6ac1497ee03331e07b6cedff5535cf88a2e3f",
+                "reference": "61b6ac1497ee03331e07b6cedff5535cf88a2e3f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8.0|^9.0",
+                "laravel/nova": "^4.0",
+                "matanyadaev/laravel-eloquent-spatial": "^2.0.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mostafaznv\\NovaMapField\\NovaMapFieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mostafaznv\\NovaMapField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Map Field for Laravel Nova",
+            "keywords": [
+                "OpenLayers",
+                "Polygon",
+                "geocoder",
+                "laravel",
+                "map",
+                "map marker",
+                "multi polygon",
+                "nova",
+                "point",
+                "spatial"
+            ],
+            "support": {
+                "issues": "https://github.com/mostafaznv/nova-map-field/issues",
+                "source": "https://github.com/mostafaznv/nova-map-field/tree/1.6.1"
+            },
+            "time": "2022-07-28T19:09:31+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -3089,6 +3579,94 @@
             "time": "2022-09-13T20:54:27+00:00"
         },
         {
+            "name": "phayes/geophp",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phayes/geoPHP.git",
+                "reference": "015404e85b602e0df1f91441f8db0f9e98f7e567"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phayes/geoPHP/zipball/015404e85b602e0df1f91441f8db0f9e98f7e567",
+                "reference": "015404e85b602e0df1f91441f8db0f9e98f7e567",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "geoPHP.inc"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2 or New-BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Hayes"
+                }
+            ],
+            "description": "GeoPHP is a open-source native PHP library for doing geometry operations. It is written entirely in PHP and can therefore run on shared hosts. It can read and write a wide variety of formats: WKT (including EWKT), WKB (including EWKB), GeoJSON, KML, GPX, GeoRSS). It works with all Simple-Feature geometries (Point, LineString, Polygon, GeometryCollection etc.) and can be used to get centroids, bounding-boxes, area, and a wide variety of other useful information.",
+            "homepage": "https://github.com/phayes/geoPHP",
+            "support": {
+                "issues": "https://github.com/phayes/geoPHP/issues",
+                "source": "https://github.com/phayes/geoPHP/tree/master"
+            },
+            "time": "2014-12-02T06:11:22+00:00"
+        },
+        {
+            "name": "phoenix-lib/nova-nested-tree-attach-many",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phoenix-lib/nova-nested-tree-attach-many.git",
+                "reference": "95f9ca4d093b4208bbe8ab59bd84886e2f26c0ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phoenix-lib/nova-nested-tree-attach-many/zipball/95f9ca4d093b4208bbe8ab59bd84886e2f26c0ac",
+                "reference": "95f9ca4d093b4208bbe8ab59bd84886e2f26c0ac",
+                "shasum": ""
+            },
+            "require": {
+                "kalnoy/nestedset": "^6.0",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "PhoenixLib\\NovaNestedTreeAttachMany\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhoenixLib\\NovaNestedTreeAttachMany\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Nova vue-tree-select field for management nested category relations.",
+            "keywords": [
+                "belongs-to-many",
+                "laravel",
+                "nested-sets",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/phoenix-lib/nova-nested-tree-attach-many/issues",
+                "source": "https://github.com/phoenix-lib/nova-nested-tree-attach-many/tree/1.8.0"
+            },
+            "time": "2021-09-02T11:05:41+00:00"
+        },
+        {
             "name": "phpoption/phpoption",
             "version": "1.9.0",
             "source": {
@@ -3228,6 +3806,72 @@
                 }
             ],
             "time": "2022-01-05T17:46:08+00:00"
+        },
+        {
+            "name": "propaganistas/laravel-phone",
+            "version": "4.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Propaganistas/Laravel-Phone.git",
+                "reference": "5b0fef1d28e720c0a594fe0f22cb1d5b1d576474"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/5b0fef1d28e720c0a594fe0f22cb1d5b1d576474",
+                "reference": "5b0fef1d28e720c0a594fe0f22cb1d5b1d576474",
+                "shasum": ""
+            },
+            "require": {
+                "giggsey/libphonenumber-for-php": "^7.0|^8.0",
+                "illuminate/contracts": "^8.9|^9.0",
+                "illuminate/support": "^8.0|^9.0",
+                "illuminate/validation": "^8.0|^9.0",
+                "league/iso3166": "^2.0|^3.0|^4.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "nunomaduro/larastan": "^1.0",
+                "orchestra/testbench": "*",
+                "phpunit/phpunit": "^9.5.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Propaganistas\\LaravelPhone\\PhoneServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Propaganistas\\LaravelPhone\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Propaganistas",
+                    "email": "Propaganistas@users.noreply.github.com"
+                }
+            ],
+            "description": "Adds phone number functionality to Laravel based on Google's libphonenumber API.",
+            "keywords": [
+                "laravel",
+                "libphonenumber",
+                "phone",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/Propaganistas/Laravel-Phone/issues",
+                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/4.3.8"
+            },
+            "time": "2022-09-04T18:30:31+00:00"
         },
         {
             "name": "psr/cache",
@@ -6797,6 +7441,57 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yassi/nova-nested-form",
+            "version": "v3.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yassipad/laravel-nova-nested-form.git",
+                "reference": "852b65e01481e79cb28351515f097fc5c7ff6ab6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yassipad/laravel-nova-nested-form/zipball/852b65e01481e79cb28351515f097fc5c7ff6ab6",
+                "reference": "852b65e01481e79cb28351515f097fc5c7ff6ab6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "laravel/nova": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Yassi\\NestedForm\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yassi\\NestedForm\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova package that allows you to create/update/delete nested related fields from a parent form.",
+            "keywords": [
+                "form",
+                "laravel",
+                "nested",
+                "nova",
+                "relationship"
+            ],
+            "support": {
+                "issues": "https://github.com/yassipad/laravel-nova-nested-form/issues",
+                "source": "https://github.com/yassipad/laravel-nova-nested-form/tree/v3.0.12"
+            },
+            "time": "2021-05-26T14:40:19+00:00"
         }
     ],
     "packages-dev": [
@@ -8034,16 +8729,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "4.0.7",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "7fa545db548c90bdebeb9da0583001a252be5578"
+                "reference": "fa0f136dd2334583309d32b62544682ee972b51a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/7fa545db548c90bdebeb9da0583001a252be5578",
-                "reference": "7fa545db548c90bdebeb9da0583001a252be5578",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/fa0f136dd2334583309d32b62544682ee972b51a",
+                "reference": "fa0f136dd2334583309d32b62544682ee972b51a",
                 "shasum": ""
             },
             "require": {
@@ -8096,7 +8791,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/4.0.7"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/4.0.8"
             },
             "funding": [
                 {
@@ -8104,7 +8799,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-14T06:33:43+00:00"
+            "time": "2022-09-14T12:41:17+00:00"
         },
         {
             "name": "sebastian/complexity",

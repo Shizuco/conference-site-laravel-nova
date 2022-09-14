@@ -72,9 +72,6 @@
                     </v-card-text>
                 </v-card>
             </div>
-            <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
-            <spinner v-if="CsvButtonType == 1"></spinner>
-            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
             <v-btn x-big block color="primary"
                 :to="{ name: 'ConferenceDetails', params: { id: this.$route.params.id } }" class="white--text">Back
             </v-btn>
@@ -112,22 +109,10 @@ export default {
                 this.categories.push(element.name)
             });
         })
-        Echo.channel('downloadCsvFile')
-            .listen('DownloadExportCsvFile', (e) => {
-                if (e.message == 'start') {
-                    this.CsvButtonType = 1
-                }
-                if (e.message == 'done') {
-                    this.CsvButtonType = 2
-                }
-            })
     },
     methods: {
         isAuth() {
             return ("Authorized" in localStorage) ? true : false
-        },
-        isAdmin() {
-            return (this.$store.getters.getUser.role == "admin") ? true : false;
         },
         isOnConference() {
             return this.$store.getters.getUserOnConferenceStatus
@@ -186,37 +171,6 @@ export default {
         },
         resetFilters() {
             this.$router.go()
-        },
-        getCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/' + this.$route.params.id + '/reportsCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-            })
-        },
-        downloadCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/' + this.$route.params.id + '/reportsDownloadCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-                responseType: 'blob', // important
-            }).then((response) => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-            })
         },
         status(id) {
             if (id == null) {

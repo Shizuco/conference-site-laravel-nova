@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -29,8 +31,17 @@ class Conference extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'date', 'time', 'category_id', 'country', 'address_lat', 'address_lon', 'created_at', 'updated_at'
+        'id', 'title', 'date', 'time', 'category_id', 'country', 'address_lat', 'address_lon', 'created_at', 'updated_at',
     ];
+
+    public function getAllCategories()
+    {
+        $list = array();
+        foreach (\App\Models\Category::all() as $category) {
+            $list[$category['id']] = $category['name'];
+        }
+        return $list;
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -45,18 +56,28 @@ class Conference extends Resource
             Text::make('title')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('date')
+            Date::make('date')
                 ->sortable()
                 ->rules('required', 'max:255'),
             Text::make('time')
-                ->sortable()
-                ->rules('required', 'max:255'),
-            Text::make('category_id')
-                ->sortable()
-                ->rules('required', 'max:255'),
-            Text::make('country')
-                ->sortable()
-                ->rules('required', 'max:255'),
+                ->placeholder('##:##:##')
+                ->rules('date_format:"H:i:s"')
+                ->help('hh:mm:ss'),
+            Select::make('category_id')->options(
+                $this->getAllCategories()
+            )->rules('required'),
+            Select::make('Country')->options([
+                'Japan' => 'Japan',
+                'Russia' => 'Russia',
+                'Ukraine' => 'Ukraine',
+                'Belarus' => 'Belarus',
+                'Canada' => 'Canada',
+                'France' => 'France',
+                'England' => 'England',
+                'USA' => 'USA',
+                'China' => 'China',
+                'Korea' => 'Korea',
+            ])->rules('required'),
             Text::make('created_at')
                 ->sortable()
                 ->rules('required', 'max:255')

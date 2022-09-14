@@ -141,21 +141,10 @@
                                     :to="{ name: 'Registration' }">More</router-link>
                             </v-btn>
                         </span>
-                        <span>
-                            <v-btn v-if="isAdmin()" depressed color="warning" big
-                                :to="{ name: 'EditConference', params: { id: conference.id } }">Edit</v-btn>
-                        </span>
-                        <span>
-                            <v-btn v-if="isAdmin()" x-big depressed color="error"
-                                @click="deleteConference(conference.id)">Delete</v-btn>
-                        </span>
                     </v-card-text>
                 </v-card>
             </div>
             <Pagination :data="data" @pagination-change-page="getConferences" />
-            <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
-            <spinner v-if="CsvButtonType == 1"></spinner>
-            <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
         </div>
     </v-app>
 
@@ -201,22 +190,10 @@ export default {
         if (this.isAuth()) {
             this.$store.dispatch("ajaxUser");
         }
-        Echo.channel('downloadCsvFile')
-            .listen('DownloadExportCsvFile', (e) => {
-                if(e.message == 'start'){
-                    this.CsvButtonType = 1
-                }
-                if(e.message == 'done'){
-                    this.CsvButtonType = 2
-                }
-            })
     },
     methods: {
         isAuth() {
             return ("Authorized" in localStorage) ? true : false;
-        },
-        isAdmin() {
-            return (this.$store.getters.getUser.role == "admin") ? true : false;
         },
         deleteConference(id) {
             this.$store.dispatch("ajaxConferenceDelete", id);
@@ -315,37 +292,6 @@ export default {
                 this.$store.getters.getReports.data.forEach(element => {
                     this.reports.push(element);
                 })
-            })
-        },
-        getCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferencesCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-            })
-        },
-        downloadCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferencesDownloadCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-                responseType: 'blob', // important
-            }).then((response) => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
             })
         },
     }

@@ -2,8 +2,6 @@ import VueRouter from "vue-router";
 
 import MainPage from "../components/MainPage";
 import ConferenceDetails from "../components/ConferenceDetails.vue";
-import CreateConference from "../components/CreateConference.vue";
-import EditConference from "../components/EditConference.vue";
 import Registration from "../components/Auth/Registration.vue";
 import Auth from "../components/Auth/Auth.vue";
 import List from "../components/Report/List.vue";
@@ -12,8 +10,6 @@ import Create from "../components/Report/Create.vue";
 import Edit from "../components/Report/Edit.vue";
 import UserPage from "../components/Auth/UserPage.vue";
 import UserFavorites from "../components/Auth/UserFavorites.vue";
-import Category from "../components/Category.vue";
-import Meetings from "../components/other/Meetings.vue";
 
 function isAuth() {
     return "Authorized" in localStorage ? true : false;
@@ -28,12 +24,6 @@ export default new VueRouter({
             name: "MainPage",
         },
         {
-            path: "/meetings",
-            alias: "/",
-            component: Meetings,
-            name: "Meetings",
-        },
-        {
             path: "/conferences/:id",
             beforeEnter(to, from, next) {
                 if (!isAuth()) {
@@ -44,30 +34,6 @@ export default new VueRouter({
             },
             component: ConferenceDetails,
             name: "ConferenceDetails",
-        },
-        {
-            path: "/conferences",
-            beforeEnter(to, from, next) {
-                if (!isAuth()) {
-                    next("/conferences");
-                } else {
-                    next();
-                }
-            },
-            component: CreateConference,
-            name: "CreateConference",
-        },
-        {
-            path: "/conferences/:id",
-            beforeEnter(to, from, next) {
-                if (!isAuth()) {
-                    next("/conferences");
-                } else {
-                    next();
-                }
-            },
-            component: EditConference,
-            name: "EditConference",
         },
         {
             path: "/register",
@@ -164,18 +130,6 @@ export default new VueRouter({
             },
             component: UserFavorites,
             name: "UserFavorites",
-        },
-        {
-            path: "/categories",
-            beforeEnter(to, from, next) {
-                if (!isAuth()) {
-                    next("/conferences");
-                } else {
-                    next();
-                }
-            },
-            component: Category,
-            name: "Category",
         },
     ],
 });

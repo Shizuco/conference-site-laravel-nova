@@ -12,6 +12,10 @@ class Conference extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'date' => 'date:Y-m-d'
+    ];
+
     protected $fillable = [
         'title',
         'country',

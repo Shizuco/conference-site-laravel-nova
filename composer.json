@@ -2,22 +2,32 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "dniccum/phone-number": "^2.0",
         "firebase/php-jwt": "^6.3",
+        "gekich/nested-tree-filter": "^1.0",
         "guzzlehttp/guzzle": "^7.4",
-        "laravel/nova": "~4.0",
+        "imumz/leaflet-map": "^1.1",
         "kalnoy/nestedset": "^6.0",
+        "laraning/nova-time-field": "^1.2",
         "laravel/framework": "^9.19",
+        "laravel/nova": "^4.0",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
+        "mostafaznv/nova-map-field": "^1.6",
+        "phoenix-lib/nova-nested-tree-attach-many": "^1.8",
         "predis/predis": "~1.0",
         "pusher/pusher-php-server": "^7.0",
         "symfony/http-client": "^6.0",
-        "symfony/mailgun-mailer": "^6.0"
+        "symfony/mailgun-mailer": "^6.0",
+        "yassi/nova-nested-form": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

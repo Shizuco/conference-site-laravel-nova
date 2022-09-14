@@ -14,13 +14,18 @@ class Report extends Model
     public $table = "conferece_user_reports";
     use HasFactory;
 
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     protected $fillable = [
         'category_id',
         'conference_id',
         'user_id',
         'duration',
         'thema',
-        'start_time',
+        'start_time' => 'datetime',
         'end_time',
         'description',
         'presentation',

@@ -20,36 +20,17 @@
                </v-btn>
             </span>
             <span>
-               <v-btn depressed color="primary" small v-if="isAdmin()">
-                  <router-link class="white--text" style="text-decoration: none; color: inherit;"
-                     :to="{ name: 'CreateConference' }">Create conference
-                  </router-link>
-               </v-btn>
-            </span>
-            <span>
-               <v-btn depressed small v-if="isAuth() && !isAdmin()">
+               <v-btn depressed small v-if="isAuth()">
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserPage' }">My Page
                   </router-link>
                </v-btn>
             </span>
             <span>
-               <v-btn depressed small v-if="isAuth() && !isAdmin()">
+               <v-btn depressed small v-if="isAuth()">
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserFavorites' }">My
                      Favorites
                   </router-link>
                   <v-badge inline :content="getFavorites()"></v-badge>
-               </v-btn>
-            </span>
-            <span>
-               <v-btn depressed small v-if="isAdmin()">
-                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Category' }">Create category
-                  </router-link>
-               </v-btn>
-            </span>
-            <span>
-               <v-btn depressed small v-if="isAdmin()">
-                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'Meetings' }">Zoom meetings
-                  </router-link>
                </v-btn>
             </span>
             <span>

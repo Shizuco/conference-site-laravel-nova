@@ -14,6 +14,7 @@
                   <v-card elevation="0">
                      <v-card-text>
                         <v-form>
+                           <ValidationObserver tag="form" ref="form" @submit.prevent="auth">
                            <v-row class="pa-0" style="margin-top: 0px !important">
                               <v-col class="pa-0">
                                  <ValidationProvider rules="required|email" ref="provider" v-slot="{ errors }"
@@ -45,11 +46,12 @@
                                  </ValidationProvider>
                               </v-col>
                            </v-row>
-                           <v-btn @click="auth()" class="rounded-0" color="#000000" x-large block dark>Log in</v-btn>
+                           <v-btn type="submit" class="rounded-0" color="#000000" x-large block dark>Log in</v-btn>
                            <v-card-actions class="text--secondary">
                               <v-spacer></v-spacer>
                               No account?<router-link :to="{ name: 'Registration' }">Registration</router-link>
                            </v-card-actions>
+                        </ValidationObserver>
                         </v-form>
                      </v-card-text>
                   </v-card>

@@ -53,24 +53,18 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAdmin()" @click="deleteConference()" x-big block color="error"
-                                        class="white--text">Delete</v-btn>
-                                </v-col>
-                                <v-col>
                                     <v-btn
-                                        v-if="isAuth() && isOnConference() == null && !isAdmin() && getConference.hasTime == true"
+                                        v-if="isOnConference() == null  && getConference.hasTime == true"
                                         @click="join()" x-big block color="success" class="white--text">Join</v-btn>
+                                        <v-btn v-else @click="out()"
+                                        x-big block color="error" class="white--text">Exit</v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth()" depressed color="warning" x-big @click="toReports">Reports
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="isAuth() && isOnConference() != null && !isAdmin()" @click="out()"
-                                        x-big block color="error" class="white--text">Exit</v-btn>
-                                </v-col>
-                                <v-col>
-                                    <v-btn v-if="!isAdmin()" x-big block color="primary">
+                                    <v-btn x-big block color="primary">
                                         <ShareNetwork class="white--text" style="text-decoration: none; color: inherit;"
                                             network="facebook" :url=url() title="Say hi to Vue!" hashtags="vuejs">
                                             Facebook
@@ -78,16 +72,13 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn v-if="!isAdmin()" x-big block color="primary">
+                                    <v-btn  x-big block color="primary">
                                         <ShareNetwork class="white--text" style="text-decoration: none; color: inherit;"
                                             network="twitter" :url=url() title="Say hi to Vue" hashtags="vuejs">
                                             Twitter
                                         </ShareNetwork>
                                     </v-btn>
                                 </v-col>
-                                <v-btn v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
-                                <spinner v-if="CsvButtonType == 1"></spinner>
-                                <v-btn v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
                             </v-row>
                         </v-form>
                     </v-card-text>
@@ -125,15 +116,6 @@ export default {
                 this.$store.dispatch('isUserOnConference', id)
                 this.$store.dispatch('ajaxUser')
             })
-            Echo.channel('downloadCsvFile')
-                .listen('DownloadExportCsvFile', (e) => {
-                    if (e.message == 'start') {
-                        this.CsvButtonType = 1
-                    }
-                    if (e.message == 'done') {
-                        this.CsvButtonType = 2
-                    }
-                })
         }
         else {
             this.$router.replace('/conferences')
@@ -147,9 +129,6 @@ export default {
     methods: {
         isAuth() {
             return ("Authorized" in localStorage) ? true : false
-        },
-        isAdmin() {
-            return (this.$store.getters.getUser.role == "admin") ? true : false
         },
         join() {
             let conference_id = this.$store.getters.getConference.id
@@ -169,11 +148,6 @@ export default {
                 this.$router.go()
             })
         },
-        deleteConference() {
-            let id = this.$route.params.id
-            this.$store.dispatch('ajaxConferenceDelete', id)
-            this.$router.replace('/conferences')
-        },
         isOnConference() {
             return this.$store.getters.getUserOnConferenceStatus
         },
@@ -182,37 +156,6 @@ export default {
         },
         toReports() {
             this.$router.replace('/conferences/' + this.$store.getters.getConference.id + '/reports')
-        },
-        getCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/' + this.$store.getters.getConference.id + '/listenersCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-            })
-        },
-        downloadCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/' + this.$store.getters.getConference.id + '/listenersDownloadCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-                responseType: 'blob', // important
-            }).then((response) => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-            })
         },
     },
 }

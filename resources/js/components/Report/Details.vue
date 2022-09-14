@@ -87,18 +87,6 @@
             </v-row>
             <v-row>
                 <v-col>
-                    <v-btn v-if="getUser.role == 'admin'" @click="deleteReport()" x-big block color="error"
-                        class="white--text">
-                        Delete report</v-btn>
-                </v-col>
-                <v-col>
-                    <v-btn block v-if="CsvButtonType == 0 && isAdmin()" @click="getCsv()">export</v-btn>
-                    <spinner v-if="CsvButtonType == 1"></spinner>
-                    <v-btn block v-if="CsvButtonType == 2" @click="downloadCsv()">download</v-btn>
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col>
                     <v-btn v-if="isFavorite.length == 0" @click="join()" small block color="success"
                         class="white--text">Add to favorite</v-btn>
                     <v-btn v-if="isFavorite.length > 0" @click="out()" small block color="error" class="white--text">
@@ -196,15 +184,6 @@ export default {
                     this.startTimer()
                 })
             })
-            Echo.channel('downloadCsvFile')
-                .listen('DownloadExportCsvFile', (e) => {
-                    if (e.message == 'start') {
-                        this.CsvButtonType = 1
-                    }
-                    if (e.message == 'done') {
-                        this.CsvButtonType = 2
-                    }
-                })
         }
     },
     computed: {
@@ -266,15 +245,7 @@ export default {
                 link.click();
             });
         },
-        isAdmin() {
-            return (this.$store.getters.getUser.role == "admin") ? true : false;
-        },
-        deleteReport() {
-            let report_id = this.$store.getters.getReport.id
-            this.$store.dispatch('ajaxReportDelete', [this.getReport.conference_id, report_id]).then(() => {
-                this.$router.replace('/conferences')
-            })
-        },
+        
         join() {
             let report_id = this.$store.getters.getReport.id
             this.$store.dispatch('ajaxAddToFavorites', report_id).then(() => {
@@ -322,37 +293,7 @@ export default {
         commentN() {
             this.commentNum++;
         },
-        getCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/reports/' + this.getReport.id + '/commentCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-            })
-        },
-        downloadCsv() {
-            let token = 'Bearer ' + localStorage.getItem('Authorized')
-            axios({
-                url: 'api/conferences/reports/' + this.getReport.id + '/commentDownloadCsv', //your url
-                method: 'GET',
-                headers: {
-                    "Authorization": token,
-                    "Content-type": "application/json"
-                },
-                responseType: 'blob', // important
-            }).then((response) => {
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                let filename = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
-                link.setAttribute('download', filename);
-                document.body.appendChild(link);
-                link.click();
-            })
-        },
+        
         joinInBrowser(link) {
             link = link.replace("/j/", "/wc/")
             link = link.slice(0, link.lastIndexOf('?'))

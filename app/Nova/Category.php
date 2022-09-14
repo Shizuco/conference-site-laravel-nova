@@ -3,9 +3,10 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 
 class Category extends Resource
 {
@@ -29,8 +30,17 @@ class Category extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'created_at', 'updated_at',
+        'id', 'name', 'parent_id', 'created_at', 'updated_at',
     ];
+
+    private function getParentId()
+    {
+        $list = array();
+        foreach (\App\Models\Category::where('parent_id', null)->get() as $category) {
+            $list[$category['id']] = $category['name'];
+        }
+        return $list;
+    }
 
     /**
      * Get the fields displayed by the resource.
@@ -43,16 +53,17 @@ class Category extends Resource
         return [
             ID::make()->sortable(),
             Text::make('name')
-                ->sortable()
-                ->rules('required', 'max:255'),
+            ->sortable()
+            ->rules('required', 'max:255'),
+            Select::make('parent_id')->options($this->getParentId()),
             Text::make('created_at')
-                ->sortable()
-                ->rules('required', 'max:255')
-                ->exceptOnForms(),
+            ->sortable()
+            ->rules('required', 'max:255')
+            ->exceptOnForms(),
             Text::make('updated_at')
-                ->sortable()
-                ->rules('required', 'max:255')
-                ->exceptOnForms(),
+            ->sortable()
+            ->rules('required', 'max:255')
+            ->exceptOnForms(),
         ];
     }
 

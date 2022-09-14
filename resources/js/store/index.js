@@ -125,19 +125,6 @@ export default new Vuex.Store({
                     commit("setConferences", response.data);
                 });
         },
-        ajaxConferencesCsv({ commit }) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/conferencesCsv",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then((response) => {
-                commit("setFile", response.config.url);
-            });
-        },
         ajaxGetConferenceByName({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
@@ -185,47 +172,7 @@ export default new Vuex.Store({
                 commit("setConference", response.data);
             });
         },
-        ajaxConferenceDelete({ commit }, id) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "delete",
-                url: "api/conferences/" + id,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then((response) => {
-                commit("setConference", response.data);
-            });
-        },
-        ajaxConferenceCreate({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "post",
-                url: "api/conferences",
-                data: data,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(function (response) {
-                commit("setConferences", response.data);
-            });
-        },
-        ajaxConferenceEdit({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "put",
-                url: "api/conferences/" + data.id,
-                data: data,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then(function (response) {
-                commit("setConferences", response.data);
-            });
-        },
+        
         register({ commit }, data) {
             return axios({
                 method: "post",
@@ -375,9 +322,6 @@ export default new Vuex.Store({
                 commit("setUserOnConferenceStatus", response.data);
             });
         },
-        changePoint({ commit }, data) {
-            commit("setConferencePoint", data);
-        },
         ajaxReports({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
@@ -424,6 +368,7 @@ export default new Vuex.Store({
             datas.append("end_time", data[0].end_time);
             datas.append("description", data[0].description);
             datas.append("category_id", data[0].category_id);
+            datas.append("isOnline", data[0].isOnline);
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "post",
@@ -436,6 +381,8 @@ export default new Vuex.Store({
                 },
             }).then(function (response) {
                 commit("setReport", response.data);
+            }).catch((err)=>{
+                console.log(err.response.data.message)
             })
         },
         ajaxEditReport({ commit }, data) {
@@ -458,17 +405,6 @@ export default new Vuex.Store({
                 },
             }).then((response) => {
                 commit("setReport", response.data);
-            });
-        },
-        ajaxReportDelete({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "delete",
-                url: "api/conferences/" + data[0] + "/reports/" + data[1],
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
             });
         },
         ajaxGetReportFile({ commit }, data) {
@@ -550,56 +486,6 @@ export default new Vuex.Store({
                 commit("setCategories", response.data);
             });
         },
-        ajaxCreateCategory({ commit }, data) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "post",
-                url: "api/categories",
-                data: data,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            });
-        },
-        ajaxDeleteCategory({ commit }, id) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            axios({
-                method: "delete",
-                url: "api/category/destroy",
-                data: id,
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            });
-        },
-        ajaxGetCategoryConferenceNumber({ commit }, id) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/category/" + id + "/getConferences",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then((response) => {
-                commit("setConferences", response.data);
-            });
-        },
-        ajaxGetCategoryReportNumber({ commit }, id) {
-            let token = "Bearer " + localStorage.getItem("Authorized");
-            return axios({
-                method: "get",
-                url: "api/category/" + id + "/getReports",
-                headers: {
-                    Authorization: token,
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            }).then((response) => {
-                commit("setReports", response.data);
-            });
-        },
         ajaxGetRootCategories({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
@@ -643,10 +529,6 @@ export default new Vuex.Store({
     mutations: {
         setConferences(state, data) {
             return (state.conferences = data);
-        },
-        setConferencePoint(state, data) {
-            state.conference.address_lat = data.address_lat;
-            state.conference.address_lon = data.address_lon;
         },
         setConference(state, data) {
             return (state.conference = data);
