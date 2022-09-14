@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "firebase/php-jwt": "^6.3",
         "guzzlehttp/guzzle": "^7.4",
+        "laravel/nova": "~4.0",
         "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.15",
@@ -63,6 +64,12 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
