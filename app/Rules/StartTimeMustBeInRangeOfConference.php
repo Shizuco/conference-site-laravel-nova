@@ -4,16 +4,18 @@ namespace App\Rules;
 
 use App\Models\Conference;
 use DateTime;
+use DateTime as Date;
 use DateTimeZone;
+use Illuminate\Contracts\Validation\InvokableRule;
 use Illuminate\Contracts\Validation\Rule;
 
 class StartTimeMustBeInRangeOfConference implements Rule
 {
 
-    public int $conference_id;
+    public ?int $conference_id;
 
-    public function __construct(int $id){
-        $this->conference_id = $id;
+    public function __construct(?int $conference_id){
+        $this->conference_id = $conference_id;
     }
 
     /**
@@ -26,11 +28,16 @@ class StartTimeMustBeInRangeOfConference implements Rule
     public function passes($attribute, $value)
     {
         $conference = Conference::whereId($this->conference_id)->get();
-        $conStartTime = new DateTime($conference[0]->date);
+        $conStartTime = explode(" ", $conference[0]->date)[0];
+        $conStartTime = $conStartTime .' '. $conference[0]->time;
+        $conStartTime = new Date($conStartTime);
         $conStartTime->setTimezone(new DateTimeZone('GMT'));
-        $conEndTime = new DateTime($conference[0]->date);
+
+        $conEndTime = explode(" ", $conference[0]->date)[0];
+        $conEndTime = $conEndTime .' 23:59:59';
+        $conEndTime = new Date($conEndTime);
         $conEndTime->setTimezone(new DateTimeZone('GMT'));
-        $value = new DateTime($value);
+        $value = new Date($value);
         if ($value < $conStartTime) {
             return false;
         }
@@ -47,6 +54,6 @@ class StartTimeMustBeInRangeOfConference implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be in rahge of conference.';
+        return 'The :attribute must be in range of conference.';
     }
 }

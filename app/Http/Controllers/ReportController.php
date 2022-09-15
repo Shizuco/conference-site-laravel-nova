@@ -125,7 +125,7 @@ class ReportController extends Controller
             }
             Report::whereId($reportId)->update($data);
         } else {
-            $this->NearestTime($id);
+            $this->nearestTime($id);
         }
     }
 
@@ -222,7 +222,7 @@ class ReportController extends Controller
         }
     }
 
-    private function NearestTime(int $id)
+    private function nearestTime(int $id)
     {
         $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();

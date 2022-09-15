@@ -2,6 +2,11 @@
 
 namespace App\Nova;
 
+use App\Rules\StartTimeMustBeInRangeOfConference;
+use App\Rules\ReportDurationMustBeLessThenHour;
+use App\Rules\DateMustBeAvailable;
+use App\Rules\StartTimeMustBeLessThanEndTime;
+use DateTime as Date;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\File;
@@ -10,9 +15,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use App\Rules\StartTimeMustBeInRangeOfConference;
-
-use Illuminate\Validation\ValidationException;
 
 class Report extends Resource
 {
@@ -65,7 +67,6 @@ class Report extends Resource
         }
         return $list;
     }
-
     /**
      * Get the fields displayed by the resource.
      *
@@ -93,13 +94,20 @@ class Report extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            DateTime::make('start_time')
-                ->rules('required')
-                ->creationRules('unique'),
+            DateTime::make('Start time', 'start_time')
+                ->rules('required', new StartTimeMustBeInRangeOfConference($request->conference_id),
+                new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
+                new DateMustBeAvailable($request->conference_id),
+                new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
+                ),
 
             DateTime::make('end_time')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255', new StartTimeMustBeInRangeOfConference($request->conference_id),
+                new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
+                new DateMustBeAvailable($request->conference_id),
+                new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
+                ),
 
             Textarea::make('description')
                 ->sortable()
@@ -118,8 +126,13 @@ class Report extends Resource
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-                
-            Text::make('duration')->rules('required'),
+
+            Text::make('duration')
+                ->fillUsing(function ($request, $model, $attribute) {
+                    $end_time = new Date($request->end_time);
+                    $start_time = new Date($request->start_time);
+                    $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp() - 21600;
+                }),
         ];
     }
 
