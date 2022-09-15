@@ -25,7 +25,7 @@ class Report extends Model
         'user_id',
         'duration',
         'thema',
-        'start_time' => 'datetime',
+        'start_time',
         'end_time',
         'description',
         'presentation',

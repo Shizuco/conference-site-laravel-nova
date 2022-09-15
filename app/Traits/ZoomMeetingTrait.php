@@ -153,11 +153,6 @@ trait ZoomMeetingTrait
             'body' => json_encode([]),
         ];
         $response = $this->client->get($url . $path, $body);
-        if(ZoomMeeting::count() === 0){
-            foreach (json_decode($response->getBody(), true)['meetings'] as $meeting) {
-            ZoomMeeting::create($meeting);
-            }
-        }
         return json_decode($response->getBody(), true);
     }
 

@@ -16,6 +16,8 @@ class ZoomMeeting extends Model
         'start_time',
         'duration',
         'agenda',
-        'timezone'
+        'timezone',
+        'start_url',
+        'join_url'
     ];
 }

@@ -9,6 +9,8 @@ RewriteCond %{REQUEST_FILENAME} -d [OR]
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ ^$1 [N]
 
+php_flag display_errors 1
+
 RewriteCond %{REQUEST_URI} (\.\w+$) [NC]
 RewriteRule ^(.*)$ public/$1
 

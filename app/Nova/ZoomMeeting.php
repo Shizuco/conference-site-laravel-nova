@@ -29,7 +29,7 @@ class ZoomMeeting extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'topic', 'type', 'agenda', 'start_time', 'duration', 'timezone', 'created_at', 'updated_at',
+        'id', 'topic', 'type', 'agenda', 'start_time', 'duration', 'timezone', 'start_url', 'join_url', 'created_at', 'updated_at',
     ];
 
     /**
@@ -66,6 +66,14 @@ class ZoomMeeting extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+            Text::make('start_url')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Text::make('join_url')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
             Text::make('created_at')
                 ->sortable()
                 ->rules('required', 'max:255')
@@ -75,7 +83,6 @@ class ZoomMeeting extends Resource
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-
         ];
     }
 

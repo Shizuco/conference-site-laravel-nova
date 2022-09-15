@@ -12,6 +12,8 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Rules\StartTimeMustBeInRangeOfConference;
 
+use Illuminate\Validation\ValidationException;
+
 class Report extends Resource
 {
     /**
@@ -92,7 +94,8 @@ class Report extends Resource
                 ->rules('required', 'max:255'),
 
             DateTime::make('start_time')
-                ->rules('required'),
+                ->rules('required')
+                ->creationRules('unique'),
 
             DateTime::make('end_time')
                 ->sortable()
