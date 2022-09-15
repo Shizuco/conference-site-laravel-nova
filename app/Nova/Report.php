@@ -74,6 +74,7 @@ class Report extends Resource
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
+
     public function fields(NovaRequest $request)
     {
         return [
@@ -92,22 +93,33 @@ class Report extends Resource
             )->rules('required'),
 
             Text::make('Zoom', 'zoom_meeting_id')
-            ->help('online or offline')
-            ->rules(new StringMustBeOneOfTwo)
-            ->fillUsing(function ($request, $model, $attribute) {
-                if ($request->zoom_meeting_id == 'online') {
-                    $data = [
-                        'topic' => $request->thema,
-                        'start_time' => new Date($request->start_time),
-                        'duration' => intval($request->duration / 60),
-                        "host_video" => "true",
-                        "participant_video" => "true",
-                    ];
-                    $meeting = new \App\Http\Controllers\MeetingController;
-                    $zoom = $meeting->store($data);
-                    $model->{$attribute} = $zoom->original['data']['id'];
-                }
-            }),
+                ->placeholder('online or offline')
+                ->creationRules(new StringMustBeOneOfTwo)
+                ->fillUsing(function ($request, $model, $attribute) {
+                    if ($request->zoom_meeting_id == 'online') {
+                        $data = [
+                            'topic' => $request->thema,
+                            'start_time' => new Date($request->start_time),
+                            'duration' => intval($request->duration / 60),
+                            "host_video" => "true",
+                            "participant_video" => "true",
+                        ];
+                        $meeting = new \App\Http\Controllers\MeetingController;
+                        $zoom = $meeting->store($data);
+                        $model->{$attribute} = $zoom->original['data']['id'];
+                    }
+                    if (preg_match('/[0-9]+/', $request->zoom_meeting_id) === 1) {
+                        $zoom = new \App\Http\Controllers\MeetingController;
+                        $data = [
+                            'topic' => $request->thema,
+                            'start_time' => new Date($request->start_time),
+                            'duration' => intval($request->duration / 60),
+                            "host_video" => "true",
+                            "participant_video" => "true",
+                        ];
+                        $zoom->update($request->zoom_meeting_id, $data);
+                    }
+                }),
 
             Text::make('thema')
                 ->sortable()
@@ -152,6 +164,16 @@ class Report extends Resource
                     $start_time = new Date($request->start_time);
                     $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp();
                 }),
+
+            Text::make('join_url', function () {
+                $zoom = new \App\Http\Controllers\MeetingController;
+                return $zoom->get($this->zoom_meeting_id)['data']['join_url'];
+            })->hideFromIndex()->copyable(),
+
+            Text::make('start_url', function () {
+                $zoom = new \App\Http\Controllers\MeetingController;
+                return $zoom->get($this->zoom_meeting_id)['data']['start_url'];
+            })->hideFromIndex()->copyable(),
         ];
     }
 

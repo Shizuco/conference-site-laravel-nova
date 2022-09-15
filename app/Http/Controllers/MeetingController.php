@@ -38,9 +38,10 @@ class MeetingController extends Controller
         return response()->json($meeting);
     }
 
-    public function update($meeting, Request $request)
+    public function update($id, array $request)
     {
-        $this->update($meeting->zoom_meeting_id, $request->all());
+        $meet = $this->put($id, $request);
+        return response()->json($meet);
     }
 
     public function destroy(int $id)

@@ -98,11 +98,10 @@ trait ZoomMeetingTrait
         ];
     }
 
-    public function update($id, $data)
+    public function put($id, $data)
     {
         $path = 'meetings/' . $id;
         $url = $this->retrieveZoomUrl();
-
         $body = [
             'headers' => $this->headers,
             'body' => json_encode([
@@ -120,7 +119,16 @@ trait ZoomMeetingTrait
             ]),
         ];
         $response = $this->client->patch($url . $path, $body);
-
+        $data = [
+            'topic' => $data['topic'],
+            'type' => self::MEETING_TYPE_SCHEDULE,
+            'start_time' => $this->toZoomTimeFormat($data['start_time']),
+            'duration' => $data['duration'],
+            'agenda' => (!empty($data['agenda'])) ? $data['agenda'] : null,
+            'timezone' => 'Europe/Kyiv'
+        ];
+        $model = ZoomMeeting::whereId($id)->first();
+        $model->update($data);
         return [
             'success' => $response->getStatusCode() === 204,
             'data' => json_decode($response->getBody(), true),

@@ -25,8 +25,10 @@
         "phoenix-lib/nova-nested-tree-attach-many": "^1.8",
         "predis/predis": "~1.0",
         "pusher/pusher-php-server": "^7.0",
+        "sixlive/nova-text-copy-field": "^1.5",
         "symfony/http-client": "^6.0",
         "symfony/mailgun-mailer": "^6.0",
+        "trinityrank/google-map-with-autocomplete": "^1.0",
         "yassi/nova-nested-form": "^3.0"
     },
     "require-dev": {

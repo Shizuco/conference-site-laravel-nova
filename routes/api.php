@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/meeting/{id}', [MeetingController::class, 'show']);
     Route::post('/meeting', [MeetingController::class, 'store']);
+    Route::put('/meeting/{id}', [MeetingController::class, 'update']);
     Route::get('/meeting', [MeetingController::class, 'index']);
 
     Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
