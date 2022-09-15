@@ -2,10 +2,11 @@
 
 namespace App\Nova;
 
-use App\Rules\StartTimeMustBeInRangeOfConference;
-use App\Rules\ReportDurationMustBeLessThenHour;
 use App\Rules\DateMustBeAvailable;
+use App\Rules\ReportDurationMustBeLessThenHour;
+use App\Rules\StartTimeMustBeInRangeOfConference;
 use App\Rules\StartTimeMustBeLessThanEndTime;
+use App\Rules\StringMustBeOneOfTwo;
 use DateTime as Date;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
@@ -24,7 +25,6 @@ class Report extends Resource
      * @var string
      */
     public static $model = \App\Models\Report::class;
-
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
@@ -38,7 +38,7 @@ class Report extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'thema', 'start_time', 'end_time', 'duration', 'user_id', 'category_id', 'conference_id', 'description', 'presentation', 'created_at', 'updated_at',
+        'id', 'thema', 'start_time', 'zoom_meeting_id', 'end_time', 'duration', 'user_id', 'category_id', 'conference_id', 'description', 'presentation', 'created_at', 'updated_at',
     ];
 
     public function getAllAnnoucers()
@@ -67,6 +67,7 @@ class Report extends Resource
         }
         return $list;
     }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -90,23 +91,41 @@ class Report extends Resource
                 $this->getAllAnnoucers()
             )->rules('required'),
 
+            Text::make('Zoom', 'zoom_meeting_id')
+            ->help('online or offline')
+            ->rules(new StringMustBeOneOfTwo)
+            ->fillUsing(function ($request, $model, $attribute) {
+                if ($request->zoom_meeting_id == 'online') {
+                    $data = [
+                        'topic' => $request->thema,
+                        'start_time' => new Date($request->start_time),
+                        'duration' => intval($request->duration / 60),
+                        "host_video" => "true",
+                        "participant_video" => "true",
+                    ];
+                    $meeting = new \App\Http\Controllers\MeetingController;
+                    $zoom = $meeting->store($data);
+                    $model->{$attribute} = $zoom->original['data']['id'];
+                }
+            }),
+
             Text::make('thema')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
             DateTime::make('Start time', 'start_time')
                 ->rules('required', new StartTimeMustBeInRangeOfConference($request->conference_id),
-                new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
-                new DateMustBeAvailable($request->conference_id),
-                new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
+                    new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
+                    new DateMustBeAvailable($request->conference_id),
+                    new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
             DateTime::make('end_time')
                 ->sortable()
                 ->rules('required', 'max:255', new StartTimeMustBeInRangeOfConference($request->conference_id),
-                new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
-                new DateMustBeAvailable($request->conference_id),
-                new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
+                    new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
+                    new DateMustBeAvailable($request->conference_id),
+                    new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
             Textarea::make('description')
@@ -131,7 +150,7 @@ class Report extends Resource
                 ->fillUsing(function ($request, $model, $attribute) {
                     $end_time = new Date($request->end_time);
                     $start_time = new Date($request->start_time);
-                    $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp() - 21600;
+                    $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp();
                 }),
         ];
     }

@@ -87,6 +87,8 @@ trait ZoomMeetingTrait
             'duration' => $data['duration'],
             'agenda' => (!empty($data['agenda'])) ? $data['agenda'] : null,
             'timezone' => 'Europe/Kyiv',
+            'start_url' => $this->get(json_decode($response->getBody(), true)['id'])['data']['start_url'],
+            'join_url' =>json_decode($response->getBody(), true)['join_url']
         ];
         ZoomMeeting::create($data);
 
