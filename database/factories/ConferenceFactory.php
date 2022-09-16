@@ -22,8 +22,8 @@ class ConferenceFactory extends Factory
             'date' => $this->faker->text,
             'time' => $this->faker->text,
             'country' => $this->faker->text,
-            'address_lat' => $this->faker->text,
-            'address_lon' => $this->faker->text,
+            'latitude' => $this->faker->text,
+            'longitude' => $this->faker->text,
         ];
     }
 }

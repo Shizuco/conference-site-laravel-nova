@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             'category_id' => '1',
             'date' => '2023-09-05',
             'time' => '14:00:00.000',
-            'address_lat' => '35.6895000',
-            'address_lon' => '139.6917100',
+            'latitude' => '35.6895000',
+            'longitude' => '139.6917100',
             'country' => 'Япония'
         ]);
 

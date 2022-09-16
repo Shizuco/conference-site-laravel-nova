@@ -32,12 +32,12 @@
                             </v-row>
                             <v-row>
                                 <gmap-map :zoom="15" :center="{
-                                    lat: Number(getConference.address_lat),
-                                    lng: Number(getConference.address_lon)
+                                    lat: Number(getConference.latitude),
+                                    lng: Number(getConference.longitude)
                                 }" mapTypeId='roadmap' style="width:100%;height:500px" id="map">
                                     <gmap-marker :position="{
-                                        lat: Number(getConference.address_lat),
-                                        lng: Number(getConference.address_lon)
+                                        lat: Number(getConference.latitude),
+                                        lng: Number(getConference.longitude)
                                     }"></gmap-marker>
                                 </gmap-map>
                             </v-row>

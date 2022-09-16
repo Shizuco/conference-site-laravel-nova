@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Trinityrank\GoogleMapWithAutocomplete\TRMap;
 
 class Conference extends Resource
 {
@@ -31,7 +32,7 @@ class Conference extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'date', 'time', 'category_id', 'country', 'address_lat', 'address_lon', 'created_at', 'updated_at',
+        'id', 'title', 'date', 'time', 'category_id', 'country', 'latitude', 'longitude', 'created_at', 'updated_at',
     ];
 
     public function getAllCategories()
@@ -61,7 +62,7 @@ class Conference extends Resource
                 ->rules('required', 'max:255'),
             Text::make('time')
                 ->placeholder('##:##:##')
-                ->rules('date_format:"H:i:s"')
+                ->rules('required','date_format:"H:i:s"')
                 ->help('hh:mm:ss'),
             Select::make('category_id')->options(
                 $this->getAllCategories()
@@ -86,12 +87,14 @@ class Conference extends Resource
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-            Text::make('address_lat')
+            TRMap::make('Map')
+            /*Text::make('latitude')
                 ->sortable()
-                ->rules('required', 'max:255'),
-            Text::make('address_lon')
+                ->hideWhenUpdating(),
+            Text::make('longitude')
                 ->sortable()
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')
+                ->hideWhenUpdating(),*/
         ];
     }
 

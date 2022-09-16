@@ -24,7 +24,7 @@ class ConferenceContent
 
             $row['Title'] = $conference->title;
             $row['Date'] = $conference->date;
-            $row['Address'] = $this->content->getAddress($conference->address_lat, $conference->address_lon);
+            $row['Address'] = $this->content->getAddress($conference->latitude, $conference->longitude);
             $row['Country'] = $conference->country;
             $row['Number of reports'] = count($conference->reports);
             $row['Number of listeners'] = count($conference->users);
