@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Rules;
 
 use App\Models\Conference;
@@ -11,10 +13,12 @@ use Illuminate\Contracts\Validation\Rule;
 class DateMustBeAvailable implements Rule
 {
     public ?int $conference_id;
+    public ?int $report_id;
 
-    public function __construct(?int $conference_id)
+    public function __construct(?int $conference_id, ?int $report_id)
     {
         $this->conference_id = $conference_id;
+        $this->report_id = $report_id;
     }
 
     /**
@@ -26,17 +30,26 @@ class DateMustBeAvailable implements Rule
      */
     public function passes($attribute, $value)
     {
-        $reports = Report::All()->where('conference_id', $this->conference_id);
         $value = new Date($value);
+        if ($this->report_id != null) {
+            $currentReport = Report::whereId($this->report_id)->get();
+            $currentReportStartTime = new Date($currentReport[0]->start_time->format('Y-m-d H:i:s'));
+            $currentReportEndTime = new Date($currentReport[0]->end_time->format('Y-m-d H:i:s'));
+            if (($currentReportStartTime == $value && $attribute == 'start_time') || ($currentReportEndTime == $value && $attribute == 'end_time')) {
+                return true;
+            }
+        }
+        $reports = Report::All()->where('conference_id', $this->conference_id);
         foreach ($reports as $report) {
-            $startTimeExist = new Date($report->start_time);
+            $startTimeExist = new Date($report->start_time->format('Y-m-d H:i:s'));
             $startTimeExist->setTimezone(new DateTimeZone('GMT'));
-            $endTimeExist = new Date($report->end_time);
+            $endTimeExist = new Date($report->end_time->format('Y-m-d H:i:s'));
             $endTimeExist->setTimezone(new DateTimeZone('GMT'));
             if ($this->isInRange($value, $startTimeExist, $endTimeExist) === true) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -47,7 +60,7 @@ class DateMustBeAvailable implements Rule
      */
     public function message()
     {
-        $time = $this->nearestTime($this->conference_id);
+        $time = $this->nearestTime($this->conference_id, $this->report_id);
         return 'Nearest time to start is ' . $time;
 
     }
@@ -57,27 +70,25 @@ class DateMustBeAvailable implements Rule
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    private function nearestTime(int $id)
+    private function nearestTime(int $id, int $report_id)
     {
         $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
-        $start_time = explode(" ", $conference[0]->date)[0];
-        $start_time = $start_time . ' ' . $conference[0]->time;
+        $start_time = $conference[0]->date->format('Y-m-d') . ' ' . $conference[0]->time;
         $start_time = new Date($start_time);
         $end_time = 0;
         for ($a = 0; $a < count($results); $a++) {
             if ($a !== 0 && $a !== count($results) - 1) {
-                $start_time = new Date($results[$a + 1]->start_time);
+                $start_time = new Date($results[$a + 1]->start_time->format('Y-m-d H:i:s'));
             }
             if ($a === count($results) - 1) {
-                $end_time = explode(" ", $conference[0]->date)[0];
-                $end_time = $end_time . ' 23:59:59';
+                $end_time = $conference[0]->date->format('Y-m-d') . ' 23:59:59';
                 $end_time = new Date($end_time);
-                $start_time = new Date($results[$a]->end_time);
+                $start_time = new Date($results[$a]->end_time->format('Y-m-d H:i:s'));
             } else if ($a === 0) {
-                $end_time = new Date($results[$a]->start_time);
+                $end_time = new Date($results[$a]->start_time->format('Y-m-d H:i:s'));
             } else {
-                $end_time = new Date($results[$a]->end_time);
+                $end_time = new Date($results[$a]->end_time->format('Y-m-d H:i:s'));
             }
             $interval = $end_time->diff($start_time);
             $err = $interval->format('%i') >= 10;

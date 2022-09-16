@@ -146,7 +146,6 @@ trait ZoomMeetingTrait
         ];
 
         $response = $this->client->get($url . $path, $body);
-
         return [
             'success' => $response->getStatusCode() === 200,
             'data' => json_decode($response->getBody(), true),

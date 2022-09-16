@@ -24,7 +24,7 @@ class MeetingController extends Controller
         return Cache::get("meetings", $this->getAll($request));
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $meeting = $this->get($id);
 
@@ -38,7 +38,7 @@ class MeetingController extends Controller
         return response()->json($meeting);
     }
 
-    public function update($id, array $request)
+    public function update(int $id, array $request)
     {
         $meet = $this->put($id, $request);
         return response()->json($meet);

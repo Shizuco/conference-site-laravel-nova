@@ -17,10 +17,10 @@ class CsvFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $method;
-    public $id;
+    public string $method;
+    public int $id;
 
-    public function __construct($method, $id)
+    public function __construct(string $method, int $id)
     {
         $this->method = $method;
         $this->$id = $id;

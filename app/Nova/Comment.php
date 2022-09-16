@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -29,7 +31,7 @@ class Comment extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'user_id', 'report_id', 'conference_id', 'comment', 'created_at', 'updated_at'
+        'id', 'user_id', 'report_id', 'conference_id', 'comment', 'created_at', 'updated_at',
     ];
 
     /**

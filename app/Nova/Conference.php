@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -62,7 +64,7 @@ class Conference extends Resource
                 ->rules('required', 'max:255'),
             Text::make('Time', 'time')
                 ->placeholder('##:##:##')
-                ->rules('required','date_format:"H:i:s"')
+                ->rules('required', 'date_format:"H:i:s"')
                 ->help('hh:mm:ss'),
             Select::make('Category ID', 'category_id')->options(
                 $this->getAllCategories()
@@ -87,7 +89,7 @@ class Conference extends Resource
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-            TRMap::make('Map')
+            TRMap::make('Map'),
         ];
     }
 

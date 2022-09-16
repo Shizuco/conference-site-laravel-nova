@@ -31,12 +31,12 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        /*if($request->email === 'admin@groupbwt.com'){
+        if($request->email === 'admin@groupbwt.com'){
             $error = ValidationException::withMessages([
                 'email' => ['Access denied']
             ]);
             throw $error;
-        }*/
+        }
         $fields = $request->validated();
 
         $user = User::where('email', $request->email)->first();

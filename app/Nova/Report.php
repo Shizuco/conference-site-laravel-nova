@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Nova;
 
 use App\Rules\DateMustBeAvailable;
@@ -108,7 +110,10 @@ class Report extends Resource
                         $zoom = $meeting->store($data);
                         $model->{$attribute} = $zoom->original['data']['id'];
                     }
-                    if (preg_match('/[0-9]+/', $request->zoom_meeting_id) === 1) {
+                    if($request->zoom_meeting_id == null){
+                        $model->{$attribute} = null;
+                    }
+                    else if (preg_match('/[0-9]+/', $request->zoom_meeting_id) === 1) {
                         $zoom = new \App\Http\Controllers\MeetingController;
                         $data = [
                             'topic' => $request->thema,
@@ -117,7 +122,7 @@ class Report extends Resource
                             "host_video" => "true",
                             "participant_video" => "true",
                         ];
-                        $zoom->update($request->zoom_meeting_id, $data);
+                        $zoom->update(intval($request->zoom_meeting_id), $data);
                     }
                 }),
 
@@ -126,17 +131,17 @@ class Report extends Resource
                 ->rules('required', 'max:255'),
 
             DateTime::make('Start time', 'start_time')
-                ->rules('required', new StartTimeMustBeInRangeOfConference($request->conference_id),
+                ->rules('required', new StartTimeMustBeInRangeOfConference(intval($request->conference_id)),
                     new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
-                    new DateMustBeAvailable($request->conference_id),
+                    new DateMustBeAvailable(intval($request->conference_id), $this->id),
                     new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
             DateTime::make('End time', 'end_time')
                 ->sortable()
-                ->rules('required', 'max:255', new StartTimeMustBeInRangeOfConference($request->conference_id),
+                ->rules('required', 'max:255', new StartTimeMustBeInRangeOfConference(intval($request->conference_id)),
                     new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
-                    new DateMustBeAvailable($request->conference_id),
+                    new DateMustBeAvailable(intval($request->conference_id), $this->id),
                     new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
@@ -146,7 +151,7 @@ class Report extends Resource
 
             File::make('Presentation', 'presentation')
                 ->disk('public')
-                ->storeAs(fn (Request $request) => $request->presentation->getClientOriginalName())
+                ->storeAs(fn(Request $request) => $request->presentation->getClientOriginalName())
                 ->storeOriginalName('presentation')
                 ->creationRules('required', 'max:10240')
                 ->acceptedTypes('.ppt, .pptx'),
@@ -170,13 +175,19 @@ class Report extends Resource
 
             Text::make('Join URL', 'join_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
+                if($zoom->get($this->zoom_meeting_id)['data'] == null){
+                    return null;
+                }
                 return $zoom->get($this->zoom_meeting_id)['data']['join_url'];
-            })->onlyOnDetail()->copyable(),
+            })->onlyOnDetail()->copyable()->nullable(),
 
             Text::make('Start URL', 'start_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
+                if($zoom->get($this->zoom_meeting_id)['data'] == null){
+                    return null;
+                }
                 return $zoom->get($this->zoom_meeting_id)['data']['start_url'];
-            })->onlyOnDetail()->copyable(),
+            })->onlyOnDetail()->copyable()->nullable(),
         ];
     }
 

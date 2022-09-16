@@ -1,6 +1,9 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Nova;
+
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -62,7 +65,6 @@ class Category extends Resource
             Text::make('Name', 'name')
             ->sortable()
             ->rules('required', 'max:255'),
-            //CategoryFilter::make(),
             Select::make('Patend ID', 'parent_id')->options($this->getParentId()),
             Text::make('Created at', 'created_at')
             ->sortable()
@@ -72,11 +74,6 @@ class Category extends Resource
             ->sortable()
             ->rules('required', 'max:255')
             ->exceptOnForms(),
-            /*Jstree::make(__('Category'), \App\Models\Category::class)
-             ->theme(['dots' => true, 'stripes' => false, 'icons' => false])
-             ->checkbox()
-             ->search()
-             ->data(['1', '2', '3']),*/
         ];
     }
     /**

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Rules;
-use DateTime as Date;
+declare (strict_types = 1);
 
+namespace App\Rules;
+
+use DateTime as Date;
 use Illuminate\Contracts\Validation\Rule;
 
 class ReportDurationMustBeLessThenHour implements Rule

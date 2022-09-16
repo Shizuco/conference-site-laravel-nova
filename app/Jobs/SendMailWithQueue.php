@@ -15,16 +15,16 @@ class SendMailWithQueue implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $email;
+    public string $email;
 
-    public $emailText;
+    public string $emailText;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($email, $emailText)
+    public function __construct(string $email, string $emailText)
     {
         $this->email = $email;
         $this->emailText = $emailText;

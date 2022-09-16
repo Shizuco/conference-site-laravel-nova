@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Nova;
 
 use Dniccum\PhoneNumber\PhoneNumber;
@@ -59,7 +61,12 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Text::make('role')
+            Select::make('role')
+                ->options([
+                    'listener' => 'listener',
+                    'annoucer' => 'annoucer',
+                ])
+                ->default('listener')
                 ->sortable()
                 ->rules('required', 'max:255'),
 

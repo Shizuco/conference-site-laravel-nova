@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -16,7 +18,7 @@ class StringMustBeOneOfTwo implements Rule
      */
     public function passes($attribute, $value)
     {
-        return ($value == 'online'||$value == 'offline') ? true : false;
+        return ($value == 'online' || $value == 'offline') ? true : false;
     }
 
     /**
