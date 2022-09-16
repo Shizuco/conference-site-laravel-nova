@@ -7,6 +7,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+//use App\Nova\Filters\CategoryFilter;
+//use Seche\NovaJstree\Jstree;
 
 class Category extends Resource
 {
@@ -42,6 +44,11 @@ class Category extends Resource
         return $list;
     }
 
+    private function get()
+    {
+        return \App\Models\Category::get();
+    }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -52,21 +59,26 @@ class Category extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('name')
+            Text::make('Name', 'name')
             ->sortable()
             ->rules('required', 'max:255'),
-            Select::make('parent_id')->options($this->getParentId()),
-            Text::make('created_at')
+            //CategoryFilter::make(),
+            Select::make('Patend ID', 'parent_id')->options($this->getParentId()),
+            Text::make('Created at', 'created_at')
             ->sortable()
             ->rules('required', 'max:255')
             ->exceptOnForms(),
-            Text::make('updated_at')
+            Text::make('Updated at', 'updated_at')
             ->sortable()
             ->rules('required', 'max:255')
             ->exceptOnForms(),
+            /*Jstree::make(__('Category'), \App\Models\Category::class)
+             ->theme(['dots' => true, 'stripes' => false, 'icons' => false])
+             ->checkbox()
+             ->search()
+             ->data(['1', '2', '3']),*/
         ];
     }
-
     /**
      * Get the cards available for the request.
      *

@@ -7,12 +7,6 @@ use App\Models\Conference;
 
 class ConferenceContent
 {
-    protected $content;
-
-    public function __construct(ConferenceContent $content){
-        $this->content = $content;
-    }
-
     public function get()
     {
         $conferences = Conference::with('users', 'reports')->get();
@@ -24,7 +18,7 @@ class ConferenceContent
 
             $row['Title'] = $conference->title;
             $row['Date'] = $conference->date;
-            $row['Address'] = $this->content->getAddress($conference->latitude, $conference->longitude);
+            $row['Address'] = $this->getAddress($conference->latitude, $conference->longitude);
             $row['Country'] = $conference->country;
             $row['Number of reports'] = count($conference->reports);
             $row['Number of listeners'] = count($conference->users);

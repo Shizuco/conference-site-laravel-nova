@@ -42,23 +42,23 @@ class Comment extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('user_id')
+            Text::make('User ID', 'user_id')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('report_id')
+            Text::make('Report ID', 'report_id')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('conference_id')
+            Text::make('Conference ID', 'conference_id')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('comment')
+            Text::make('Comment', 'comment')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('created_at')
+            Text::make('Created at', 'created_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-            Text::make('updated_at')
+            Text::make('Updated at', 'updated_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),

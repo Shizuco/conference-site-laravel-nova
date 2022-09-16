@@ -14,6 +14,7 @@ class Category extends Model
     use HasFactory, NodeTrait;
 
     protected $fillable = [
+        'id',
         'name'
     ];
 

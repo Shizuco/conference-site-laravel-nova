@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc0b259113770fa75d6eb7b507afbe53",
+    "content-hash": "776931194b837665f9de44878e88f00d",
     "packages": [
         {
             "name": "brick/math",
@@ -1589,6 +1589,67 @@
                 }
             ],
             "time": "2022-08-28T14:45:39+00:00"
+        },
+        {
+            "name": "handleglobal/nova-nested-form",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/handleglobal/laravel-nova-nested-form.git",
+                "reference": "fc79101fcba849463e7bd3a382ef8241c3154f5a"
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "laravel/nova": "^4.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Handleglobal\\NestedForm\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Handleglobal\\NestedForm\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Buchkovsky",
+                    "homepage": "https://procoders.tech",
+                    "email": "buch@procoders.tech"
+                },
+                {
+                    "name": "Ardit Qerosi",
+                    "homepage": "https://procoders.tech",
+                    "email": "qerosi@proverstka.tech"
+                }
+            ],
+            "description": "A Laravel Nova package that allows you to create/update/delete nested related fields from a parent form.",
+            "homepage": "https://handleglobal.com",
+            "keywords": [
+                "form",
+                "laravel",
+                "nested",
+                "nova",
+                "nova 4",
+                "relationship"
+            ],
+            "support": {
+                "email": "buch@procoders.tech",
+                "issues": "https://github.com/handleglobal/laravel-nova-nested-form/issues",
+                "source": "https://github.com/handleglobal/laravel-nova-nested-form",
+                "docs": "https://github.com/handleglobal/laravel-nova-nested-form#readme"
+            },
+            "time": "2022-09-13T18:11:24+00:00"
         },
         {
             "name": "imumz/leaflet-map",
@@ -4550,16 +4611,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.5.0",
+            "version": "4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "ef842484ba57f163c6d465ab744bfecb872a11d4"
+                "reference": "a161a26d917604dc6d3aa25100fddf2556e9f35d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/ef842484ba57f163c6d465ab744bfecb872a11d4",
-                "reference": "ef842484ba57f163c6d465ab744bfecb872a11d4",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/a161a26d917604dc6d3aa25100fddf2556e9f35d",
+                "reference": "a161a26d917604dc6d3aa25100fddf2556e9f35d",
                 "shasum": ""
             },
             "require": {
@@ -4628,7 +4689,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.5.0"
+                "source": "https://github.com/ramsey/uuid/tree/4.5.1"
             },
             "funding": [
                 {
@@ -4640,7 +4701,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-15T01:44:53+00:00"
+            "time": "2022-09-16T03:22:46+00:00"
         },
         {
             "name": "rap2hpoutre/fast-excel",
@@ -4711,6 +4772,51 @@
                 }
             ],
             "time": "2022-07-21T14:21:25+00:00"
+        },
+        {
+            "name": "seche/nova-jstree",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/seche/nova-jstree.git",
+                "reference": "cf085b7c1df444c0361490860b23ed4a7726e458"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/seche/nova-jstree/zipball/cf085b7c1df444c0361490860b23ed4a7726e458",
+                "reference": "cf085b7c1df444c0361490860b23ed4a7726e458",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Seche\\NovaJstree\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seche\\NovaJstree\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/seche/nova-jstree/issues",
+                "source": "https://github.com/seche/nova-jstree/tree/1.0.0"
+            },
+            "time": "2021-08-27T20:12:42+00:00"
         },
         {
             "name": "sixlive/nova-text-copy-field",
@@ -9978,7 +10084,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "handleglobal/nova-nested-form": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

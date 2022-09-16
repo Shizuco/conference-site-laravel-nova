@@ -38,7 +38,7 @@ class Conference extends Resource
     public function getAllCategories()
     {
         $list = array();
-        foreach (\App\Models\Category::all() as $category) {
+        foreach (\App\Models\Category::where('parent_id', null)->get() as $category) {
             $list[$category['id']] = $category['name'];
         }
         return $list;
@@ -54,17 +54,17 @@ class Conference extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('title')
+            Text::make('Title', 'title')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Date::make('date')
+            Date::make('Date', 'date')
                 ->sortable()
                 ->rules('required', 'max:255'),
-            Text::make('time')
+            Text::make('Time', 'time')
                 ->placeholder('##:##:##')
                 ->rules('required','date_format:"H:i:s"')
                 ->help('hh:mm:ss'),
-            Select::make('category_id')->options(
+            Select::make('Category ID', 'category_id')->options(
                 $this->getAllCategories()
             )->rules('required'),
             Select::make('Country')->options([
@@ -79,22 +79,15 @@ class Conference extends Resource
                 'China' => 'China',
                 'Korea' => 'Korea',
             ])->rules('required'),
-            Text::make('created_at')
+            Text::make('Created at', 'created_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
-            Text::make('updated_at')
+            Text::make('Updated at', 'updated_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
             TRMap::make('Map')
-            /*Text::make('latitude')
-                ->sortable()
-                ->hideWhenUpdating(),
-            Text::make('longitude')
-                ->sortable()
-                ->rules('required', 'max:255')
-                ->hideWhenUpdating(),*/
         ];
     }
 

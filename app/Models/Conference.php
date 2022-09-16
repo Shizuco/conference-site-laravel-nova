@@ -19,9 +19,9 @@ class Conference extends Model
     protected $fillable = [
         'title',
         'country',
-        'address_lat',
+        'latitude',
         'category_id',
-        'address_lon',
+        'longitude',
         'date',
         'time',
     ];

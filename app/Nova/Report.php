@@ -80,15 +80,15 @@ class Report extends Resource
         return [
             ID::make()->sortable(),
 
-            Select::make('category_id')->options(
+            Select::make('Category ID', 'category_id')->options(
                 $this->getAllCategories()
             )->rules('required'),
 
-            Select::make('conference_id')->options(
+            Select::make('Conference ID', 'conference_id')->options(
                 $this->getAllConferences()
             )->rules('required'),
 
-            Select::make('user_id')->options(
+            Select::make('User ID', 'user_id')->options(
                 $this->getAllAnnoucers()
             )->rules('required'),
 
@@ -121,7 +121,7 @@ class Report extends Resource
                     }
                 }),
 
-            Text::make('thema')
+            Text::make('Thema', 'thema')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
@@ -132,7 +132,7 @@ class Report extends Resource
                     new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
-            DateTime::make('end_time')
+            DateTime::make('End time', 'end_time')
                 ->sortable()
                 ->rules('required', 'max:255', new StartTimeMustBeInRangeOfConference($request->conference_id),
                     new ReportDurationMustBeLessThenHour($request->start_time, $request->end_time),
@@ -140,40 +140,43 @@ class Report extends Resource
                     new StartTimeMustBeLessThanEndTime($request->start_time, $request->end_time)
                 ),
 
-            Textarea::make('description')
+            Textarea::make('Description', 'description')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            File::make('presentation')
-                ->rules('required', 'max:10240')
+            File::make('Presentation', 'presentation')
+                ->disk('public')
+                ->storeAs(fn (Request $request) => $request->presentation->getClientOriginalName())
+                ->storeOriginalName('presentation')
+                ->creationRules('required', 'max:10240')
                 ->acceptedTypes('.ppt, .pptx'),
 
-            Text::make('created_at')
+            Text::make('Created at', 'created_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
 
-            Text::make('updated_at')
+            Text::make('Updated at', 'updated_at')
                 ->sortable()
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
 
-            Text::make('duration')
+            Text::make('Duration', 'duration')
                 ->fillUsing(function ($request, $model, $attribute) {
                     $end_time = new Date($request->end_time);
                     $start_time = new Date($request->start_time);
                     $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp();
                 }),
 
-            Text::make('join_url', function () {
+            Text::make('Join URL', 'join_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
                 return $zoom->get($this->zoom_meeting_id)['data']['join_url'];
-            })->hideFromIndex()->copyable(),
+            })->onlyOnDetail()->copyable(),
 
-            Text::make('start_url', function () {
+            Text::make('Start URL', 'start_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
                 return $zoom->get($this->zoom_meeting_id)['data']['start_url'];
-            })->hideFromIndex()->copyable(),
+            })->onlyOnDetail()->copyable(),
         ];
     }
 

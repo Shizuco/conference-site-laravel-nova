@@ -4,7 +4,7 @@ namespace App\Helpers;
 class ZoomApiHelper{
 
 	public function createZoomMeeting($meetingConfig = []){
-		$jwtToken = env('ZOOM_API_TOKEN');
+		$jwtToken = config('app.zoom_api_token');
 		
 		$requestBody = [
 			'topic'			=> $meetingConfig['topic'] 		?? 'PHP General Talk',
