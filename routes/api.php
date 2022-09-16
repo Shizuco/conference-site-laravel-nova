@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/meeting', [MeetingController::class, 'store']);
     Route::put('/meeting/{id}', [MeetingController::class, 'update']);
     Route::get('/meeting', [MeetingController::class, 'index']);
+    Route::delete('/meeting/{id}', [MeetingController::class, 'destroy']);
 
     Route::post('/conferenceJoin/{id}', [UserController::class, 'conferenceJoin']);
     Route::post('/conferenceOut/{id}', [UserController::class, 'conferenceOut']);

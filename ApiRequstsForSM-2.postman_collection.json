@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "1cb50b8c-1950-405a-8adb-b16827632afa",
+		"_postman_id": "53168fe1-c823-44b8-bf8b-b4812802bfdc",
 		"name": "ApiRequstsForSM-2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21743001"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1497,6 +1496,215 @@
 					]
 				},
 				"description": "make file with listeners"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/meeting/76010202650",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|R5LejftB4LZQCfXeqtbyPyEU3cgKxu283bwFODQy",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\" : \"fewfgweg\",\r\n    \"start_time\": \"2022-09-05 20:00:00.000\",\r\n    \"duration\": \"30\",\r\n    \"host_video\": \"1\",\r\n    \"participant_video\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/meeting/76010202650",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"meeting",
+						"76010202650"
+					]
+				},
+				"description": "get one zoom meeting"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/meeting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|R5LejftB4LZQCfXeqtbyPyEU3cgKxu283bwFODQy",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/meeting",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"meeting"
+					]
+				},
+				"description": "get all zoom meetings"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/meeting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|R5LejftB4LZQCfXeqtbyPyEU3cgKxu283bwFODQy",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\" : \"fewfgweg\",\r\n    \"start_time\": \"2022-09-05 20:00:00.000\",\r\n    \"duration\": \"30\",\r\n    \"host_video\": \"1\",\r\n    \"participant_video\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/meeting",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"meeting"
+					]
+				},
+				"description": "creat zoom meeting"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/meeting/76010202650",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|R5LejftB4LZQCfXeqtbyPyEU3cgKxu283bwFODQy",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\" : \"fewfgweg\",\r\n    \"start_time\": \"2022-09-05 20:00:00.000\",\r\n    \"duration\": \"30\",\r\n    \"host_video\": \"1\",\r\n    \"participant_video\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/meeting/76010202650",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"meeting",
+						"76010202650"
+					]
+				},
+				"description": "update already exist meeting"
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/meeting/76010202650",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|R5LejftB4LZQCfXeqtbyPyEU3cgKxu283bwFODQy",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/meeting/76010202650",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"meeting",
+						"76010202650"
+					]
+				},
+				"description": "destroy meeting"
 			},
 			"response": []
 		}
