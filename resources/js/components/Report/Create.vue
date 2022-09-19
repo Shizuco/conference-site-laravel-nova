@@ -74,7 +74,7 @@
                                                 <span style="font-size:smaller">{{  errors[0]  }}</span>
                                             </v-col>
                                             <v-col>
-                                                <v-file-input label="Presentation" v-model="formData.presentation"
+                                                <v-file-input max="10280" accept="application/vnd.openxmlformats-officedocument.presentationml.presentation" label="Presentation" v-model="formData.presentation"
                                                     outlined class="rounded-0"></v-file-input>
                                             </v-col>
                                         </ValidationProvider>

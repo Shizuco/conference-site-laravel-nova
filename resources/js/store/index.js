@@ -85,7 +85,7 @@ export default new Vuex.Store({
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
                 method: "get",
-                url: "api/meeting/" + id,
+                url: "api/meeting/" + parseInt(id),
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",

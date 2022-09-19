@@ -80,20 +80,21 @@ class ConferenceController extends Controller
         if (count($results) === 0) {
             return true;
         }
-        $startTime = new Datetime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
+        $startTime = $conference[0]->date->format('Y-m-d') . ' ' . $conference[0]->time;
+        $startTime = new Datetime($startTime);
         $endTime = 0;
         $hasTime = 0;
         for ($a = 0; $a < count($results); $a++) {
             if ($a !== 0 && $a !== count($results) - 1) {
-                $startTime = new Datetime($results[$a + 1]->start_time);
+                $startTime = new Datetime($results[$a + 1]->start_time->format('Y-m-d H:i:s'));
             }
             if ($a === count($results) - 1) {
-                $endTime = new DateTime($conference[0]->date . ' 23:59:59.000');
-                $startTime = new Datetime($results[$a]->end_time);
+                $endTime = new DateTime($conference[0]->date->format('Y-m-d') . ' 23:59:59.000');
+                $startTime = new Datetime($results[$a]->end_time->format('Y-m-d H:i:s'));
             } else if ($a === 0) {
-                $endTime = new Datetime($results[$a]->start_time);
+                $endTime = new Datetime($results[$a]->start_time->format('Y-m-d H:i:s'));
             } else {
-                $endTime = new Datetime($results[$a]->end_time);
+                $endTime = new Datetime($results[$a]->end_time->format('Y-m-d H:i:s'));
             }
             $interval = $endTime->diff($startTime);
             $err = (($interval->format('%i') >= 10)||$interval->format('%h') > 0);

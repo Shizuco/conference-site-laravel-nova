@@ -172,8 +172,8 @@ export default {
                     this.link = this.$route.params.id
                     this.$store.dispatch('isReportInFavorite', this.getReport.id)
                     this.$data.formData.thema = this.getReport.thema
-                    this.$data.formData.start_time = this.getReport.start_time
-                    this.$data.formData.end_time = this.getReport.end_time
+                    this.$data.formData.start_time = new Date(this.getReport.start_time).toUTCString()
+                    this.$data.formData.end_time = new Date(this.getReport.end_time).toUTCString()
                     this.$data.formData.description = this.getReport.description
                     this.$data.formData.presentation = this.getReport.presentation
                     this.$store.dispatch('ajaxGetMeeting', this.getReport.zoom_meeting_id).then(() => {

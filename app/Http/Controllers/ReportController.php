@@ -190,9 +190,9 @@ class ReportController extends Controller
         $reports = Report::All()->where('conference_id', $id);
         $isDateOk = 0;
         foreach ($reports as $report) {
-            $startTimeExist = new Datetime($report->start_time);
+            $startTimeExist = new Datetime($report->start_time->format('Y-m-d H:i:s'));
             $startTimeExist->setTimezone(new DateTimeZone('GMT'));
-            $endTimeExist = new Datetime($report->end_time);
+            $endTimeExist = new Datetime($report->end_time->format('Y-m-d H:i:s'));
             $endTimeExist->setTimezone(new DateTimeZone('GMT'));
             if ($this->isInRange($startTime, $startTimeExist, $endTimeExist) === true) {
                 $isDateOk++;
@@ -226,30 +226,30 @@ class ReportController extends Controller
     {
         $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
-        $start_time = new Datetime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
-        $end_time = 0;
+        $startTime = new DateTime($conference[0]->date->format('Y-m-d') . ' ' . $conference[0]->time);
+        $endTime = 0;
         for ($a = 0; $a < count($results); $a++) {
             if ($a !== 0 && $a !== count($results) - 1) {
-                $start_time = new Datetime($results[$a + 1]->start_time);
+                $startTime = new Datetime($results[$a + 1]->start_time->format('Y-m-d H:i:s'));
             }
             if ($a === count($results) - 1) {
-                $end_time = new DateTime($conference[0]->date . ' 23:59:59.000');
-                $start_time = new Datetime($results[$a]->end_time);
+                $endTime = new DateTime($conference[0]->date . ' 23:59:59.000');
+                $startTime = new Datetime($results[$a]->end_time->format('Y-m-d H:i:s'));
             } else if ($a === 0) {
-                $end_time = new Datetime($results[$a]->start_time);
+                $endTime = new Datetime($results[$a]->start_time->format('Y-m-d H:i:s'));
             } else {
-                $end_time = new Datetime($results[$a]->end_time);
+                $endTime = new Datetime($results[$a]->end_time->format('Y-m-d H:i:s'));
             }
-            $interval = $end_time->diff($start_time);
+            $interval = $endTime->diff($startTime);
             $err = $interval->format('%i') >= 10;
             if ($err) {
                 if ($a === 0) {
                     $error = ValidationException::withMessages([
-                        'start_time' => ['Nearest time for start is ' . $start_time->format('Y-m-d H:i:s')],
+                        'start_time' => ['Nearest time for start is ' . $startTime->format('Y-m-d H:i:s')],
                     ]);
                 } else {
                     $error = ValidationException::withMessages([
-                        'start_time' => ['Nearest time for start is ' . $results[$a]->end_time],
+                        'start_time' => ['Nearest time for start is ' . $results[$a]->end_time->format('Y-m-d H:i:s')],
                     ]);
                 }
                 throw $error;
@@ -260,9 +260,9 @@ class ReportController extends Controller
     private function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
     {
         $conference = Conference::whereId($id)->get();
-        $conStartTime = new DateTime($conference[0]->date . 'T' . $conference[0]->time . 'Z');
+        $conStartTime = new DateTime($conference[0]->date->format('Y-m-d') . ' ' . $conference[0]->time);
         $conStartTime->setTimezone(new DateTimeZone('GMT'));
-        $conEndTime = new DateTime($conference[0]->date . 'T23:59:59.000000Z');
+        $conEndTime = new DateTime($conference[0]->date->format('Y-m-d') . ' 23:59:59.000000');
         $conEndTime->setTimezone(new DateTimeZone('GMT'));
         if ($startTimeExist < $conStartTime) {
             $error = ValidationException::withMessages([

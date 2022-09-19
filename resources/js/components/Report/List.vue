@@ -58,7 +58,7 @@
                 <v-card elevation="3">
                     <v-card-title>{{ report.thema }}</v-card-title>
                     <v-card-text>
-                        Duration: {{ report.start_time }} to {{ report.end_time }}
+                        Duration: {{ new Date(report.start_time).toUTCString() }} to {{ new Date(report.end_time).toUTCString()}}
                         <br>
                         <span>
                             <v-btn x-big depressed color="success">
