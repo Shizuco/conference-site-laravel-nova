@@ -12,4 +12,9 @@ class PlanController extends Controller
     {
         return Plan::all();
     }
+
+    public function intent()
+    {
+        return response()->json(auth()->user()->createSetupIntent());
+    }
 }

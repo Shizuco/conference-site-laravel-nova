@@ -31,7 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/user/change', [UserController::class, 'update']);
 
     Route::get('/plans', [PlanController::class, 'index']);
-    Route::get('/success/{id}', [SubscriptionController::class, 'session']);
+    Route::get('/intent', [PlanController::class, 'intent']);
+    Route::post('/subscribe', [SubscriptionController::class, 'session']);
 
     Route::get('/meeting/{id}', [MeetingController::class, 'show']);
     Route::post('/meeting', [MeetingController::class, 'store']);

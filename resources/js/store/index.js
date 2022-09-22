@@ -24,9 +24,13 @@ export default new Vuex.Store({
         meeting: [],
         meetings: [],
         plans: [],
-        plan: []
+        plan: [],
+        intent: ''
     },
     getters: {
+        getIntent(state){
+            return state.intent
+        },
         getPlans(state){
             return state.plans
         },
@@ -89,15 +93,29 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        ajaxSuccess({ commit }, id) {
+        ajaxSubscribe({ commit }, data) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
-                method: "get",
-                url: "api/success/" + id,
+                method: "post",
+                url: "api/subscribe",
+                data: data,
                 headers: {
                     Authorization: token,
                     "Content-type": "application/json; charset=UTF-8",
                 },
+            })
+        },
+        ajaxGetIntent({ commit }) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/intent",
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }).then((response)=>{
+                commit("setIntent", response.data);
             })
         },
         ajaxGetPlan({ commit }, slug) {
@@ -631,6 +649,9 @@ export default new Vuex.Store({
         },
         setPlan(state, data){
             return (state.plan = data)
-        }
+        },
+        setIntent(state, data){
+            return (state.intent = data)
+        },
     },
 });
