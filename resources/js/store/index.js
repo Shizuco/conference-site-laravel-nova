@@ -22,9 +22,17 @@ export default new Vuex.Store({
         subCategories: [],
         currentCategory: [],
         meeting: [],
-        meetings: []
+        meetings: [],
+        plans: [],
+        plan: []
     },
     getters: {
+        getPlans(state){
+            return state.plans
+        },
+        getPlan(state){
+            return state.plan
+        },
         getMeetings(state){
             return state.meetings
         },
@@ -81,6 +89,43 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        ajaxSuccess({ commit }, id) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/success/" + id,
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            })
+        },
+        ajaxGetPlan({ commit }, slug) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/plans/" + slug,
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }).then((response) => {
+                commit("setPlan", response.data);
+            });
+        },
+        ajaxGetPlans({ commit }) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "get",
+                url: "api/plans",
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            }).then((response) => {
+                commit("setPlans", response.data);
+            });
+        },
         ajaxGetMeeting({ commit }, id) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({
@@ -580,6 +625,12 @@ export default new Vuex.Store({
         },
         setMeetings(state, data){
             return (state.meetings = data)
+        },
+        setPlans(state, data){
+            return (state.plans = data)
+        },
+        setPlan(state, data){
+            return (state.plan = data)
         }
     },
 });

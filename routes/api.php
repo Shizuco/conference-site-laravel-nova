@@ -7,6 +7,8 @@ use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,9 @@ Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name(
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::put('/user/change', [UserController::class, 'update']);
+
+    Route::get('/plans', [PlanController::class, 'index']);
+    Route::get('/success/{id}', [SubscriptionController::class, 'session']);
 
     Route::get('/meeting/{id}', [MeetingController::class, 'show']);
     Route::post('/meeting', [MeetingController::class, 'store']);
