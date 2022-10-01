@@ -17,12 +17,9 @@
                             <h3>Decription: </h3>{{plan.description}}
                         </v-card-text>
                         <v-card-actions>
-                            <f-plan v-if="index == 1"></f-plan>
-                            <ft-plan v-if="index == 2"></ft-plan>
-                            <u-plan v-if="index == 3"></u-plan>
                             <v-btn>
-                                <router-link v-if="index == 0" class="white--text" style="text-decoration: none; color: inherit;"
-                                    :to="{ name: 'DefaultPlan'}">
+                                <router-link class="white--text" style="text-decoration: none; color: inherit;"
+                                    :to="{ name: 'PlanPayPage', params: {plan: plan.name} }">
                                     Update
                                 </router-link>
                             </v-btn>

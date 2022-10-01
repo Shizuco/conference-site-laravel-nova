@@ -11,7 +11,7 @@ import Edit from "../components/Report/Edit.vue";
 import UserPage from "../components/Auth/UserPage.vue";
 import UserFavorites from "../components/Auth/UserFavorites.vue";
 import AllPlans from "../components/PaymentPlan/AllPlans.vue";
-import DefaultPlan from "../components/PaymentPlan/DefaultPlan.vue";
+import PlanPayPage from "../components/PaymentPlan/PlanPayPage.vue";
 
 function isAuth() {
     return "Authorized" in localStorage ? true : false;
@@ -20,9 +20,9 @@ function isAuth() {
 export default new VueRouter({
     routes: [
         {
-            path: "/defaultPlan",
-            component: DefaultPlan,
-            name: "DefaultPlan",
+            path: "/PlanPayPage",
+            component: PlanPayPage,
+            name: "PlanPayPage",
             beforeEnter(to, from, next) {
                 if (!isAuth()) {
                     next("/conferences");

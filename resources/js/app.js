@@ -39,19 +39,7 @@ Vue.component(
 );
 Vue.component(
     "d-plan",
-    require("./components/PaymentPlan/DefaultPlan.vue").default
-);
-Vue.component(
-  "f-plan",
-  require("./components/PaymentPlan/FiveJoinPlan.vue").default
-);
-Vue.component(
-  "ft-plan",
-  require("./components/PaymentPlan/FivetyJoinPlan.vue").default
-);
-Vue.component(
-  "u-plan",
-  require("./components/PaymentPlan/UnlimitedPlan.vue").default
+    require("./components/PaymentPlan/PlanPayPage.vue").default
 );
 Vue.component(
   "success",

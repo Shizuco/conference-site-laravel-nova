@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Models\Subscription;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -75,5 +76,10 @@ class User extends Authenticatable
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subsciptions()
+    {
+        return $this->hasOne(Subscription::class, 'subscriptions');
     }
 }
