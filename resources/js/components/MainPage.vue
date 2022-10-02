@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <v-row class="shrink">
+            <FlashMessage :position="'right bottom'"></FlashMessage>
             <v-col>
                 <auth style="height: 80px; width: 800px"></auth>
             </v-col>
@@ -180,6 +181,13 @@ export default {
         CsvButtonType: 0
     }),
     mounted() {
+        if (this.$route.params.plan == 'success') {
+            this.flashMessage.show({
+                status: 'success',
+                title: 'Success',
+                message: 'Yes!'
+            });
+        }
         this.getConferences()
         this.$store.dispatch('ajaxGetCategories').then(() => {
             console.log(this.$store.getters.getCategories)

@@ -35,6 +35,12 @@
             </span>
             <span>
                <v-btn depressed small>
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'AllPlans' }">Plans
+                  </router-link>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small>
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
                   </router-link>
                </v-btn>

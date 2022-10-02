@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\Subscription;
 use App\Services\ExportCsvFile;
 use App\Services\MakeListenerCsvFile;
 use App\Services\Messages\SendMessageAboutNewListener;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     protected $exportCsv;
     protected $listenerCsv;
     protected $newListenerMessage;
@@ -32,6 +32,11 @@ class UserController extends Controller
             $this->sendMessage($conferenceId);
         }
         Auth::user()->conferences()->attach($conferenceId);
+    }
+
+    public function getPlan()
+    {
+        return response()->json(Subscription::where('user_id', auth()->user()->id)->get());
     }
 
     public function conferenceOut(int $conferenceId)

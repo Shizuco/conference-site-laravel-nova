@@ -6,7 +6,6 @@
           <div class="card-header">
             You will be charged {{this.$route.params.plan}} Plan
           </div>
-
           <div class="card-body">
 
             <form id="payment-form">
@@ -69,14 +68,9 @@ export default {
         'token': payment_method,
         'plan': this.$route.params.plan
       }
-      this.$store.dispatch('ajaxSubscribe', data).then(() => {
-        //this.$router.replace('/conferences')
-      }).catch((err)=>{
-        console.log(err)
-      })
-
+      this.$store.dispatch('ajaxSubscribe', data)
+      this.$router.replace({name: 'MainPage', params: {plan: 'success'}})
     }
   },
-
 }
 </script>
