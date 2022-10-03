@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'listener',
             'phone' => '380987656428',
             'birthday' => '2002-09-05',
-            'country' => 'Япония'
+            'country' => 'Japan'
         ]);
 
         \App\Models\Conference::factory(10)->create([
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'time' => '14:00:00.000',
             'latitude' => '35.6895000',
             'longitude' => '139.6917100',
-            'country' => 'Япония'
+            'country' => 'Japan'
         ]);
 
         \App\Models\Category::factory(1)->create([
@@ -43,7 +43,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@groupbwt.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
-            'surname' => ' '
+            'surname' => ' ',
+            'phone' => ' ',
+            'birthday' => ' ',
+            'country' => ' '
          ]);
     }
 }

@@ -29,11 +29,11 @@ class SubscriptionCheck extends Command
     {
         $subs = \App\Models\Subscription::get();
         foreach ($subs as $sub) {
-            if (date_timestamp_get(date_create($sub->ends_at)) < date_timestamp_get(date_create())) {
+            if (($sub->stripe_status == 'canceled') || (date_timestamp_get(date_create($sub->ends_at)) < date_timestamp_get(date_create()))) {
                 $user = \App\Models\User::whereId($sub->user_id)->get()[0];
                 $currentPlan = \App\Models\Subscription::where('user_id', $user->id)->get()[0]->name;
                 if ($currentPlan) {
-                    $user->subscription($currentPlan)->cancelNow();
+                    //$user->subscription($currentPlan)->cancelNow();
                     \App\Models\Subscription::where('user_id', $user->id)->delete();
                 }
                 \App\Models\User::whereId($user->id)

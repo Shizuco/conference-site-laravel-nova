@@ -24,8 +24,15 @@ class SubscriptionController extends Controller
             ->update([
                 "left_joins" => $plan[0]->joins,
             ]);
-        $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
+        if($request->token['id']){
+            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
             ->create($request->token['id'])->cancel();
+        }
+        else{
+            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
+            ->create()->cancel();
+        }
+        
     }
 
     public function cancelPlan(Request $request){
