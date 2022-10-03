@@ -185,7 +185,7 @@ export default {
             this.flashMessage.show({
                 status: 'success',
                 title: 'Success',
-                message: 'Yes!'
+                message: 'Paid successfully!'
             });
         }
         this.getConferences()

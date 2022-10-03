@@ -7,7 +7,7 @@
             You will be charged {{this.$route.params.plan}} Plan
           </div>
           <div class="card-body">
-
+            <FlashMessage :position="'right bottom'"></FlashMessage>
             <form id="payment-form">
               <div class="row">
                 <div class="col-xl-4 col-lg-4">
@@ -67,8 +67,15 @@ export default {
           'token': result.paymentMethod,
           'plan': this.$route.params.plan
         }
-        this.$store.dispatch('ajaxSubscribe', data)
-        this.$router.replace({ name: 'MainPage', params: { plan: 'success' } })
+        this.$store.dispatch('ajaxSubscribe', data).then(() => {
+          this.$router.replace({ name: 'MainPage', params: { plan: 'success' } })
+        }).catch((err) => {
+          this.flashMessage.show({
+            status: 'error',
+            title: 'Error',
+            message: err
+          });
+        })
       });
 
     }
