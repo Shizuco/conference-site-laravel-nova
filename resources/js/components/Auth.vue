@@ -21,7 +21,7 @@
             </span>
             <span>
                <v-btn depressed small v-if="isAuth()">
-                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserPage' }">My Page
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'UserInfoPage' }">My Page
                   </router-link>
                </v-btn>
             </span>
@@ -31,6 +31,12 @@
                      Favorites
                   </router-link>
                   <v-badge inline :content="getFavorites()"></v-badge>
+               </v-btn>
+            </span>
+            <span>
+               <v-btn depressed small>
+                  <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'AllPlans' }">Plans
+                  </router-link>
                </v-btn>
             </span>
             <span>

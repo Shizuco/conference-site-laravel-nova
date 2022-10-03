@@ -5,14 +5,16 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Models\Conference;
 use App\Models\Report;
+use App\Models\Subscription;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Billable;
 
 
     /**
@@ -29,6 +31,7 @@ class User extends Authenticatable
         'birthday',
         'country',
         'surname',
+        'left_joins'
     ];
 
     /**
@@ -74,5 +77,10 @@ class User extends Authenticatable
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subsciptions()
+    {
+        return $this->hasOne(Subscription::class, 'subscriptions');
     }
 }

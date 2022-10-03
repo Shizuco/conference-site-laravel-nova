@@ -28,12 +28,16 @@
         "vee-validate": "^3.4.14",
         "vue": "^2.7.8",
         "vue-loader": "^15.10.0",
+        "vue-stripe-elements-plus": "^1.0.3",
         "vue-template-compiler": "^2.7.8",
         "vue2-google-maps": "^0.10.7"
     },
     "dependencies": {
         "@jeremyhamm/vue-slider": "^0.2.0",
         "@mdi/font": "^7.0.96",
+        "@smartweb/vue-flash-message": "^0.6.10",
+        "@stripe/stripe-js": "^1.37.0",
+        "@vue-stripe/vue-stripe": "^4.4.4",
         "@zoomus/websdk": "^2.6.0",
         "bootstrap-vue": "^2.22.0",
         "install": "^0.13.0",

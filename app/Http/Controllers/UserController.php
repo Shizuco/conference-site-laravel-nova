@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Services\ExportCsvFile;
 use App\Services\MakeListenerCsvFile;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     protected $exportCsv;
     protected $listenerCsv;
     protected $newListenerMessage;
@@ -31,11 +31,37 @@ class UserController extends Controller
         if (Auth::user()->role === 'listener') {
             $this->sendMessage($conferenceId);
         }
+        if (Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => Auth::user()->joins - 1,
+                ]);
+        } else if (Auth::user()->joins - 1 === -1) {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => 0,
+                ]);
+        } else {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => Auth::user()->joins - 1,
+                ]);
+        }
+
         Auth::user()->conferences()->attach($conferenceId);
+    }
+
+    public function getPlan()
+    {
+        return response()->json(Subscription::where('user_id', auth()->user()->id)->get());
     }
 
     public function conferenceOut(int $conferenceId)
     {
+        User::whereId(Auth::user()->id)
+            ->update([
+                "left_joins" => Auth::user()->joins + 1,
+            ]);
         Auth::user()->conferences()->detach($conferenceId);
     }
 

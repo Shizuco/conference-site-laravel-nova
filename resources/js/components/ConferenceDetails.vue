@@ -53,11 +53,10 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn
-                                        v-if="isOnConference() == null  && getConference.hasTime == true"
+                                    <v-btn v-if="isOnConference() == null  && getConference.hasTime == true"
                                         @click="join()" x-big block color="success" class="white--text">Join</v-btn>
-                                        <v-btn v-else @click="out()"
-                                        x-big block color="error" class="white--text">Exit</v-btn>
+                                    <v-btn v-else @click="out()" x-big block color="error" class="white--text">Exit
+                                    </v-btn>
                                 </v-col>
                                 <v-col>
                                     <v-btn v-if="isAuth()" depressed color="warning" x-big @click="toReports">Reports
@@ -72,7 +71,7 @@
                                     </v-btn>
                                 </v-col>
                                 <v-col>
-                                    <v-btn  x-big block color="primary">
+                                    <v-btn x-big block color="primary">
                                         <ShareNetwork class="white--text" style="text-decoration: none; color: inherit;"
                                             network="twitter" :url=url() title="Say hi to Vue" hashtags="vuejs">
                                             Twitter
@@ -112,9 +111,10 @@ export default {
                         disabled: true
                     })
                 })
-                console.log(this.getConference)
                 this.$store.dispatch('isUserOnConference', id)
-                this.$store.dispatch('ajaxUser')
+                this.$store.dispatch('ajaxUser').then(() => {
+                    this.isCanJoin()
+                })
             })
         }
         else {
@@ -132,13 +132,19 @@ export default {
         },
         join() {
             let conference_id = this.$store.getters.getConference.id
-            this.$store.dispatch('userConferenceJoin', conference_id)
-            if (this.$store.getters.getUser.role == "announcer") {
-                this.$router.replace({ name: 'Create' })
+            if (!this.isCanJoin()) {
+                this.$router.replace({name:'AllPlans', params: {limit: 'limit'}})
             }
             else {
-                this.$router.go()
+                this.$store.dispatch('userConferenceJoin', conference_id)
+                if (this.$store.getters.getUser.role == "announcer") {
+                    this.$router.replace({ name: 'Create' })
+                }
+                else {
+                    this.$router.go()
+                }
             }
+
         },
         out() {
             let conference_id = this.$store.getters.getConference.id
@@ -157,6 +163,10 @@ export default {
         toReports() {
             this.$router.replace('/conferences/' + this.$store.getters.getConference.id + '/reports')
         },
+        isCanJoin() {
+            if(this.$store.getters.getUser.left_joins <= -1) return true
+            return (this.$store.getters.getUser.left_joins - 1 >= 0) ? true : false
+        }
     },
 }
 </script>
