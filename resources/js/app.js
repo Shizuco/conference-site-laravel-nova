@@ -45,6 +45,7 @@ Vue.component(
   "success",
   require("./components/PaymentPlan/Success.vue").default
 );
+Vue.component('infoUser', require("./components/Auth/UserInfoPage.vue"))
 Vue.component("skeleton", require("./components/Skeleton.vue").default);
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);

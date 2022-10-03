@@ -3,6 +3,7 @@
         <v-row class="shrink">
             <auth style="height: 80px; width: 800px"></auth>
         </v-row>
+        <FlashMessage :position="'right bottom'"></FlashMessage>
         <v-row justify="center" style="width: 700px !important; margin-left: 400px !important">
             <v-row justify="left">
                 <v-col v-for="(plan, index) in plans" :value="plan.id" :key="plan.id">
@@ -44,14 +45,23 @@ export default {
     mounted() {
         this.$store.dispatch('ajaxGetPlans').then(() => {
             this.plans = this.$store.getters.getPlans
-            this.$store.dispatch('ajaxGetCurrentPlan').then(()=>{
+            this.$store.dispatch('ajaxGetCurrentPlan').then(() => {
                 this.currentPlan = this.$store.getters.getCurrentPlan[0].name
+            }).then(() => {
+                if (this.$route.params.limit == 'limit') {
+                    this.flashMessage.show({
+                        status: 'error',
+                        title: 'Error',
+                        message: 'You have reached your limit on ' + this.currentPlan + ' conference attendance this month.'
+                    });
+                }
+
             })
         })
     },
-    methods:{
-        isPlanChoosen(plan){
-            return (plan == this.currentPlan)? true : false;
+    methods: {
+        isPlanChoosen(plan) {
+            return (plan == this.currentPlan) ? true : false;
         }
     }
 }

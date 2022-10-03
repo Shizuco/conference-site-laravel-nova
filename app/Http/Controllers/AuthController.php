@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,7 @@ class AuthController extends Controller
     {
         $fields = $request->validated();
         $fields['password'] = bcrypt($request->password);
+        $fields['left_joins'] = 1;
         $user = User::create($fields);
 
         $token = $user->createToken('mytasktoken')->plainTextToken;
@@ -25,7 +27,9 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ];
-
+        $plan = Plan::where('name', 'Basic')->get();
+        $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+            ->create()->cancel();
         return response($response, 201);
     }
 

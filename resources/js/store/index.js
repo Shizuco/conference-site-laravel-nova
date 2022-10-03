@@ -97,6 +97,18 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        ajaxCancelPlan({ commit }) {
+            let token = "Bearer " + localStorage.getItem("Authorized");
+            return axios({
+                method: "post",
+                url: "api/planCancel",
+                data: {plan: 'Basic'},
+                headers: {
+                    Authorization: token,
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            })
+        },
         ajaxGetCurrentPlan({ commit }) {
             let token = "Bearer " + localStorage.getItem("Authorized");
             return axios({

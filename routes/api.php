@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/subscribe', [SubscriptionController::class, 'session']);
 
     Route::get('/plan', [UserController::class, 'getPlan']);
+    Route::post('/planCancel', [SubscriptionController::class, 'cancelPlan']);
 
     Route::get('/meeting/{id}', [MeetingController::class, 'show']);
     Route::post('/meeting', [MeetingController::class, 'store']);

@@ -5,8 +5,8 @@ declare (strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Services\ExportCsvFile;
 use App\Services\MakeListenerCsvFile;
 use App\Services\Messages\SendMessageAboutNewListener;
@@ -31,6 +31,23 @@ class UserController extends Controller
         if (Auth::user()->role === 'listener') {
             $this->sendMessage($conferenceId);
         }
+        if (Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => Auth::user()->joins - 1,
+                ]);
+        } else if (Auth::user()->joins - 1 === -1) {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => 0,
+                ]);
+        } else {
+            User::whereId(Auth::user()->id)
+                ->update([
+                    "left_joins" => Auth::user()->joins - 1,
+                ]);
+        }
+
         Auth::user()->conferences()->attach($conferenceId);
     }
 
@@ -41,6 +58,10 @@ class UserController extends Controller
 
     public function conferenceOut(int $conferenceId)
     {
+        User::whereId(Auth::user()->id)
+            ->update([
+                "left_joins" => Auth::user()->joins + 1,
+            ]);
         Auth::user()->conferences()->detach($conferenceId);
     }
 

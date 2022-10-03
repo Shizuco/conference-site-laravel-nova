@@ -1,11 +1,9 @@
 <template>
     <v-app>
         <v-app-bar app color="black">
-            <v-list-item-group>
-                <v-list-item>
-                    <router-link :to="{ name: 'MainPage' }" class="text-h5 white--text">Conferences</router-link>
-                </v-list-item>
-            </v-list-item-group>
+            <v-col>
+                <auth style="height: 80px; width: 800px"></auth>
+            </v-col>
         </v-app-bar>
         <v-main>
             <v-container class="fill-height" fluid>

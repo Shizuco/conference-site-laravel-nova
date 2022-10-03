@@ -11,21 +11,21 @@
             <form id="payment-form">
               <div class="row">
                 <div class="col-xl-4 col-lg-4">
-                  <div class="form-group">
+                  <div>
                     <v-text-field label="Name" name="name" id="name" type="text" class="rounded-0" outlined required
                       v-model="name">
                     </v-text-field>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-4">
-                  <div class="form-group">
+                  <div>
                     <label for="">Card details</label>
                     <div id="card-element"></div>
                   </div>
                 </div>
                 <div class="col-xl-12 col-lg-12">
                   <hr>
-                  <button @click="submit()">Purchase</button>
+                  <v-btn @click="pay()">Purchase</v-btn>
                 </div>
               </div>
             </form>
@@ -57,19 +57,20 @@ export default {
     cardElement.mount('#card-element')
   },
   methods: {
-    submit() {
-      let payment_method = {
-        card: cardElement,
-        billing_details: {
-          name: this.name
-        },
+    pay() {
+      stripe.createPaymentMethod(
+        'card', cardElement, {
+        billing_details: { name: this.name }
       }
-      let data = {
-        'token': payment_method,
-        'plan': this.$route.params.plan
-      }
-      this.$store.dispatch('ajaxSubscribe', data)
-      this.$router.replace({name: 'MainPage', params: {plan: 'success'}})
+      ).then((result) => {
+        let data = {
+          'token': result.paymentMethod,
+          'plan': this.$route.params.plan
+        }
+        this.$store.dispatch('ajaxSubscribe', data)
+        this.$router.replace({ name: 'MainPage', params: { plan: 'success' } })
+      });
+
     }
   },
 }

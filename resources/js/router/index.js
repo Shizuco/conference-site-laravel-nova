@@ -9,6 +9,7 @@ import Details from "../components/Report/Details.vue";
 import Create from "../components/Report/Create.vue";
 import Edit from "../components/Report/Edit.vue";
 import UserPage from "../components/Auth/UserPage.vue";
+import UserInfoPage from "../components/Auth/UserInfoPage.vue";
 import UserFavorites from "../components/Auth/UserFavorites.vue";
 import AllPlans from "../components/PaymentPlan/AllPlans.vue";
 import PlanPayPage from "../components/PaymentPlan/PlanPayPage.vue";
@@ -19,6 +20,18 @@ function isAuth() {
 
 export default new VueRouter({
     routes: [
+        {
+            path: "/info",
+            component: UserInfoPage,
+            name: "UserInfoPage",
+            beforeEnter(to, from, next) {
+                if (!isAuth()) {
+                    next("/conferences");
+                } else {
+                    next();
+                }
+            },
+        },
         {
             path: "/PlanPayPage",
             component: PlanPayPage,
