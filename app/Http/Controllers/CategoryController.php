@@ -3,8 +3,7 @@
 declare (strict_types = 1);
 
 namespace App\Http\Controllers;
-
-use App\Http\Requests\CategoryRequest;
+ 
 use App\Models\Category;
 use App\Models\Conference;
 use Illuminate\Http\Request;
@@ -33,24 +32,11 @@ class CategoryController extends Controller
         return response()->json(Category::whereId($id)->get());
     }
 
-    public function store(CategoryRequest $request)
-    {
-        $category = Category::create($request->validated());
-
-        if ($request->parent) {
-            $node = Category::find($request->parent);
-            $node->appendNode($category);
-        }
-    }
-    public function destroy(Request $request)
-    {
-        $node = Category::find($request->id);
-        $node->delete();
-    }
     public function getConferences(int $id)
     {
         return response()->json(Category::with('conferences')->whereId($id)->paginate(5));
     }
+
     public function getReports(int $id)
     {
         return response()->json(Category::with('reports')->whereId($id)->get());
