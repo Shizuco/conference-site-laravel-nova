@@ -15,7 +15,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Listeners extends Resource
 {
     /**
      * The model the resource corresponds to.
@@ -40,6 +40,11 @@ class User extends Resource
         'id', 'name', 'surname', 'role', 'email', 'phone', 'password', 'country', 'birthday', 'created_at', 'updated_at',
     ];
 
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->where('role', 'listener');
+    }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -49,7 +54,6 @@ class User extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
 
             Gravatar::make()->maxWidth(50),
 
@@ -63,8 +67,7 @@ class User extends Resource
 
             Select::make('role')
                 ->options([
-                    'listener' => 'listener',
-                    'annoucer' => 'annoucer',
+                    'listener' => 'listener'
                 ])
                 ->default('listener')
                 ->sortable()
@@ -76,7 +79,7 @@ class User extends Resource
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
-            PhoneNumber::make('Phone')->disableValidation()->rules('required'),
+            PhoneNumber::make('Phone')->disableValidation()->rules('required')->format('+38(###)-###-####'),
 
             Password::make('Password')
                 ->onlyOnForms()
@@ -132,7 +135,7 @@ class User extends Resource
     public function filters(NovaRequest $request)
     {
         return [
-            new Filters\Role('role'),
+            
         ];
     }
 

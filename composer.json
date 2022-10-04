@@ -27,6 +27,7 @@
         "phoenix-lib/nova-nested-tree-attach-many": "^1.8",
         "predis/predis": "~1.0",
         "pusher/pusher-php-server": "^7.0",
+        "saumini/ellipsis-textarea": "^1.0",
         "seche/nova-jstree": "^1.0",
         "sixlive/nova-text-copy-field": "^1.5",
         "stripe/stripe-php": "^9.6",

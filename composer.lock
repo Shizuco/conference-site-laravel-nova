@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5978edfd04c21c48c746cf8d5970c663",
+    "content-hash": "007f8e1e318be6e1443e1002386f23fb",
     "packages": [
         {
             "name": "brick/math",
@@ -4944,6 +4944,51 @@
                 }
             ],
             "time": "2022-07-21T14:21:25+00:00"
+        },
+        {
+            "name": "saumini/ellipsis-textarea",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nsaumini/ellipsis-textarea.git",
+                "reference": "76c39a9aeb88d3aae02eee04cd9689dcac843388"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nsaumini/ellipsis-textarea/zipball/76c39a9aeb88d3aae02eee04cd9689dcac843388",
+                "reference": "76c39a9aeb88d3aae02eee04cd9689dcac843388",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Saumini\\EllipsisTextarea\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Saumini\\EllipsisTextarea\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova textarea field with ellipsis support",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/nsaumini/ellipsis-textarea/issues",
+                "source": "https://github.com/nsaumini/ellipsis-textarea/tree/master"
+            },
+            "time": "2018-11-14T04:41:10+00:00"
         },
         {
             "name": "seche/nova-jstree",

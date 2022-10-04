@@ -63,4 +63,5 @@ class Conference extends Model
         }
         return $query->paginate(5);
     }
+
 }

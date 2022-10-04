@@ -60,7 +60,7 @@ class DateMustBeAvailable implements Rule
      */
     public function message()
     {
-        $time = $this->nearestTime($this->conference_id, $this->report_id);
+        $time = $this->nearestTime($this->conference_id);
         return 'Nearest time to start is ' . $time;
 
     }
@@ -70,7 +70,7 @@ class DateMustBeAvailable implements Rule
         return $dateToCheck >= $startDate && $dateToCheck <= $endDate;
     }
 
-    private function nearestTime(int $id, int $report_id)
+    private function nearestTime(int $id)
     {
         $conference = Conference::whereId($id)->get();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();

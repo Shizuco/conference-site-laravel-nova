@@ -55,7 +55,6 @@ class Conference extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
             Text::make('Title', 'title')
                 ->sortable()
                 ->rules('required', 'max:255'),
