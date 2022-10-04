@@ -80,51 +80,18 @@ class Report extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
 
-            Select::make('Category ID', 'category_id')->options(
+            Select::make('Category', 'category_id')->options(
                 $this->getAllCategories()
-            )->rules('required'),
+            )->rules('required')->hideFromIndex(),
 
-            Select::make('Conference ID', 'conference_id')->options(
+            Select::make('Conference', 'conference_id')->options(
                 $this->getAllConferences()
-            )->rules('required'),
+            )->rules('required')->hideFromIndex(),
 
-            Select::make('User ID', 'user_id')->options(
+            Select::make('User', 'user_id')->options(
                 $this->getAllAnnoucers()
-            )->rules('required'),
-
-            Text::make('Zoom', 'zoom_meeting_id')
-                ->placeholder('online or offline')
-                ->creationRules(new StringMustBeOneOfTwo)
-                ->fillUsing(function ($request, $model, $attribute) {
-                    if ($request->zoom_meeting_id == 'online') {
-                        $data = [
-                            'topic' => $request->thema,
-                            'start_time' => new Date($request->start_time),
-                            'duration' => intval($request->duration / 60),
-                            "host_video" => "true",
-                            "participant_video" => "true",
-                        ];
-                        $meeting = new \App\Http\Controllers\MeetingController;
-                        $zoom = $meeting->store($data);
-                        $model->{$attribute} = $zoom->original['data']['id'];
-                    }
-                    if($request->zoom_meeting_id == null){
-                        $model->{$attribute} = null;
-                    }
-                    else if (preg_match('/[0-9]+/', $request->zoom_meeting_id) === 1) {
-                        $zoom = new \App\Http\Controllers\MeetingController;
-                        $data = [
-                            'topic' => $request->thema,
-                            'start_time' => new Date($request->start_time),
-                            'duration' => intval($request->duration / 60),
-                            "host_video" => "true",
-                            "participant_video" => "true",
-                        ];
-                        $zoom->update(intval($request->zoom_meeting_id), $data);
-                    }
-                }),
+            )->rules('required')->hideFromIndex(),
 
             Text::make('Thema', 'thema')
                 ->sortable()
@@ -156,6 +123,38 @@ class Report extends Resource
                 ->creationRules('required', 'max:10240')
                 ->acceptedTypes('.ppt, .pptx'),
 
+            Text::make('Zoom', 'zoom_meeting_id')
+                ->placeholder('online or offline')
+                ->creationRules(new StringMustBeOneOfTwo)
+                ->hideWhenUpdating()
+                ->fillUsing(function ($request, $model, $attribute) {
+                    if ($request->zoom_meeting_id == 'online') {
+                        $data = [
+                            'topic' => $request->thema,
+                            'start_time' => new Date($request->start_time),
+                            'duration' => intval($request->duration / 60),
+                            "host_video" => "true",
+                            "participant_video" => "true",
+                        ];
+                        $meeting = new \App\Http\Controllers\MeetingController;
+                        $zoom = $meeting->store($data);
+                        $model->{$attribute} = $zoom->original['data']['id'];
+                    }
+                    if ($request->zoom_meeting_id == null) {
+                        $model->{$attribute} = null;
+                    } else if (preg_match('/[0-9]+/', $request->zoom_meeting_id) === 1) {
+                        $zoom = new \App\Http\Controllers\MeetingController;
+                        $data = [
+                            'topic' => $request->thema,
+                            'start_time' => new Date($request->start_time),
+                            'duration' => intval($request->duration / 60),
+                            "host_video" => "true",
+                            "participant_video" => "true",
+                        ];
+                        $zoom->update(intval($request->zoom_meeting_id), $data);
+                    }
+                }),
+
             Text::make('Created at', 'created_at')
                 ->sortable()
                 ->rules('required', 'max:255')
@@ -166,16 +165,16 @@ class Report extends Resource
                 ->rules('required', 'max:255')
                 ->exceptOnForms(),
 
-            Text::make('Duration', 'duration')
+            Text::make('Duration/in sec', 'duration')
                 ->fillUsing(function ($request, $model, $attribute) {
                     $end_time = new Date($request->end_time);
                     $start_time = new Date($request->start_time);
                     $model->{$attribute} = $end_time->getTimestamp() - $start_time->getTimestamp();
-                }),
+                })->hideWhenUpdating(),
 
             Text::make('Join URL', 'join_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
-                if($zoom->get($this->zoom_meeting_id)['data'] == null){
+                if ($zoom->get($this->zoom_meeting_id)['data'] == null) {
                     return null;
                 }
                 return $zoom->get($this->zoom_meeting_id)['data']['join_url'];
@@ -183,7 +182,7 @@ class Report extends Resource
 
             Text::make('Start URL', 'start_url', function () {
                 $zoom = new \App\Http\Controllers\MeetingController;
-                if($zoom->get($this->zoom_meeting_id)['data'] == null){
+                if ($zoom->get($this->zoom_meeting_id)['data'] == null) {
                     return null;
                 }
                 return $zoom->get($this->zoom_meeting_id)['data']['start_url'];

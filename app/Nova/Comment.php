@@ -43,7 +43,6 @@ class Comment extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
             Text::make('User ID', 'user_id')
                 ->sortable()
                 ->rules('required', 'max:255'),

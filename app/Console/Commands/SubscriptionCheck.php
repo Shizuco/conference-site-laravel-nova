@@ -33,7 +33,6 @@ class SubscriptionCheck extends Command
                 $user = \App\Models\User::whereId($sub->user_id)->get()[0];
                 $currentPlan = \App\Models\Subscription::where('user_id', $user->id)->get()[0]->name;
                 if ($currentPlan) {
-                    //$user->subscription($currentPlan)->cancelNow();
                     \App\Models\Subscription::where('user_id', $user->id)->delete();
                 }
                 \App\Models\User::whereId($user->id)

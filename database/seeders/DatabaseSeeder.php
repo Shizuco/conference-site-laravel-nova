@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             'role' => 'listener',
             'phone' => '380987656428',
             'birthday' => '2002-09-05',
-            'country' => 'Japan'
+            'country' => 'Japan',
+            'left_joins' => 1
         ]);
 
         \App\Models\Conference::factory(10)->create([
@@ -46,7 +47,8 @@ class DatabaseSeeder extends Seeder
             'surname' => ' ',
             'phone' => ' ',
             'birthday' => ' ',
-            'country' => ' '
+            'country' => ' ',
+            'left_joins' => 0
          ]);
     }
 }

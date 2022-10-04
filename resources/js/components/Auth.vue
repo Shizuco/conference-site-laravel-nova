@@ -34,13 +34,13 @@
                </v-btn>
             </span>
             <span>
-               <v-btn depressed small>
+               <v-btn depressed small v-if="isAuth()">
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'AllPlans' }">Plans
                   </router-link>
                </v-btn>
             </span>
             <span>
-               <v-btn depressed small>
+               <v-btn depressed small v-if="isAuth()">
                   <router-link style="text-decoration: none; color: inherit;" :to="{ name: 'MainPage' }">To main
                   </router-link>
                </v-btn>

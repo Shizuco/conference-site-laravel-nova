@@ -43,7 +43,6 @@ class ZoomMeeting extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
             Text::make('topic')
                 ->sortable()
                 ->rules('required', 'max:255'),

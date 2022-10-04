@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
 use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -35,9 +35,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if($request->email === 'admin@groupbwt.com'){
+        if ($request->email === 'admin@groupbwt.com') {
             $error = ValidationException::withMessages([
-                'email' => ['Access denied']
+                'email' => ['Access denied'],
             ]);
             throw $error;
         }
@@ -46,17 +46,23 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             $error = ValidationException::withMessages([
-                'password' => ['Incorrect login or password']
+                'password' => ['Incorrect login or password'],
             ]);
             throw $error;
         }
-
+        
         $token = $user->createToken('mytasktoken')->plainTextToken;
 
         $response = [
             'user' => $user,
             'token' => $token,
         ];
+
+        if (count(\App\Models\Subscription::where('user_id', $user->id)->get()) === 0) {
+            $plan = Plan::where('name', 'Basic')->get();
+            $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+                ->create()->cancel();
+        }
 
         return response()->json($response, 201);
     }

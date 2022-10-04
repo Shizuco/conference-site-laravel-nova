@@ -4,8 +4,6 @@ declare (strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateConferenceRequest;
-use App\Http\Requests\UpdateConferenceRequest;
 use App\Models\Conference;
 use App\Models\Report;
 use App\Services\ExportCsvFile;
@@ -18,13 +16,11 @@ class ConferenceController extends Controller
 {
     protected $exportCsv;
     protected $makeCsv;
-    protected $message;
 
-    public function __construct(ExportCsvFile $exportCsv, MakeConferenceCsvFile $makeCsv, SendMessageAboutConferenceDeletedByAdmin $message)
+    public function __construct(ExportCsvFile $exportCsv, MakeConferenceCsvFile $makeCsv)
     {
         $this->exportCsv = $exportCsv;
         $this->makeCsv = $makeCsv;
-        $this->message = $message;
     }
 
     public function index(Request $request)
@@ -43,24 +39,6 @@ class ConferenceController extends Controller
         $conf = Conference::findOrFail($id);
         $conf['hasTime'] = $time;
         return response()->json($conf);
-    }
-
-    public function store(CreateConferenceRequest $request)
-    {
-        $data = $request->validated();
-        $data['category_id'] = $request->category_id;
-        Conference::create($data);
-    }
-
-    public function update(UpdateConferenceRequest $request, int $id)
-    {
-        Conference::whereId($id)->update($request->validated());
-    }
-
-    public function destroy(int $id)
-    {
-        $this->sendMessage($id);
-        Conference::findOrFail($id)->delete();
     }
 
     public function exportCsv(Request $request)
