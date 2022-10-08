@@ -10,7 +10,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        return Plan::all();
+        return Plan::get();
     }
 
     public function intent()

@@ -18,27 +18,15 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Models\Conference;
+use App\Models\User;
 
 class Report extends Resource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var string
-     */
     public static $model = \App\Models\Report::class;
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
+
     public static $title = 'id';
 
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
     public static $search = [
         'id', 'thema', 'start_time', 'zoom_meeting_id', 'end_time', 'duration', 'user_id', 'category_id', 'conference_id', 'description', 'presentation', 'created_at', 'updated_at',
     ];
@@ -46,7 +34,7 @@ class Report extends Resource
     public function getAllAnnoucers()
     {
         $list = array();
-        foreach (\App\Models\User::where('role', 'annoucer')->get() as $annoucer) {
+        foreach (User::where('role', 'annoucer')->get() as $annoucer) {
             $list[$annoucer['id']] = $annoucer['name'] . ' ' . $annoucer['surname'];
         }
         return $list;
@@ -55,7 +43,7 @@ class Report extends Resource
     public function getAllConferences()
     {
         $list = array();
-        foreach (\App\Models\Conference::all() as $conference) {
+        foreach (Conference::get() as $conference) {
             $list[$conference['id']] = $conference['title'];
         }
         return $list;
@@ -64,18 +52,11 @@ class Report extends Resource
     public function getAllCategories()
     {
         $list = array();
-        foreach (\App\Models\Category::all() as $category) {
+        foreach (Category::get() as $category) {
             $list[$category['id']] = $category['name'];
         }
         return $list;
     }
-
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
 
     public function fields(NovaRequest $request)
     {
@@ -190,45 +171,21 @@ class Report extends Resource
         ];
     }
 
-    /**
-     * Get the cards available for the request.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
     public function cards(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the filters available for the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
     public function filters(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the lenses available for the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
     public function lenses(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the actions available for the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
     public function actions(NovaRequest $request)
     {
         return [];

@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -27,8 +28,8 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ];
-        $plan = Plan::where('name', 'Basic')->get();
-        $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+        $plan = Plan::where('name', 'Basic')->firstOfFail();
+        $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
             ->create()->cancel();
         return response($response, 201);
     }
@@ -58,9 +59,9 @@ class AuthController extends Controller
             'token' => $token,
         ];
 
-        if (count(\App\Models\Subscription::where('user_id', $user->id)->get()) === 0) {
-            $plan = Plan::where('name', 'Basic')->get();
-            $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+        if (count(Subscription::where('user_id', $user->id)->get()) === 0) {
+            $plan = Plan::where('name', 'Basic')->firstOfFail();
+            $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
                 ->create()->cancel();
         }
 

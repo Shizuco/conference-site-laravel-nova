@@ -62,7 +62,7 @@ class CommentController extends Controller
         $comDate = new Datetime($this->serializeDate($rep->updated_at));
         $today = new Datetime($this->serializeDate($today));
         if ($rep->user_id === Auth::user()->id && $this->IsInRange($today, $comDate) === true) {
-            Comment::whereId($commentId)->update($request->validated());
+            Comment::where('id', $commentId)->update($request->validated());
         }
     }
 

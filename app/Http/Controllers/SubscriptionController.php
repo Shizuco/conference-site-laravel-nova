@@ -13,29 +13,41 @@ class SubscriptionController extends Controller
 {
     public function session(Request $request)
     {
-        $user = auth()->user();
-        $currentPlan = Subscription::where('user_id', $user->id)->get()[0]->name;
-        if ($currentPlan) {
-            $user->subscription($currentPlan)->cancelNow();
-            Subscription::where('user_id', $user->id)->delete();
+        if ($request->token) {
+            $this->transferToPlan($request->plan, $request->token);
+        } else {
+            $this->transferToPlan($request->plan, null);
         }
-        $plan = Plan::where('name', $request->plan)->get();
-        User::whereId($user->id)
-            ->update([
-                "left_joins" => $plan[0]->joins,
-            ]);
-        if($request->token['id']){
-            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
-            ->create($request->token['id'])->cancel();
-        }
-        else{
-            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
-            ->create()->cancel();
-        }
-        
     }
 
-    public function cancelPlan(Request $request){
-        $this->session($request);
+    public function cancelPlan(Request $request)
+    {
+        if ($request->token) {
+            $this->transferToPlan($request->plan, $request->token);
+        } else {
+            $this->transferToPlan($request->plan, null);
+        }
+    }
+
+    private function transferToPlan($plan)
+    {
+        $user = auth()->user();
+        $currentPlan = Subscription::where('user_id', $user->id)->firstOfFail();
+        if ($currentPlan) {
+            $user->subscription($currentPlan->name)->cancelNow();
+            Subscription::where('user_id', $user->id)->delete();
+        }
+        $plan = Plan::where('name', $request->plan)->firstOfFail();
+        User::where('id', $user->id)
+            ->update([
+                "left_joins" => $plan->joins,
+            ]);
+        if ($request->token) {
+            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
+                ->create($request->token['id'])->cancel();
+        } else {
+            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
+                ->create()->cancel();
+        }
     }
 }

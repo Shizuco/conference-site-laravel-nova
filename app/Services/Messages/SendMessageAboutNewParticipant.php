@@ -21,7 +21,7 @@ class SendMessageAboutNewParticipant implements SendMessageInterface
             $startTimeExist->setTimezone(new DateTimeZone('GMT'));
             $startTimeExist->add(new DateInterval('PT3H'));
             $startTimeExist = $startTimeExist->format('Y-m-d H:i:s');
-            $users = Conference::with('users')->whereId($id)->get();
+            $users = Conference::with('users')->where('id', $id)->get();
             $report = Report::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
             $usersEmails = [];
             $message = '';

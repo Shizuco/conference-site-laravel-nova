@@ -11,7 +11,7 @@ class SendMessageAboutConferenceDeletedByAdmin implements SendMessageInterface
 
     public function sendMessage($request = 0, int $id = 0, $report = 0)
     {
-        $users = Conference::with('users')->whereId($id)->get();
+        $users = Conference::with('users')->where('id', $id)->get();
         $usersEmails = [];
         $message = '';
         foreach ($users as $user) {
