@@ -31,18 +31,14 @@ class UserController extends Controller
         if (Auth::user()->role === 'listener') {
             $this->sendMessage($conferenceId);
         }
-        if (Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
-            User::whereId(Auth::user()->id)
-                ->update([
-                    "left_joins" => Auth::user()->joins - 1,
-                ]);
-        } else if (Auth::user()->joins - 1 === -1) {
-            User::whereId(Auth::user()->id)
+
+        if (Auth::user()->joins - 1 === -1) {
+            User::where('id', Auth::user()->id)
                 ->update([
                     "left_joins" => 0,
                 ]);
         } else {
-            User::whereId(Auth::user()->id)
+            User::where('id', Auth::user()->id)
                 ->update([
                     "left_joins" => Auth::user()->joins - 1,
                 ]);
@@ -58,10 +54,13 @@ class UserController extends Controller
 
     public function conferenceOut(int $conferenceId)
     {
-        User::whereId(Auth::user()->id)
-            ->update([
-                "left_joins" => Auth::user()->joins + 1,
-            ]);
+        if (!Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
+            User::where('id', Auth::user()->id)
+                ->update([
+                    "left_joins" => Auth::user()->joins + 1,
+                ]);
+        }
+
         Auth::user()->conferences()->detach($conferenceId);
     }
 
@@ -78,7 +77,7 @@ class UserController extends Controller
         } else {
             unset($fields['password']);
         }
-        User::whereId(Auth::user()->id)->update($fields);
+        User::where('id', Auth::user()->id)->update($fields);
         $user = User::where('email', $request->email)->first();
         $token = $user->createToken('mytasktoken')->plainTextToken;
         $response = [

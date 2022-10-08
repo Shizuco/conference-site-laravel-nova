@@ -127,7 +127,7 @@ trait ZoomMeetingTrait
             'agenda' => (!empty($data['agenda'])) ? $data['agenda'] : null,
             'timezone' => 'Europe/Kyiv'
         ];
-        $model = ZoomMeeting::whereId($id)->first();
+        $model = ZoomMeeting::where('id', $id)->first();
         $model->update($data);
         return [
             'success' => $response->getStatusCode() === 204,

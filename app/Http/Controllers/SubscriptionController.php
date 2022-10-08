@@ -38,7 +38,7 @@ class SubscriptionController extends Controller
             Subscription::where('user_id', $user->id)->delete();
         }
         $plan = Plan::where('name', $request->plan)->firstOfFail();
-        User::whereId($user->id)
+        User::where('id', $user->id)
             ->update([
                 "left_joins" => $plan->joins,
             ]);
