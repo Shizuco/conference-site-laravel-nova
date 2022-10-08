@@ -27,8 +27,8 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ];
-        $plan = Plan::where('name', 'Basic')->get();
-        $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+        $plan = Plan::where('name', 'Basic')->firstOfFail();
+        $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
             ->create()->cancel();
         return response($response, 201);
     }
@@ -59,8 +59,8 @@ class AuthController extends Controller
         ];
 
         if (count(\App\Models\Subscription::where('user_id', $user->id)->get()) === 0) {
-            $plan = Plan::where('name', 'Basic')->get();
-            $subscription = $user->newSubscription('Basic', $plan[0]->stripe_plan)
+            $plan = Plan::where('name', 'Basic')->firstOfFail();
+            $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
                 ->create()->cancel();
         }
 

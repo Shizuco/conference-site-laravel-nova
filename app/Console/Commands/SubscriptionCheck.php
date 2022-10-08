@@ -21,7 +21,7 @@ class SubscriptionCheck extends Command
         foreach ($subs as $sub) {
             if (($sub->stripe_status == 'canceled') || (date_timestamp_get(date_create($sub->ends_at)) < date_timestamp_get(date_create()))) {
                 $user = User::whereId($sub->user_id)->firstOrFail();
-                $currentPlan = Subscription::where('user_id', $user->id)->firstOrFail()->name;
+                $currentPlan = Subscription::where('user_id', $user->id)->firstOrFail();
                 if ($currentPlan) {
                     Subscription::where('user_id', $user->id)->delete();
                 }

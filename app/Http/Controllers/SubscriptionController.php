@@ -13,32 +13,40 @@ class SubscriptionController extends Controller
 {
     public function session(Request $request)
     {
-        $this->transferToPlan($request->plan, $request->token);
+        if ($request->token) {
+            $this->transferToPlan($request->plan, $request->token);
+        } else {
+            $this->transferToPlan($request->plan, null);
+        }
     }
 
     public function cancelPlan(Request $request)
     {
-        $this->transferToPlan($request->plan, $request->token);
+        if ($request->token) {
+            $this->transferToPlan($request->plan, $request->token);
+        } else {
+            $this->transferToPlan($request->plan, null);
+        }
     }
 
     private function transferToPlan($plan)
     {
         $user = auth()->user();
-        $currentPlan = Subscription::where('user_id', $user->id)->firstOfFail()->name;
+        $currentPlan = Subscription::where('user_id', $user->id)->firstOfFail();
         if ($currentPlan) {
-            $user->subscription($currentPlan)->cancelNow();
+            $user->subscription($currentPlan->name)->cancelNow();
             Subscription::where('user_id', $user->id)->delete();
         }
-        $plan = Plan::where('name', $request->plan)->get();
+        $plan = Plan::where('name', $request->plan)->firstOfFail();
         User::whereId($user->id)
             ->update([
-                "left_joins" => $plan[0]->joins,
+                "left_joins" => $plan->joins,
             ]);
         if ($request->token) {
-            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
+            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
                 ->create($request->token['id'])->cancel();
         } else {
-            $subscription = $user->newSubscription($request->plan, $plan[0]->stripe_plan)
+            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
                 ->create()->cancel();
         }
     }

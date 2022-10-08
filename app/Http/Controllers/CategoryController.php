@@ -22,8 +22,8 @@ class CategoryController extends Controller
 
     public function subCategories(int $id)
     {
-        $conf = Conference::whereId($id)->get();
-        $parentId = $conf[0]->category_id;
+        $conf = Conference::whereId($id)->firstOfFail();
+        $parentId = $conf->category_id;
         return response()->json(Category::where('parent_id', $parentId)->get());
     }
 
