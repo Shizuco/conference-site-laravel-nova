@@ -29,7 +29,7 @@ class CategoryController extends Controller
 
     public function currentCategory(int $id)
     {
-        return response()->json(Category::where('id', $id)->get());
+        return response()->json(Category::where('id', $id)->firstOrFail());
     }
 
     public function getConferences(int $id)
@@ -39,6 +39,6 @@ class CategoryController extends Controller
 
     public function getReports(int $id)
     {
-        return response()->json(Category::with('reports')->where('id', $id)->get());
+        return response()->json(Category::with('reports')->where('id', $id)->firstOrFail());
     }
 }
