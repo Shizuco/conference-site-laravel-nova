@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'role' => $this->faker->text,
             'password' => $this->faker->password(), // password
             'surname' => $this->faker->name(),
-            'birthday' => $this->faker->text,
+            'birthday' => $this->faker->date(),
             'country' => $this->faker->text,
             'phone' => $this->faker->text,
             'remember_token' => Str::random(10),
