@@ -16,6 +16,12 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
+        if ($request->password != $request->password_confirmation) {
+            $error = ValidationException::withMessages([
+                'password' => ['Password must be equal to password confirmation'],
+            ]);
+            throw $error;
+        }
         $fields = $request->validated();
         $fields['password'] = bcrypt($request->password);
         $fields['left_joins'] = 1;
