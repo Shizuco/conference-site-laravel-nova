@@ -60,4 +60,22 @@ class AuthTest extends TestCase
             ->assertStatus(422)
             ->assertJson($error);
     }
+
+    public function test_admin_login()
+    {
+        $response = $this->postJson('/api/login',
+            [
+                'email' => 'admin@groupbwt.com',
+                'password' => '12345678',
+            ]);
+
+        $error = [
+            'errors' => [
+                'email' => ['Access denied'],
+            ],
+        ];
+        $response
+            ->assertStatus(422)
+            ->assertJson($error);
+    }
 }
