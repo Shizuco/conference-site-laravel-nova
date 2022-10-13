@@ -99,7 +99,7 @@ class ReportController extends Controller
 
     public function update(CreateReportRequest $request, int $conferenceId, int $reportId)
     {
-        $rep = Report::where('id', $reportId)->firstOfFail();
+        $rep = Report::where('id', $reportId)->firstOrFail();
         $startTimeExist = new Datetime($request->start_time);
         $startTimeExist->setTimezone(new DateTimeZone('GMT'));
         $startTimeExist->add(new DateInterval('PT3H'));
@@ -224,7 +224,7 @@ class ReportController extends Controller
 
     private function nearestTime(int $id)
     {
-        $conference = Conference::wwhere('id', $id)->firstOfFail();
+        $conference = Conference::wwhere('id', $id)->firstOrFail();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
         $startTime = new DateTime($conference->date->format('Y-m-d') . ' ' . $conference->time);
         $endTime = 0;
@@ -259,7 +259,7 @@ class ReportController extends Controller
 
     private function isDateInRangeOfConference(Datetime $startTimeExist, Datetime $endTimeExist, int $id)
     {
-        $conference = Conference::where('id', $id)->firstOfFail();
+        $conference = Conference::where('id', $id)->firstOrFail();
         $conStartTime = new DateTime($conference->date->format('Y-m-d') . ' ' . $conference->time);
         $conStartTime->setTimezone(new DateTimeZone('GMT'));
         $conEndTime = new DateTime($conference->date->format('Y-m-d') . ' 23:59:59.000000');

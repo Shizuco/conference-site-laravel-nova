@@ -32,12 +32,12 @@ class SubscriptionController extends Controller
     private function transferToPlan($plan)
     {
         $user = auth()->user();
-        $currentPlan = Subscription::where('user_id', $user->id)->firstOfFail();
+        $currentPlan = Subscription::where('user_id', $user->id)->firstOrFail();
         if ($currentPlan) {
             $user->subscription($currentPlan->name)->cancelNow();
             Subscription::where('user_id', $user->id)->delete();
         }
-        $plan = Plan::where('name', $request->plan)->firstOfFail();
+        $plan = Plan::where('name', $request->plan)->firstOrFail();
         User::where('id', $user->id)
             ->update([
                 "left_joins" => $plan->joins,

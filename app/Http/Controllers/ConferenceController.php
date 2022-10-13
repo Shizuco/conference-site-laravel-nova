@@ -53,8 +53,8 @@ class ConferenceController extends Controller
 
     private function hasTime(int $id)
     {
-        $conference = Conference::where('id', $id)->firstOfFail();
-        $results = Report::orderBy('start_time')->where('conference_id', $id)->firstOfFail();
+        $conference = Conference::where('id', $id)->firstOrFail();
+        $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
         if (count($results) === 0) {
             return true;
         }

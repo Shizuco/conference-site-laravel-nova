@@ -28,7 +28,7 @@ class StartTimeMustBeInRangeOfConference implements Rule
      */
     public function passes($attribute, $value)
     {
-        $conference = Conference::where('id', $this->conference_id)->firstOfFail();
+        $conference = Conference::where('id', $this->conference_id)->firstOrFail();
         $conStartTime = $conference->date->format('Y-m-d') . ' ' . $conference->time;
         $conStartTime = new Date($conStartTime);
         $conStartTime->setTimezone(new DateTimeZone('GMT'));

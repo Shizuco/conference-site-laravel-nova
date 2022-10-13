@@ -32,19 +32,13 @@ class UserController extends Controller
             $this->sendMessage($conferenceId);
         }
 
-        if (Auth::user()->joins - 1 === -1) {
-            User::where('id', Auth::user()->id)
-                ->update([
-                    "left_joins" => 0,
-                ]);
-        } else {
+        if (Auth::user()->joins != 0) {
             User::where('id', Auth::user()->id)
                 ->update([
                     "left_joins" => Auth::user()->joins - 1,
                 ]);
+            Auth::user()->conferences()->attach($conferenceId);
         }
-
-        Auth::user()->conferences()->attach($conferenceId);
     }
 
     public function getPlan()
@@ -54,13 +48,22 @@ class UserController extends Controller
 
     public function conferenceOut(int $conferenceId)
     {
-        if (!Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
-            User::where('id', Auth::user()->id)
-                ->update([
-                    "left_joins" => Auth::user()->joins + 1,
-                ]);
+        $joinCreated = '';
+        foreach (Auth::user()->conferences()->get() as $join) {
+            if ($join['pivot']['conference_id'] == $conferenceId) {
+                $joinCreated = $join['pivot']['created_at'];
+                break;
+            }
         }
+        if (Subscription::where('user_id', Auth::user()->id)->get()[0]['created_at'] < $joinCreated) {
+            if (Subscription::where('user_id', Auth::user()->id)->get()[0]['name'] != 'Senior') {
 
+                User::whereId(Auth::user()->id)
+                    ->update([
+                        "left_joins" => Auth::user()->left_joins + 1,
+                    ]);
+            }
+        }
         Auth::user()->conferences()->detach($conferenceId);
     }
 

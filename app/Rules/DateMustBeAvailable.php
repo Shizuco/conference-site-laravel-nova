@@ -32,7 +32,7 @@ class DateMustBeAvailable implements Rule
     {
         $value = new Date($value);
         if ($this->report_id != null) {
-            $currentReport = Report::where('id', $this->report_id)->firstOfFail();
+            $currentReport = Report::where('id', $this->report_id)->firstOrFail();
             $currentReportStartTime = new Date($currentReport->start_time->format('Y-m-d H:i:s'));
             $currentReportEndTime = new Date($currentReport->end_time->format('Y-m-d H:i:s'));
             if (($currentReportStartTime == $value && $attribute == 'start_time') || ($currentReportEndTime == $value && $attribute == 'end_time')) {
@@ -72,7 +72,7 @@ class DateMustBeAvailable implements Rule
 
     private function nearestTime(int $id)
     {
-        $conference = Conference::where('id', $id)->firstOfFail();
+        $conference = Conference::where('id', $id)->firstOrFail();
         $results = Report::orderBy('start_time')->where('conference_id', $id)->get();
         $start_time = $conference->date->format('Y-m-d') . ' ' . $conference->time;
         $start_time = new Date($start_time);
