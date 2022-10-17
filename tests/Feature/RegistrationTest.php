@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Subscription;
 
 class RegistrationTest extends TestCase
 {
@@ -25,8 +27,11 @@ class RegistrationTest extends TestCase
             'country' => 'Japan',
         ]);
 
+        $user = User::where('email', 'randomemail@something.com')->first();
+        Subscription::where('user_id', $user->id)->delete();
+        $user->delete();
+
         $response->assertStatus(201);
-        \App\Models\User::where('email', 'randomemail@something.com')->delete();
     }
 
     public function test_success_announcer_registration()
@@ -43,8 +48,11 @@ class RegistrationTest extends TestCase
             'country' => 'Japan',
         ]);
 
+        $user = User::where('email', 'randomemail@something.com')->first();
+        Subscription::where('user_id', $user->id)->delete();
+        $user->delete();
+
         $response->assertStatus(201);
-        \App\Models\User::where('email', 'randomemail@something.com')->delete();
     }
 
     public function test_already_exist_registration()

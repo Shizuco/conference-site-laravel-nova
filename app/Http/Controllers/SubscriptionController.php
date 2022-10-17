@@ -8,6 +8,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SubscriptionController extends Controller
 {
@@ -29,24 +30,27 @@ class SubscriptionController extends Controller
         }
     }
 
-    private function transferToPlan($plan)
+    private function transferToPlan($plan, $token)
     {
+        if ($plan != 'Basic' && !$token) {
+            abort(422, "Payment token is invalid");
+        }
         $user = auth()->user();
-        $currentPlan = Subscription::where('user_id', $user->id)->firstOrFail();
+        $currentPlan = Subscription::where('user_id', $user->id)->first();
         if ($currentPlan) {
             $user->subscription($currentPlan->name)->cancelNow();
             Subscription::where('user_id', $user->id)->delete();
         }
-        $plan = Plan::where('name', $request->plan)->firstOrFail();
+        $plan = Plan::where('name', $plan)->firstOrFail();
         User::where('id', $user->id)
             ->update([
                 "left_joins" => $plan->joins,
             ]);
-        if ($request->token) {
-            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
-                ->create($request->token['id'])->cancel();
+        if ($token) {
+            $subscription = $user->newSubscription($plan, $plan->stripe_plan)
+                ->create($token['id'])->cancel();
         } else {
-            $subscription = $user->newSubscription($request->plan, $plan->stripe_plan)
+            $subscription = $user->newSubscription($plan, $plan->stripe_plan)
                 ->create()->cancel();
         }
     }

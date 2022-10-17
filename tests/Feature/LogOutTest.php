@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use App\Models\Subscription;
 
 class LogOutTest extends TestCase
 {
@@ -15,11 +16,14 @@ class LogOutTest extends TestCase
      */
     public function test_success_logout()
     {
+        $user = User::factory()->create();
         Sanctum::actingAs(
-            User::factory()->create(),
+            $user,
             ['*']
         );
         $response = $this->post('/api/logout');
+        Subscription::where('user_id', $user->id)->delete();
+        $user->delete();
         $response->assertStatus(200);
     }
 
