@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Subscription;
+use App\Models\User;
+use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
@@ -53,6 +53,22 @@ class RegistrationTest extends TestCase
         $user->delete();
 
         $response->assertStatus(201);
+    }
+
+    public function test_try_to_register_admin_registration()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'admin',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+        $response->assertStatus(403);
     }
 
     public function test_already_exist_registration()

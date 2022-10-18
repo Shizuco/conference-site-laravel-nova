@@ -9,11 +9,6 @@ use Tests\TestCase;
 
 class ChangePlanTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
 
     public function test_success_plan_change()
     {
@@ -41,6 +36,20 @@ class ChangePlanTest extends TestCase
         Subscription::where('user_id', $user->id)->delete();
         $user->delete();
         $response->assertStatus(200);
+    }
+
+    public function test_try_admin_plan_change()
+    {
+        $user = User::where('email', 'admin@groupbwt.com')->first();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $response = $this->postJson('/api/subscribe', [
+            'plan' => 'Basic',
+        ]);
+        $response
+            ->assertStatus(403);
     }
 
     public function test_with_no_payment_token_to_basic_success_plan_change()

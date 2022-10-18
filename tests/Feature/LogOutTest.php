@@ -9,11 +9,7 @@ use App\Models\Subscription;
 
 class LogOutTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    
     public function test_success_logout()
     {
         $user = User::factory()->create();

@@ -23,6 +23,10 @@ class AuthController extends Controller
             ]);
             throw $error;
         }
+        if($request->role == 'admin')
+        {
+            abort(403, 'You can`t register admin');
+        }
         $fields = $request->validated();
         $fields['password'] = bcrypt($request->password);
         $fields['left_joins'] = 1;

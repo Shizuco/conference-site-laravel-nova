@@ -4,6 +4,7 @@ declare (strict_types = 1);
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -13,14 +14,29 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_success_login()
+    public function test_listener_success_login()
     {
+        $user = User::factory(['password' => bcrypt('123123123'), 'role' => 'listener'])->create();
         $response = $this->postJson('/api/login',
             [
-                'email' => 'shizucokuro2002@gmail.com',
+                'email' => $user->email,
                 'password' => '123123123',
             ]);
+            
+        $user->delete();
+        $response
+            ->assertStatus(201);
+    }
 
+    public function test_announcer_success_login()
+    {
+        $user = User::factory(['password' => bcrypt('123123123'), 'role' => 'announcer'])->create();
+        $response = $this->postJson('/api/login',
+            [
+                'email' => $user->email,
+                'password' => '123123123',
+            ]);
+        $user->delete();
         $response
             ->assertStatus(201);
     }

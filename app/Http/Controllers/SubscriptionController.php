@@ -36,6 +36,9 @@ class SubscriptionController extends Controller
             abort(422, "Payment token is invalid");
         }
         $user = auth()->user();
+        if($user->role == 'admin'){
+            abort(403, "Access denined");
+        }
         $currentPlan = Subscription::where('user_id', $user->id)->first();
         if ($currentPlan) {
             $user->subscription($currentPlan->name)->cancelNow();

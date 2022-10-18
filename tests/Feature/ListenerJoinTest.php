@@ -10,11 +10,7 @@ use Tests\TestCase;
 
 class ListenerJoinTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    
     public function test_success_listener_join()
     {
         $user = User::factory(['role' => 'listener',
