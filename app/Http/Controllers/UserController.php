@@ -32,6 +32,9 @@ class UserController extends Controller
         if (Auth::user()->role === 'listener') {
             $this->sendMessage($conferenceId);
         }
+        if(Auth::user()->role === 'admin'){
+            abort(403, 'Access denied');
+        }
         if (Conference::where('id', $conferenceId)->firstOrFail()) {
             if (Auth::user()->left_joins != 0) {
                 User::where('id', Auth::user()->id)
