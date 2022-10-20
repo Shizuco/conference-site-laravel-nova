@@ -50,6 +50,9 @@ class ReportController extends Controller
 
     public function reportsByName(Request $request)
     {
+        if (Auth::user()->role === 'admin') {
+            abort(403, 'Access denide');
+        }
         return response()->json(Report::where('thema', 'LIKE', "%{$request->rep_title}%")->paginate(5));
     }
 
@@ -100,8 +103,7 @@ class ReportController extends Controller
     public function update(CreateReportRequest $request, int $conferenceId, int $reportId)
     {
         $rep = Report::where('id', $reportId)->firstOrFail();
-        if($rep->user_id !== Auth::user()->id)
-        {
+        if ($rep->user_id !== Auth::user()->id) {
             abort(403, 'Access denide');
         }
         $startTimeExist = new Datetime($request->start_time);
@@ -136,8 +138,7 @@ class ReportController extends Controller
     public function destroy(int $conferenceId, int $report_id)
     {
         $rep = Report::where('id', $report_id)->firstOrFail();
-        if($rep->user_id !== Auth::user()->id)
-        {
+        if ($rep->user_id !== Auth::user()->id) {
             abort(403, 'Access denide');
         }
         if ($report_id == 0) {

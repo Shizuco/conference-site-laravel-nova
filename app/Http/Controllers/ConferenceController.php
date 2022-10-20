@@ -8,8 +8,8 @@ use App\Models\Conference;
 use App\Models\Report;
 use App\Services\ExportCsvFile;
 use App\Services\MakeConferenceCsvFile;
-use App\Services\Messages\SendMessageAboutConferenceDeletedByAdmin;
 use Datetime;
+use Auth;
 use Illuminate\Http\Request;
 
 class ConferenceController extends Controller
@@ -30,6 +30,9 @@ class ConferenceController extends Controller
 
     public function conferencesByName(Request $request)
     {
+        if (Auth::user()->role === 'admin') {
+            abort(403, 'Access denide');
+        }
         return response()->json(Conference::where('title', 'LIKE', "%{$request->conf_title}%")->paginate(5));
     }
 
@@ -75,7 +78,7 @@ class ConferenceController extends Controller
                 $endTime = new Datetime($results[$a]->end_time->format('Y-m-d H:i:s'));
             }
             $interval = $endTime->diff($startTime);
-            $err = (($interval->format('%i') >= 10)||$interval->format('%h') > 0);
+            $err = (($interval->format('%i') >= 10) || $interval->format('%h') > 0);
             if ($err) {
                 $hasTime++;
             }
