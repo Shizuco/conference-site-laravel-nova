@@ -12,16 +12,6 @@ use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
 Route::get('/conferences', [ConferenceController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::match(['get', 'post'], '/login', [AuthController::class, 'login'])->name('login');
@@ -75,20 +65,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/conferences/{conference_id}/report/{report_id}/comment/{id}', [CommentController::class, 'update']);
 
     Route::group(['middleware' => ['isAdmin']], function () {
-        Route::delete('/conferences/{id}', [ConferenceController::class, 'destroy']);
-        Route::post('/conferences', [ConferenceController::class, 'store']);
-        Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
-        Route::post('/categories', [CategoryController::class, 'store']);
-        Route::delete('/category/destroy', [CategoryController::class, 'destroy']);
-
         Route::get('/conferencesDownloadCsv', [ConferenceController::class, 'downloadCsv']);
-        Route::get('/conferencesCsv', [ConferenceController::class, 'exportCsv']);
         Route::get('/conferences/{id}/reportsDownloadCsv', [ReportController::class, 'downloadCsv']);
-        Route::get('/conferences/{id}/reportsCsv', [ReportController::class, 'exportCsv']);
         Route::get('/conferences/reports/{id}/commentDownloadCsv', [CommentController::class, 'downloadCsv']);
-        Route::get('/conferences/reports/{id}/commentCsv', [CommentController::class, 'exportCsv']);
         Route::get('/conferences/{id}/listenersDownloadCsv', [UserController::class, 'downloadCsv']);
-        Route::get('/conferences/{id}/listenersCsv', [UserController::class, 'exportCsv']);
     });
 });
 

@@ -473,8 +473,6 @@ export default new Vuex.Store({
                 },
             }).then(function (response) {
                 commit("setReport", response.data);
-            }).catch((err)=>{
-                console.log(err.response.data.message)
             })
         },
         ajaxEditReport({ commit }, data) {

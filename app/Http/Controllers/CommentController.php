@@ -36,6 +36,9 @@ class CommentController extends Controller
 
     public function store(CreateCommentRequest $request, int $conferenceId, int $reportId)
     {
+        if (Auth::user()->role == 'admin') {
+            abort(403, 'Access denide');
+        }
         $this->sendMessage($reportId);
         $data = $request->validated();
         $data['report_id'] = $reportId;
@@ -56,6 +59,9 @@ class CommentController extends Controller
 
     public function update(CreateCommentRequest $request, int $conferenceId, int $reportId, int $commentId)
     {
+        if (Auth::user()->role == 'admin') {
+            abort(403, 'Access denide');
+        }
         $rep = Comment::findOrFail($commentId);
         $today = new Datetime('now - 10 minute');
         $today->format('Y-m-d H:i:s');

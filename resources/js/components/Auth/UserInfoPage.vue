@@ -84,7 +84,7 @@ export default {
         },
         cancelPlan(){
             this.$store.dispatch('ajaxCancelPlan').then(()=>{
-                this.$route.replace('/conferences')
+                this.$router.replace('/conferences')
             })
         }
     }

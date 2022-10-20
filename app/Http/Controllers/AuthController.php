@@ -17,6 +17,16 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
+        if ($request->password != $request->password_confirmation) {
+            $error = ValidationException::withMessages([
+                'password' => ['Password must be equal to password confirmation'],
+            ]);
+            throw $error;
+        }
+        if($request->role == 'admin')
+        {
+            abort(403, 'You can`t register admin');
+        }
         $fields = $request->validated();
         $fields['password'] = bcrypt($request->password);
         $fields['left_joins'] = 1;
@@ -28,7 +38,7 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token,
         ];
-        $plan = Plan::where('name', 'Basic')->firstOfFail();
+        $plan = Plan::where('name', 'Basic')->firstOrFail();
         $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
             ->create()->cancel();
         return response($response, 201);
@@ -45,13 +55,19 @@ class AuthController extends Controller
         $fields = $request->validated();
 
         $user = User::where('email', $request->email)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user) {
+            $error = ValidationException::withMessages([
+                'email' => ['No account with such email'],
+            ]);
+            throw $error;
+        }
+        if (!Hash::check($request->password, $user->password)) {
             $error = ValidationException::withMessages([
                 'password' => ['Incorrect login or password'],
             ]);
             throw $error;
         }
-        
+
         $token = $user->createToken('mytasktoken')->plainTextToken;
 
         $response = [
@@ -60,7 +76,7 @@ class AuthController extends Controller
         ];
 
         if (count(Subscription::where('user_id', $user->id)->get()) === 0) {
-            $plan = Plan::where('name', 'Basic')->firstOfFail();
+            $plan = Plan::where('name', 'Basic')->firstOrFail();
             $subscription = $user->newSubscription('Basic', $plan->stripe_plan)
                 ->create()->cancel();
         }
@@ -70,6 +86,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        if (!auth()->user()->currentAccessToken()) {
+            return response()->json('unauthenticate', 302);
+        }
         auth()->user()->currentAccessToken()->delete();
 
         return [

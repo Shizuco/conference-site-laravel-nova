@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Models\Conference;
 use App\Services\ExportCsvFile;
 use App\Services\MakeListenerCsvFile;
 use App\Services\Messages\SendMessageAboutNewListener;
@@ -31,20 +32,21 @@ class UserController extends Controller
         if (Auth::user()->role === 'listener') {
             $this->sendMessage($conferenceId);
         }
-
-        if (Auth::user()->joins - 1 === -1) {
-            User::where('id', Auth::user()->id)
-                ->update([
-                    "left_joins" => 0,
-                ]);
-        } else {
-            User::where('id', Auth::user()->id)
-                ->update([
-                    "left_joins" => Auth::user()->joins - 1,
-                ]);
+        if(Auth::user()->role === 'admin'){
+            abort(403, 'Access denied');
+        }
+        if (Conference::where('id', $conferenceId)->firstOrFail()) {
+            if (Auth::user()->left_joins != 0) {
+                User::where('id', Auth::user()->id)
+                    ->update([
+                        "left_joins" => Auth::user()->left_joins - 1,
+                    ]);
+                Auth::user()->conferences()->attach($conferenceId);
+            } else {
+                abort(422, "No joins left");
+            }
         }
 
-        Auth::user()->conferences()->attach($conferenceId);
     }
 
     public function getPlan()
@@ -54,13 +56,22 @@ class UserController extends Controller
 
     public function conferenceOut(int $conferenceId)
     {
-        if (!Subscription::where('user_id', Auth::user()->id)->where('name', 'Senior')->get()) {
-            User::where('id', Auth::user()->id)
-                ->update([
-                    "left_joins" => Auth::user()->joins + 1,
-                ]);
+        $joinCreated = '';
+        foreach (Auth::user()->conferences()->get() as $join) {
+            if ($join['pivot']['conference_id'] == $conferenceId) {
+                $joinCreated = $join['pivot']['created_at'];
+                break;
+            }
         }
+        if (Subscription::where('user_id', Auth::user()->id)->get()[0]['created_at'] < $joinCreated) {
+            if (Subscription::where('user_id', Auth::user()->id)->get()[0]['name'] != 'Senior') {
 
+                User::whereId(Auth::user()->id)
+                    ->update([
+                        "left_joins" => Auth::user()->left_joins + 1,
+                    ]);
+            }
+        }
         Auth::user()->conferences()->detach($conferenceId);
     }
 
