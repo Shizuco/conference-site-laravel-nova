@@ -33,6 +33,29 @@ class CommentTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_success_update_comment_by_annoucer()
+    {
+        $user = User::factory(['role' => 'annoucer'])->create();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
+        $report = Report::factory(['user_id' => $user->id, 'conference_id' => $conference->id])->create();
+        $comment = Comment::factory(['user_id' => $user->id])->create();
+        $response = $this->put('/api/conferences/' . $conference->id . '/report/' . $report->id . '/comment/' . $comment->id, [
+            'user_id' => $user->id,
+            'report_id' => $report->id,
+            'conference_id' => $conference->id,
+            'comment' => 'fmewomf[owemf',
+        ]);
+        $comment->delete();
+        $user->delete();
+        $conference->delete();
+        $report->delete();
+        $response->assertStatus(200);
+    }
+
     public function test_success_comment_by_listener()
     {
         $user = User::factory(['role' => 'listener'])->create();
@@ -49,6 +72,29 @@ class CommentTest extends TestCase
             'comment' => 'fmewomf[owemf',
         ]);
         Comment::where('comment', 'fmewomf[owemf')->delete();
+        $user->delete();
+        $conference->delete();
+        $report->delete();
+        $response->assertStatus(200);
+    }
+
+    public function test_success_update_comment_by_listener()
+    {
+        $user = User::factory(['role' => 'listener'])->create();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
+        $report = Report::factory(['user_id' => $user->id, 'conference_id' => $conference->id])->create();
+        $comment = Comment::factory(['user_id' => $user->id])->create();
+        $response = $this->put('/api/conferences/' . $conference->id . '/report/' . $report->id . '/comment/' . $comment->id, [
+            'user_id' => $user->id,
+            'report_id' => $report->id,
+            'conference_id' => $conference->id,
+            'comment' => 'fmewomf[owemf',
+        ]);
+        $comment->delete();
         $user->delete();
         $conference->delete();
         $report->delete();
@@ -108,6 +154,28 @@ class CommentTest extends TestCase
             'conference_id' => $conference->id,
         ]);
         Comment::where('comment', 'fmewomf[owemf')->delete();
+        $user->delete();
+        $conference->delete();
+        $report->delete();
+        $response->assertStatus(302);
+    }
+
+    public function test_comment_is_required_on_update()
+    {
+        $user = User::factory(['role' => 'annoucer'])->create();
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
+        $report = Report::factory(['user_id' => $user->id, 'conference_id' => $conference->id])->create();
+        $comment = Comment::factory(['user_id' => $user->id])->create();
+        $response = $this->put('/api/conferences/' . $conference->id . '/report/' . $report->id . '/comment/' . $comment->id, [
+            'user_id' => $user->id,
+            'report_id' => $report->id,
+            'conference_id' => $conference->id,
+        ]);
+        $comment->delete();
         $user->delete();
         $conference->delete();
         $report->delete();
