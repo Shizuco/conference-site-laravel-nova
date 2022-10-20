@@ -100,6 +100,10 @@ class ReportController extends Controller
     public function update(CreateReportRequest $request, int $conferenceId, int $reportId)
     {
         $rep = Report::where('id', $reportId)->firstOrFail();
+        if($rep->user_id !== Auth::user()->id)
+        {
+            abort(403, 'Access denide');
+        }
         $startTimeExist = new Datetime($request->start_time);
         $startTimeExist->setTimezone(new DateTimeZone('GMT'));
         $startTimeExist->add(new DateInterval('PT3H'));
@@ -110,7 +114,7 @@ class ReportController extends Controller
         $this->isDateInRangeOfConference($startTimeExist, $endTimeExist, $conferenceId);
         $data = $request->validated();
         $duration = ($endTimeExist->getTimestamp() - $startTimeExist->getTimestamp());
-        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($request->start_time, $request->end_time, $conferenceId) === true) {
+        if ($rep->user_id === Auth::user()->id || $this->isDateAvailable($startTimeExist, $endTimeExist, $conferenceId) === true) {
             $data['conference_id'] = $conferenceId;
             $data['user_id'] = Auth::user()->id;
             if (gettype($request->file('presentation')) == 'object') {
