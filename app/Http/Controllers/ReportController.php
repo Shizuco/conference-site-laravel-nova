@@ -135,14 +135,19 @@ class ReportController extends Controller
 
     public function destroy(int $conferenceId, int $report_id)
     {
+        $rep = Report::where('id', $report_id)->firstOrFail();
+        if($rep->user_id !== Auth::user()->id)
+        {
+            abort(403, 'Access denide');
+        }
         if ($report_id == 0) {
-            $rep = Report::where('conference_id', $conferenceId)->where('user_id', Auth::user()->id)->first();
+            $rep = Report::where('conference_id', $conferenceId)->where('user_id', Auth::user()->id)->firstOrFail();
             if ($rep->zoom_meeting_id !== null) {
                 $this->meeting->destroy($rep->zoom_meeting_id);
             }
             $rep->delete();
         } else {
-            $rep = Report::where('id', $report_id)->first();
+            $rep = Report::where('id', $report_id)->firstOrFail();
             if ($rep->zoom_meeting_id !== null) {
                 $this->meeting->destroy($rep->zoom_meeting_id);
             }
