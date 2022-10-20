@@ -20,6 +20,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Models\Conference;
 use App\Models\User;
+use App\Models\Category;
 
 class Report extends Resource
 {

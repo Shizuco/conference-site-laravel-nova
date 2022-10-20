@@ -60,7 +60,7 @@ class ReportController extends Controller
 
     public function store(CreateReportRequest $request, int $id)
     {
-        $conference = Conference::Find($id)->first();
+        $conference = Conference::where('id', $id)->firstOrFail();
         $startTimeExist = new Datetime($request->start_time);
         $startTimeExist->setTimezone(new DateTimeZone('GMT'));
         $startTimeExist->add(new DateInterval('PT3H'));

@@ -20,7 +20,7 @@ class isAdmin
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check() || Auth::user()->role !== 'admin') {
-            throw new Exception('Access denide');
+            abort(403, 'Access denide');
         }
         return $next($request);
     }

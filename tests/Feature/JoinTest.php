@@ -121,6 +121,7 @@ class JoinTest extends TestCase
     {
         $conference = Conference::factory()->create();
         $response = $this->post('/api/conferenceJoin/' . $conference->id);
+        $conference->delete();
         $response->assertStatus(302);
     }
 }

@@ -41,7 +41,7 @@ class AuthTest extends TestCase
             ->assertStatus(201);
     }
 
-    public function test_bed_creds_password_login()
+    public function test_bad_creds_password_login()
     {
         $response = $this->postJson('/api/login',
             [
@@ -59,7 +59,7 @@ class AuthTest extends TestCase
             ->assertJson($error);
     }
 
-    public function test_bed_creds_email_login()
+    public function test_bad_creds_email_login()
     {
         $response = $this->postJson('/api/login',
             [
