@@ -11,11 +11,6 @@ use Illuminate\Http\UploadedFile;
 
 class UpdateReportTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function test_success_update_report_by_admin()
     {
         $user = User::where('role', 'admin')->first();
@@ -24,14 +19,7 @@ class UpdateReportTest extends TestCase
             $user,
             ['*']
         );
-        $file = new UploadedFile(
-            storage_path() . "/app/" . 'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation;',
-            null,
-            TRUE,
-            TRUE
-        );
+        $file =$this->file();
         $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
         $report = Report::factory(['user_id' => $reportCreator->id, 'conference_id' => $conference->id])->create();
         $response = $this->put('nova-api/reports/'.$report->id.'?editing=true&editMode=update', [
@@ -58,14 +46,7 @@ class UpdateReportTest extends TestCase
             $user,
             ['*']
         );
-        $file = new UploadedFile(
-            storage_path() . "/app/" . 'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation;',
-            null,
-            TRUE,
-            TRUE
-        );
+        $file = $this->file();
         $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
         $report = Report::factory(['user_id' => $user->id, 'conference_id' => $conference->id])->create();
         $response = $this->put('api/conferences/' . $conference->id . '/reports/' . $report->id, [
@@ -197,14 +178,7 @@ class UpdateReportTest extends TestCase
             $user,
             ['*']
         );
-        $file = new UploadedFile(
-            storage_path() . "/app/" . 'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation;',
-            null,
-            TRUE,
-            TRUE
-        );
+        $file = $this->file();
         $conference = Conference::factory(['date' => '2009-09-09', 'time' => '14:00:00', 'latitude' => '13', 'longitude' => '13', 'country' => 'Japan'])->create();
         $response = $this->put('api/conferences/' . $conference->id . '/reports/-1', [
             'conference_id' => $conference->id,
@@ -220,5 +194,16 @@ class UpdateReportTest extends TestCase
         $user->delete();
         $conference->delete();
         $response->assertStatus(404);
+    }
+
+    private function file(){
+        return new UploadedFile(
+            storage_path() . "/app/" . 'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
+            'Biology Subject for High School_ Ants Taxonomy by Slidesgo.pptx',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation;',
+            null,
+            true,
+            true
+        );
     }
 }

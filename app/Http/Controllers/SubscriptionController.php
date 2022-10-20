@@ -50,10 +50,10 @@ class SubscriptionController extends Controller
                 "left_joins" => $plan->joins,
             ]);
         if ($token) {
-            $subscription = $user->newSubscription($plan, $plan->stripe_plan)
+            $subscription = $user->newSubscription($plan->name, $plan->stripe_plan)
                 ->create($token['id'])->cancel();
         } else {
-            $subscription = $user->newSubscription($plan, $plan->stripe_plan)
+            $subscription = $user->newSubscription($plan->name, $plan->stripe_plan)
                 ->create()->cancel();
         }
     }

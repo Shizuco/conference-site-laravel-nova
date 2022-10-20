@@ -124,4 +124,129 @@ class RegistrationTest extends TestCase
         $response
             ->assertStatus(302);
     }
+
+    public function test_name_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_surname_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+        $response->assertStatus(302);
+    }
+
+    public function test_email_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+        $response->assertStatus(302);
+    }
+
+    public function test_password_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+        $response->assertStatus(302);
+    }
+
+    public function test_role_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_phone_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'birthday' => '2002-02-02',
+            'country' => 'Japan',
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_birthday_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'country' => 'Japan',
+        ]);
+
+        $response->assertStatus(302);
+    }
+
+    public function test_country_is_required()
+    {
+        $response = $this->post('/api/register', [
+            'name' => 'random',
+            'surname' => 'random',
+            'email' => 'randomemail@something.com',
+            'password' => '123123123',
+            'password_confirmation' => '123123123',
+            'role' => 'announcer',
+            'phone' => '380983878221',
+            'birthday' => '2002-02-02',
+        ]);
+
+        $response->assertStatus(302);
+    }
 }

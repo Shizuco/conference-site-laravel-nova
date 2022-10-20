@@ -41,6 +41,30 @@ class AuthTest extends TestCase
             ->assertStatus(201);
     }
 
+    public function test_email_is_required()
+    {
+        $user = User::factory(['password' => bcrypt('123123123')])->create();
+        $response = $this->postJson('/api/login',
+            [
+                'password' => '123123123',
+            ]);
+        $user->delete();
+        $response
+            ->assertStatus(422);
+    }
+
+    public function test_password_is_required()
+    {
+        $user = User::factory(['password' => bcrypt('123123123')])->create();
+        $response = $this->postJson('/api/login',
+            [
+                'email' => $user->email,
+            ]);
+        $user->delete();
+        $response
+            ->assertStatus(422);
+    }
+
     public function test_bad_creds_password_login()
     {
         $response = $this->postJson('/api/login',

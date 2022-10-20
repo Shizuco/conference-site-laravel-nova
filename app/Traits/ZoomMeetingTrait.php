@@ -81,22 +81,26 @@ trait ZoomMeetingTrait
             ]),
         ];
         $response = $this->client->post($url . $path, $body);
+        $meet = $this->get(json_decode($response->getBody()->getContents(), true)['id']);
+        $start_url = $meet['data']['start_url'];
+        $id = $meet['data']['id'];
+        $join_url = $meet['data']['join_url'];
         $data = [
-            'id' => json_decode($response->getBody(), true)['id'],
+            'id' => $id,
             'topic' => $data['topic'],
             'type' => self::MEETING_TYPE_SCHEDULE,
             'start_time' => $this->toZoomTimeFormat($data['start_time']),
             'duration' => $data['duration'],
-            'agenda' => (!empty($data['agenda'])) ? $data['agenda'] : null,
+            'agenda' => null,
             'timezone' => 'Europe/Kyiv',
-            'start_url' => $this->get(json_decode($response->getBody(), true)['id'])['data']['start_url'],
-            'join_url' =>json_decode($response->getBody(), true)['join_url']
+            'start_url' => $start_url,
+            'join_url' => $join_url,
         ];
         ZoomMeeting::create($data);
 
         return [
             'success' => $response->getStatusCode() === 201,
-            'data' => json_decode($response->getBody(), true),
+            'data' => $meet,
         ];
     }
 
@@ -133,7 +137,7 @@ trait ZoomMeetingTrait
         $model->update($data);
         return [
             'success' => $response->getStatusCode() === 204,
-            'data' => json_decode($response->getBody(), true),
+            'data' => json_decode($response->getBody()->getContents()),
         ];
     }
 
@@ -150,7 +154,7 @@ trait ZoomMeetingTrait
         $response = $this->client->get($url . $path, $body);
         return [
             'success' => $response->getStatusCode() === 200,
-            'data' => json_decode($response->getBody(), true),
+            'data' => json_decode($response->getBody()->getContents(), true),
         ];
     }
 
@@ -164,19 +168,9 @@ trait ZoomMeetingTrait
             'body' => json_encode([]),
         ];
         $response = $this->client->get($url . $path, $body);
-        /*if(ZoomMeeting::count() === 0){
-            foreach (json_decode($response->getBody(), true)['meetings'] as $meeting) {
-                ZoomMeeting::create($this->get($meeting['id'])['data']);
-            }
-        }*/
-        return json_decode($response->getBody(), true);
+        return json_decode($response->getBody()->getContents());
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool[]
-     */
     public function delete($id)
     {
         $path = 'meetings/' . $id;

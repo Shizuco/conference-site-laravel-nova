@@ -91,7 +91,7 @@ class ReportController extends Controller
                     "host_video" => "true",
                     "participant_video" => "true",
                 ]);
-                $data['zoom_meeting_id'] = $zoom_id->original['data']['id'];
+                $data['zoom_meeting_id'] = $zoom_id->original['data']['data']['id'];
             }
             Report::create($data);
             $this->sendMessage($request, $id, 0, 'new participant');
